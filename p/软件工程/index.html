@@ -1,0 +1,3143 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="1 软件工程概述 软件定义 定义：软件是包括程序、数据及其相关文档的完整集合。\n程序和数据是构造软件的基础，文档是软件质量的保证，也是保证软件更新及生命周期长短的必需品。\n软件的特点：\n软件是一种逻辑实体，具有抽象性 软件开发过程中没有明显的制造过程，应理解为“创作” 不存在机械磨损和老化问题，但存在软件退化问题 软件的开发和运行受到计算机系统的约束和限制 软件的分类 根据软件服务对象范围不同分类\n通用软件：操作系统、数据库管理系统、IDE、CASE工具等； 定制软件：企业ERP、办公自动化系统等按照客户个性化要求实现的软件； 服务类软件：淘宝、京东、12306等等； 根据根据软件完成功能所处的层次不同：\n应用软件、中间件软件、系统软件\n系统软件 指能与硬件紧密配合在一起，使计算机系统各个部件、相关的软件和数据协调、高效地工作。 系统软件处于计算机系统的最底层，与计算机硬件紧密配合，使计算机系统各个部件、相关的软件和数据协调、高效地工作的软件，使计算机系统正常运行必不可少的组成部分 应用软件 应用软件是在特定领域内开发，为特定目的服务的一类软件，人们日常使用的软件大部分属于应用软件 中间件软件 中间件是位于操作系统和应用软件之间的通用服务，用来管理分布式计算资源和网络通信，这些服务具有标准的程序接口和协议 软件发展阶段 程序设计阶段：20世纪50至60年代\n这个阶段只有程序的概念，没有软件的概念 程序规模小，程序的开发者和使用者常是同一个个人，无须向其他人作任何的交代和解释 程序系统阶段：20世纪60至70年代\n计算机从单一的科学计算，扩展到数据处理、实时控制等方面，相继研制出了一批高级程序设计语言，使得该时期结构化程序设计称为主要的开发技术和手段，程序已不再是计算机硬件的附属成分，而是计算机系统中与硬件相互依存、共同发挥作用的不可缺少的部分 传统软件工程阶段：20世纪70至90年代\n软件的开发不再是“个体化”或“手工作坊”式的开发方式，而是以工程化的思想作指导，用工程化的原则、方法和标准来开发和维护软件，软件已经产品化、系列化、标准化、工程化 现代软件工程阶段： 20世纪90年代-21世纪20年代\n随着互联网技术的快速发展，软件开发技术也进入到敏捷时代。通过面向对象技术、软件复用技术（设计模式、软件框架、软件体系结构等）、构件设计技术、分布式计算技术、软件过程管理技术等的应用使得软件工程过程进入到以软件测试为导向的快速迭代和快速实现的节奏中，很大程度上提高了软件质量 软件工程3.0：AI 时代\n软件危机 1960年后至1970之间的软件快速发展阶段\n指由于落后的软件生产方式无法满足迅速增长的计算机软件需求，从而导致软件开发与维护过程中出现一系列严重问题的现象。\n软件危机的解决途径\n1968年 软件工程大会第一次召开，并提出应用软件工程解决软件危机的问题 软件工程方法 1968年 Friedrich Ludwig Bauer （1924-2015） 提出运用工程化原则和方法，组织软件开发解决软件危机，并提出“软件工程 Software Engineering”的概念。 20世纪60年代后，随着计算机软件应用领域增多，软件规模不断扩大，软件系统功能多，逻辑复杂，不断扩充，从而导致许多系统开发出现了不良的后果和现象：\n软件开发计划难以制定和实施 软件开发费用和进度失控 软件的质量无法让用户满意 软件无法维护 软件没有适当的文档资料 产生软件危机的原因\n软件系统本身的复杂性 软件开发的方法和技术不合理及不成熟； 软件发展的三个阶段 ">
+<title>软件工程</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="软件工程">
+<meta property='og:description' content="1 软件工程概述 软件定义 定义：软件是包括程序、数据及其相关文档的完整集合。\n程序和数据是构造软件的基础，文档是软件质量的保证，也是保证软件更新及生命周期长短的必需品。\n软件的特点：\n软件是一种逻辑实体，具有抽象性 软件开发过程中没有明显的制造过程，应理解为“创作” 不存在机械磨损和老化问题，但存在软件退化问题 软件的开发和运行受到计算机系统的约束和限制 软件的分类 根据软件服务对象范围不同分类\n通用软件：操作系统、数据库管理系统、IDE、CASE工具等； 定制软件：企业ERP、办公自动化系统等按照客户个性化要求实现的软件； 服务类软件：淘宝、京东、12306等等； 根据根据软件完成功能所处的层次不同：\n应用软件、中间件软件、系统软件\n系统软件 指能与硬件紧密配合在一起，使计算机系统各个部件、相关的软件和数据协调、高效地工作。 系统软件处于计算机系统的最底层，与计算机硬件紧密配合，使计算机系统各个部件、相关的软件和数据协调、高效地工作的软件，使计算机系统正常运行必不可少的组成部分 应用软件 应用软件是在特定领域内开发，为特定目的服务的一类软件，人们日常使用的软件大部分属于应用软件 中间件软件 中间件是位于操作系统和应用软件之间的通用服务，用来管理分布式计算资源和网络通信，这些服务具有标准的程序接口和协议 软件发展阶段 程序设计阶段：20世纪50至60年代\n这个阶段只有程序的概念，没有软件的概念 程序规模小，程序的开发者和使用者常是同一个个人，无须向其他人作任何的交代和解释 程序系统阶段：20世纪60至70年代\n计算机从单一的科学计算，扩展到数据处理、实时控制等方面，相继研制出了一批高级程序设计语言，使得该时期结构化程序设计称为主要的开发技术和手段，程序已不再是计算机硬件的附属成分，而是计算机系统中与硬件相互依存、共同发挥作用的不可缺少的部分 传统软件工程阶段：20世纪70至90年代\n软件的开发不再是“个体化”或“手工作坊”式的开发方式，而是以工程化的思想作指导，用工程化的原则、方法和标准来开发和维护软件，软件已经产品化、系列化、标准化、工程化 现代软件工程阶段： 20世纪90年代-21世纪20年代\n随着互联网技术的快速发展，软件开发技术也进入到敏捷时代。通过面向对象技术、软件复用技术（设计模式、软件框架、软件体系结构等）、构件设计技术、分布式计算技术、软件过程管理技术等的应用使得软件工程过程进入到以软件测试为导向的快速迭代和快速实现的节奏中，很大程度上提高了软件质量 软件工程3.0：AI 时代\n软件危机 1960年后至1970之间的软件快速发展阶段\n指由于落后的软件生产方式无法满足迅速增长的计算机软件需求，从而导致软件开发与维护过程中出现一系列严重问题的现象。\n软件危机的解决途径\n1968年 软件工程大会第一次召开，并提出应用软件工程解决软件危机的问题 软件工程方法 1968年 Friedrich Ludwig Bauer （1924-2015） 提出运用工程化原则和方法，组织软件开发解决软件危机，并提出“软件工程 Software Engineering”的概念。 20世纪60年代后，随着计算机软件应用领域增多，软件规模不断扩大，软件系统功能多，逻辑复杂，不断扩充，从而导致许多系统开发出现了不良的后果和现象：\n软件开发计划难以制定和实施 软件开发费用和进度失控 软件的质量无法让用户满意 软件无法维护 软件没有适当的文档资料 产生软件危机的原因\n软件系统本身的复杂性 软件开发的方法和技术不合理及不成熟； 软件发展的三个阶段 ">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T09:27:01&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T09:27:01&#43;08:00'/>
+<meta name="twitter:title" content="软件工程">
+<meta name="twitter:description" content="1 软件工程概述 软件定义 定义：软件是包括程序、数据及其相关文档的完整集合。\n程序和数据是构造软件的基础，文档是软件质量的保证，也是保证软件更新及生命周期长短的必需品。\n软件的特点：\n软件是一种逻辑实体，具有抽象性 软件开发过程中没有明显的制造过程，应理解为“创作” 不存在机械磨损和老化问题，但存在软件退化问题 软件的开发和运行受到计算机系统的约束和限制 软件的分类 根据软件服务对象范围不同分类\n通用软件：操作系统、数据库管理系统、IDE、CASE工具等； 定制软件：企业ERP、办公自动化系统等按照客户个性化要求实现的软件； 服务类软件：淘宝、京东、12306等等； 根据根据软件完成功能所处的层次不同：\n应用软件、中间件软件、系统软件\n系统软件 指能与硬件紧密配合在一起，使计算机系统各个部件、相关的软件和数据协调、高效地工作。 系统软件处于计算机系统的最底层，与计算机硬件紧密配合，使计算机系统各个部件、相关的软件和数据协调、高效地工作的软件，使计算机系统正常运行必不可少的组成部分 应用软件 应用软件是在特定领域内开发，为特定目的服务的一类软件，人们日常使用的软件大部分属于应用软件 中间件软件 中间件是位于操作系统和应用软件之间的通用服务，用来管理分布式计算资源和网络通信，这些服务具有标准的程序接口和协议 软件发展阶段 程序设计阶段：20世纪50至60年代\n这个阶段只有程序的概念，没有软件的概念 程序规模小，程序的开发者和使用者常是同一个个人，无须向其他人作任何的交代和解释 程序系统阶段：20世纪60至70年代\n计算机从单一的科学计算，扩展到数据处理、实时控制等方面，相继研制出了一批高级程序设计语言，使得该时期结构化程序设计称为主要的开发技术和手段，程序已不再是计算机硬件的附属成分，而是计算机系统中与硬件相互依存、共同发挥作用的不可缺少的部分 传统软件工程阶段：20世纪70至90年代\n软件的开发不再是“个体化”或“手工作坊”式的开发方式，而是以工程化的思想作指导，用工程化的原则、方法和标准来开发和维护软件，软件已经产品化、系列化、标准化、工程化 现代软件工程阶段： 20世纪90年代-21世纪20年代\n随着互联网技术的快速发展，软件开发技术也进入到敏捷时代。通过面向对象技术、软件复用技术（设计模式、软件框架、软件体系结构等）、构件设计技术、分布式计算技术、软件过程管理技术等的应用使得软件工程过程进入到以软件测试为导向的快速迭代和快速实现的节奏中，很大程度上提高了软件质量 软件工程3.0：AI 时代\n软件危机 1960年后至1970之间的软件快速发展阶段\n指由于落后的软件生产方式无法满足迅速增长的计算机软件需求，从而导致软件开发与维护过程中出现一系列严重问题的现象。\n软件危机的解决途径\n1968年 软件工程大会第一次召开，并提出应用软件工程解决软件危机的问题 软件工程方法 1968年 Friedrich Ludwig Bauer （1924-2015） 提出运用工程化原则和方法，组织软件开发解决软件危机，并提出“软件工程 Software Engineering”的概念。 20世纪60年代后，随着计算机软件应用领域增多，软件规模不断扩大，软件系统功能多，逻辑复杂，不断扩充，从而导致许多系统开发出现了不良的后果和现象：\n软件开发计划难以制定和实施 软件开发费用和进度失控 软件的质量无法让用户满意 软件无法维护 软件没有适当的文档资料 产生软件危机的原因\n软件系统本身的复杂性 软件开发的方法和技术不合理及不成熟； 软件发展的三个阶段 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1-软件工程概述">1 软件工程概述</a>
+      <ol>
+        <li><a href="#软件定义">软件定义</a></li>
+        <li><a href="#软件的分类">软件的分类</a></li>
+        <li><a href="#软件发展阶段">软件发展阶段</a></li>
+        <li><a href="#软件危机">软件危机</a></li>
+        <li><a href="#软件工程">软件工程</a>
+          <ol>
+            <li><a href="#软件工程的定义">软件工程的定义</a></li>
+            <li><a href="#软件工程的三要素">软件工程的三要素</a></li>
+            <li><a href="#软件工程的目标">软件工程的目标</a></li>
+            <li><a href="#软件工程的研究内容">软件工程的研究内容</a></li>
+            <li><a href="#软件工程应用的原则">软件工程应用的原则</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#2-软件生命周期模型">2 软件生命周期模型</a>
+      <ol>
+        <li><a href="#软件工程过程">软件工程过程</a></li>
+        <li><a href="#软件过程模型">软件过程模型</a></li>
+        <li><a href="#软件生命周期">软件生命周期</a>
+          <ol>
+            <li><a href="#制定计划">制定计划</a></li>
+            <li><a href="#需求分析">需求分析</a></li>
+            <li><a href="#设计">设计</a></li>
+            <li><a href="#程序编码">程序编码</a></li>
+            <li><a href="#测试">测试</a></li>
+            <li><a href="#运行维护">运行维护</a></li>
+          </ol>
+        </li>
+        <li><a href="#传统软件生命周期模型">传统软件生命周期模型</a>
+          <ol>
+            <li><a href="#瀑布模型">瀑布模型</a></li>
+            <li><a href="#演化模型">演化模型</a></li>
+            <li><a href="#增量模型">增量模型</a></li>
+            <li><a href="#迭代模型喷泉模型">迭代模型/喷泉模型</a></li>
+            <li><a href="#v模型和w模型">V模型和W模型</a></li>
+            <li><a href="#螺旋模型">螺旋模型</a></li>
+            <li><a href="#构建组件模型">构建组件模型</a></li>
+            <li><a href="#快速应用开发模型-rad">快速应用开发模型 RAD</a></li>
+          </ol>
+        </li>
+        <li><a href="#新型软件生命周期模型">新型软件生命周期模型</a>
+          <ol>
+            <li><a href="#up模型">UP模型</a></li>
+            <li><a href="#敏捷建模">敏捷建模</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#3-软件需求分析">3 软件需求分析</a>
+      <ol>
+        <li><a href="#需求的定义">需求的定义</a>
+          <ol>
+            <li><a href="#ieee定义">IEEE定义</a></li>
+            <li><a href="#通俗的定义">通俗的定义</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件需求分析的任务和目标">软件需求分析的任务和目标</a>
+          <ol>
+            <li><a href="#任务">任务</a></li>
+            <li><a href="#目标">目标</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件需求分析建模的原则">软件需求分析建模的原则</a></li>
+        <li><a href="#软件需求工程">软件需求工程</a>
+          <ol>
+            <li><a href="#软件需求的获取">软件需求的获取</a></li>
+            <li><a href="#软件需求的管理">软件需求的管理</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件需求的类别">软件需求的类别</a></li>
+        <li><a href="#需求分析说明书类别">需求分析说明书类别</a>
+          <ol>
+            <li><a href="#用户需求说明书">用户需求说明书</a></li>
+            <li><a href="#软件需求规格说明书">软件需求规格说明书</a></li>
+            <li><a href="#软件需求的确认和评审">软件需求的确认和评审</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#4-面向对象分析">4 面向对象分析</a>
+      <ol>
+        <li><a href="#oo建模的发展历程">OO建模的发展历程</a></li>
+        <li><a href="#uml建模语言">UML建模语言</a>
+          <ol>
+            <li><a href="#uml发展历史">UML发展历史</a></li>
+            <li><a href="#uml定义">UML定义</a></li>
+            <li><a href="#uml基本结构">UML基本结构</a></li>
+          </ol>
+        </li>
+        <li><a href="#41视图">4+1视图</a></li>
+        <li><a href="#领域模型">领域模型</a>
+          <ol>
+            <li><a href="#活动图">活动图</a></li>
+            <li><a href="#uml类图">UML类图</a></li>
+          </ol>
+        </li>
+        <li><a href="#用例模型">用例模型</a>
+          <ol>
+            <li><a href="#用例图">用例图</a></li>
+            <li><a href="#用例说明">用例说明</a></li>
+            <li><a href="#ssd图-系统顺序图">SSD图 系统顺序图</a></li>
+            <li><a href="#操作契约">操作契约</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#结构化需求分析方法老师的知识点总结没有不看了">结构化需求分析方法（老师的知识点总结没有，不看了）</a>
+      <ol>
+        <li><a href="#结构化分析由来">结构化分析由来</a>
+          <ol>
+            <li><a href="#分析模型的结构">分析模型的结构</a></li>
+            <li><a href="#数据建模">数据建模</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#6-软件设计">6 软件设计</a>
+      <ol>
+        <li><a href="#软件设计的目标">软件设计的目标</a></li>
+        <li><a href="#软件设计的过程">软件设计的过程</a>
+          <ol>
+            <li><a href="#软件概要设计">软件概要设计</a></li>
+            <li><a href="#软件详细设计">软件详细设计</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件设计的主要内容">软件设计的主要内容</a>
+          <ol>
+            <li><a href="#软件体系结构设计">软件体系结构设计</a></li>
+            <li><a href="#软件功能结构设计">软件功能结构设计</a></li>
+            <li><a href="#软件的数据设计">软件的数据设计</a></li>
+            <li><a href="#软件的接口设计">软件的接口设计</a></li>
+            <li><a href="#软件的过程设计">软件的过程设计</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件设计模型">软件设计模型</a></li>
+        <li><a href="#软件设计基础">软件设计基础</a>
+          <ol>
+            <li><a href="#一般性原则">一般性原则</a></li>
+            <li><a href="#软件结构的模块化">软件结构的模块化</a></li>
+            <li><a href="#模块的独立性和耦合性">模块的独立性和耦合性</a></li>
+          </ol>
+        </li>
+        <li><a href="#面向对象的设计原则">面向对象的设计原则</a>
+          <ol>
+            <li><a href="#单一职责">单一职责</a></li>
+            <li><a href="#里氏替换原则">里氏替换原则</a></li>
+            <li><a href="#依赖倒置原则">依赖倒置原则</a></li>
+            <li><a href="#接口隔离原则">接口隔离原则</a></li>
+            <li><a href="#迪米特法则">迪米特法则</a></li>
+            <li><a href="#开闭原则">开闭原则</a></li>
+            <li><a href="#组合聚合复用">组合/聚合复用</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#7-面向对象设计方法">7 面向对象设计方法</a>
+      <ol>
+        <li><a href="#面向对象设计任务">面向对象设计任务</a></li>
+        <li><a href="#软件的层次化结构">软件的层次化结构</a>
+          <ol>
+            <li><a href="#用户界面层">用户界面层</a></li>
+            <li><a href="#控制器层对象设计原则">控制器层对象设计原则</a></li>
+            <li><a href="#业务应用层对象设计原则">业务/应用层对象设计原则</a></li>
+            <li><a href="#持久化层对象设计原则">持久化层对象设计原则</a></li>
+          </ol>
+        </li>
+        <li><a href="#基于类职责分配grasp的设计">基于类职责分配GRASP的设计</a>
+          <ol>
+            <li><a href="#控制器模式">控制器模式</a></li>
+            <li><a href="#创建者模式">创建者模式</a></li>
+            <li><a href="#信息专家模式">信息专家模式</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#8-软件实现">8 软件实现</a>
+      <ol>
+        <li><a href="#软件实现的任务包括">软件实现的任务包括</a></li>
+        <li><a href="#源程序文档化">源程序文档化</a>
+          <ol>
+            <li><a href="#标识符命名">标识符命名</a></li>
+            <li><a href="#源程序的注释">源程序的注释</a></li>
+            <li><a href="#源程序的布局">源程序的布局</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#9-软件测试超级重点">9 软件测试（超级重点）</a>
+      <ol>
+        <li><a href="#软件测试的定义">软件测试的定义</a></li>
+        <li><a href="#软件测试的目的">软件测试的目的</a>
+          <ol>
+            <li><a href="#用户角度">用户角度</a></li>
+            <li><a href="#开发者角度">开发者角度</a></li>
+            <li><a href="#glenford-jmyers-认为">Glenford J.Myers 认为</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件测试的原则">软件测试的原则</a></li>
+        <li><a href="#软件测试对象">软件测试对象</a></li>
+        <li><a href="#软件测试流程">软件测试流程</a></li>
+        <li><a href="#软件测试方法">软件测试方法</a>
+          <ol>
+            <li><a href="#白盒测试-必考一题应用题">白盒测试 必考一题应用题</a></li>
+            <li><a href="#黑盒测试--必考一题应用题">黑盒测试  必考一题应用题</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件测试的基本类型">软件测试的基本类型</a>
+          <ol>
+            <li><a href="#单元测试">单元测试</a></li>
+            <li><a href="#集成测试">集成测试</a></li>
+            <li><a href="#确认测试">确认测试</a></li>
+            <li><a href="#系统测试">系统测试</a></li>
+            <li><a href="#验收测试">验收测试</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#10-软件项目管理">10 软件项目管理</a>
+      <ol>
+        <li><a href="#项目及软件项目的定义">项目及软件项目的定义</a>
+          <ol>
+            <li><a href="#项目定义">项目定义</a></li>
+            <li><a href="#软件项目的定义">软件项目的定义：</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件项目管理的定义">软件项目管理的定义</a></li>
+        <li><a href="#软件项目管理的过程">软件项目管理的过程</a></li>
+        <li><a href="#软件项目计划">软件项目计划</a>
+          <ol>
+            <li><a href="#软件项目估算">软件项目估算</a></li>
+            <li><a href="#软件的进度安排">软件的进度安排</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#11-软件维护">11 软件维护</a>
+      <ol>
+        <li><a href="#软件维护的定义">软件维护的定义</a></li>
+        <li><a href="#软件维护的类别">软件维护的类别</a>
+          <ol>
+            <li><a href="#改正性维护">改正性维护</a></li>
+            <li><a href="#适应性维护">适应性维护</a></li>
+            <li><a href="#完善性维护">完善性维护</a></li>
+            <li><a href="#预防性维护">预防性维护</a></li>
+          </ol>
+        </li>
+        <li><a href="#软件维护的活动">软件维护的活动</a></li>
+        <li><a href="#维护周期的软件开发">维护周期的软件开发</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="1-软件工程概述">1 软件工程概述
+</h2><h3 id="软件定义">软件定义
+</h3><p>定义：软件是包括程序、数据及其相关文档的完整集合。</p>
+<p>程序和数据是构造软件的基础，文档是软件质量的保证，也是保证软件更新及生命周期长短的必需品。</p>
+<p>软件的特点：</p>
+<pre><code>软件是一种逻辑实体，具有抽象性
+软件开发过程中没有明显的制造过程，应理解为“创作”
+不存在机械磨损和老化问题，但存在软件退化问题
+软件的开发和运行受到计算机系统的约束和限制
+</code></pre>
+<h3 id="软件的分类">软件的分类
+</h3><ol>
+<li>
+<p>根据软件服务对象范围不同分类</p>
+ <p>通用软件：操作系统、数据库管理系统、IDE、CASE工具等；
+ <p>定制软件：企业ERP、办公自动化系统等按照客户个性化要求实现的软件；
+ <p>服务类软件：淘宝、京东、12306等等；
+</li>
+<li>
+<p>根据根据软件完成功能所处的层次不同：</p>
+<p>应用软件、中间件软件、系统软件</p>
+<ul>
+<li>系统软件
+<br>指能与硬件紧密配合在一起，使计算机系统各个部件、相关的软件和数据协调、高效地工作。
+<br>系统软件处于计算机系统的最底层，与计算机硬件紧密配合，使计算机系统各个部件、相关的软件和数据协调、高效地工作的软件，使计算机系统正常运行必不可少的组成部分</li>
+<li>应用软件
+<br>应用软件是在特定领域内开发，为特定目的服务的一类软件，人们日常使用的软件大部分属于应用软件</li>
+<li>中间件软件
+<br>中间件是位于操作系统和应用软件之间的通用服务，用来管理分布式计算资源和网络通信，这些服务具有标准的程序接口和协议</li>
+</ul>
+</li>
+</ol>
+<h3 id="软件发展阶段">软件发展阶段
+</h3><p>程序设计阶段：20世纪50至60年代</p>
+<pre><code>这个阶段只有程序的概念，没有软件的概念
+程序规模小，程序的开发者和使用者常是同一个个人，无须向其他人作任何的交代和解释
+</code></pre>
+<p>程序系统阶段：20世纪60至70年代</p>
+<pre><code>计算机从单一的科学计算，扩展到数据处理、实时控制等方面，相继研制出了一批高级程序设计语言，使得该时期结构化程序设计称为主要的开发技术和手段，程序已不再是计算机硬件的附属成分，而是计算机系统中与硬件相互依存、共同发挥作用的不可缺少的部分
+</code></pre>
+<p>传统软件工程阶段：20世纪70至90年代</p>
+<pre><code>软件的开发不再是“个体化”或“手工作坊”式的开发方式，而是以工程化的思想作指导，用工程化的原则、方法和标准来开发和维护软件，软件已经产品化、系列化、标准化、工程化
+</code></pre>
+<p>现代软件工程阶段： 20世纪90年代-21世纪20年代</p>
+<pre><code>随着互联网技术的快速发展，软件开发技术也进入到敏捷时代。通过面向对象技术、软件复用技术（设计模式、软件框架、软件体系结构等）、构件设计技术、分布式计算技术、软件过程管理技术等的应用使得软件工程过程进入到以软件测试为导向的快速迭代和快速实现的节奏中，很大程度上提高了软件质量
+</code></pre>
+<p>软件工程3.0：AI 时代</p>
+<h3 id="软件危机">软件危机
+</h3><p>1960年后至1970之间的软件快速发展阶段</p>
+<p>指由于落后的软件生产方式无法满足迅速增长的计算机软件需求，从而导致软件开发与维护过程中出现一系列严重问题的现象。</p>
+<p>软件危机的解决途径</p>
+<pre><code>1968年 软件工程大会第一次召开，并提出应用软件工程解决软件危机的问题
+软件工程方法
+    1968年 Friedrich Ludwig Bauer （1924-2015）
+    提出运用工程化原则和方法，组织软件开发解决软件危机，并提出“软件工程 Software Engineering”的概念。
+</code></pre>
+<p>20世纪60年代后，随着计算机软件应用领域增多，软件规模不断扩大，软件系统功能多，逻辑复杂，不断扩充，从而导致许多系统开发出现了不良的后果和现象：</p>
+<ol>
+<li>软件开发计划难以制定和实施</li>
+<li>软件开发费用和进度失控</li>
+<li>软件的质量无法让用户满意</li>
+<li>软件无法维护</li>
+<li>软件没有适当的文档资料</li>
+</ol>
+<p>产生软件危机的原因</p>
+<pre><code>软件系统本身的复杂性
+软件开发的方法和技术不合理及不成熟；
+</code></pre>
+<p>软件发展的三个阶段
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-12.png"
+	width="1174"
+	height="606"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-12_hu5003102368624954804.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-12_hu16483952656658406446.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="464px"
+	
+></p>
+<h3 id="软件工程">软件工程
+</h3><h4 id="软件工程的定义">软件工程的定义
+</h4><p>软件工程是为了克服软件危机而提出的一种概念，人们在实践中借鉴了工程学的某些原理、原则和方法，不断探索软件工程的原理、技术和方法，形成了一门新的学科：软件工程学</p>
+<p>1968年10月，F.L. Bauer首次提出了“软件工程”的概念：软件工程是为了<b>经济地</b>获得能够在实际机器上高效运行的<b>可靠软件</b>而建立和使用的一系列好的<b>工程化原则</b>。</p>
+<p>Barry Boehm（1935-2022）的软件工程定义：运用现代科学技术知识来设计并构造计算机程序及为开发、运行和维护这些程序所必需的<b>相关文件资料</b>。</p>
+<p>Richard E. Fairley 认为：软件工程学是为在<b>成本限额以内按时完成</b>开发和修改软件产品所需的系统生产和维护的技术和管理的<b>学科</b>。</p>
+<p>IEEE计算机学会将“软件工程”定义为：</p>
+<pre><code>⑴ 应用系统化的、规范化的、定量的方法来开发、运行和维护软件，即：将工程应用到软件；
+⑵ 对⑴中各种方法的研究。
+</code></pre>
+<h4 id="软件工程的三要素">软件工程的三要素
+</h4><p>方法、工具和过程</p>
+<p>方法：提供了“如何做”的技术</p>
+<pre><code>给出需求、设计建模、编码、测试的方法；
+</code></pre>
+<p>工具：提供了自动或半自动的软件支撑环境</p>
+<pre><code>给出各种建模、编码和测试所需要的自动化或半自动化的工具 ；
+</code></pre>
+<p>过程：将软件工程的方法和工具综合起来以达到合理、及时地进行计算机软件开发的目的</p>
+<pre><code>给出指导各种软件类型开发所需要的过程模型；
+</code></pre>
+<h4 id="软件工程的目标">软件工程的目标
+</h4><p>现实目标：</p>
+<pre><code>在一个特定项目中，在给定成本和时间的前提下，开发出满足用户需求且具有正确性、可用性等因素的软件产品。
+</code></pre>
+<p>终极目标：</p>
+<pre><code>摆脱手工生产软件的状况，逐步实现软件研制和维护的自动化。 
+</code></pre>
+<h4 id="软件工程的研究内容">软件工程的研究内容
+</h4><ol>
+<li>软件开发技术</li>
+<li>软件工程管理</li>
+</ol>
+<h4 id="软件工程应用的原则">软件工程应用的原则
+</h4><p>原则：</p>
+<pre><code>选择合适的开发模型；
+采用合适的设计建模方法；
+提供高质量的工程支持力度；
+重视开发过程的管理；
+</code></pre>
+<h2 id="2-软件生命周期模型">2 软件生命周期模型
+</h2><p>软件过程模型：从一个特定角度提出的对软件过程的概括描述，是对软件开发实际过程的抽象，包括构成软件过程的:</p>
+<pre><code>1、各种活动（Activities→How）；
+2、软件工件（Artifacts→What）；
+3、参与角色（Actors/Roles→Who）。
+</code></pre>
+<p>软件生命周期模型是一个框架，描述从软件需求定义直至软件经使用后废弃为止，跨越整个生存期的软件开发、运行和维护所实施的全部过程、活动和任务，同时描述生命周期不同阶段产生的软件工件，明确活动的执行角色等。</p>
+<h3 id="软件工程过程">软件工程过程
+</h3><p>工程项目的三个基本目标：</p>
+<pre><code>合理的进度；
+有限的经费；
+一定的质量；
+
+美国质量管理专家戴明博士针对工程项目的质量目标，提出了PDCA循环，称为戴明环
+Plan, Do, Check, Action
+</code></pre>
+<p><b>软件工程过程</b>是为了获得<b>软件产品</b>，在<b>软件工具</b>的支持下由<b>软件工程师</b>完成的一系列软件<b>工程活动</b>，包括下面四项对应于戴明环的PDCA思想活动。</p>
+<pre><code>编写软件规格说明：规定软件的功能及其使用限制；
+软件开发：产生满足规格说明的软件；
+软件确认：通过有效性验证以保证软件能够满足客户的要求；
+软件演进：为了满足客户的变更要求，软件必须在使用过程中进行不断地改进。
+</code></pre>
+<h3 id="软件过程模型">软件过程模型
+</h3><p>从一个特定角度提出的对软件开发过程的简化描述或称之为框架描述，是对软件开发实际过程的抽象，它包括构成软件过程的各种活动、软件工件以及参与开发的角色等元素。</p>
+<h3 id="软件生命周期">软件生命周期
+</h3><p>指软件产品从考虑其概念开始，直至废弃为止的整个时期，包括概念阶段、分析与设计阶段、构造阶段、移交和运行阶段等不同时期。</p>
+<p>软件生命周期的六个基本步骤</p>
+<pre><code>制定计划		P
+需求分析		D
+设计			D
+程序编码		D
+测试			C
+运行维护		A
+</code></pre>
+<h4 id="制定计划">制定计划
+</h4><ol>
+<li><b>确定</b>要开发软件系统的<b>总目标</b>；</li>
+<li>给出功能、性能、可靠性以及接口等方面的<b>要求</b>；</li>
+<li>完成该软件任务的<b>可行性</b>研究；</li>
+<li>确定软件的<b>过程模型</b>及<b>建模方法</b>；</li>
+<li><b>估计</b>可利用的<b>资源</b> (硬件，软件，人力等)、成本、效益、开发进度；</li>
+<li><b>制定</b>出完成开发任务的<b>实施计划</b>
+<ul>
+<li>任务列表</li>
+<li>每个任务的起止时间</li>
+<li>每个任务的责任人</li>
+</ul>
+</li>
+</ol>
+<p>责任人：项目负责人
+<h4 id="需求分析">需求分析
+</h4><ul>
+<li>对用户提出的要求进行分析并给出详细的定义，确定软件的功能；</li>
+<li>编写软件需求规格说明书或系统功能说明书及初步的系统用户手册；</li>
+<li>提交管理机构评审；</li>
+<li>责任人：软件开发人员（泛指）/需求分析人员（具体）</li>
+</ul>
+<h4 id="设计">设计
+</h4><ul>
+<li>概要设计：把各项需求转换成软件的<b>功能结构</b>。结构中每一组成部分都是意义明确的功能模块，每个功能都和某些需求相对应；</li>
+<li>详细设计：对每个模块要完成的工作进行具体的描述，为源程序编写打下基础；</li>
+<li>编写设计说明书，提交评审。</li>
+<li>责任人：软件开发人员（泛指）/软件架构师、软件设计人员、DBA等（具体）</li>
+</ul>
+<h4 id="程序编码">程序编码
+</h4><ul>
+<li>把软件设计转换成计算机可以接受的程序代码，即写成以某一种特定程序设计语言表示的“源程序清单”；</li>
+<li>写出的程序应当是结构良好、清晰易读的，且与设计相一致的；</li>
+<li>责任人：软件开发人员（泛指）/编码工程师（具体）</li>
+</ul>
+<h4 id="测试">测试
+</h4><ul>
+<li>单元测试，查找各模块在功能和结构上存在的问题并加以纠正；</li>
+<li>组装测试，将已测试过的模块按一定顺序组装起来；</li>
+<li>按规定的各项需求，逐项进行一系列有效性测试，决定已开发的软件是否合格，能否交付用户使用；</li>
+<li>责任人：软件测试人员、编码工程师、客户（具体）</li>
+</ul>
+<h4 id="运行维护">运行维护
+</h4><ul>
+<li>软件交付给用户后的软件开发活动
+<ul>
+<li>改正性维护：运行中发现了软件中的错误需要修正；</li>
+<li>适应性维护：为了适应变化了的软件工作环境，需做适当变更；</li>
+<li>完善性维护：为了增强软件的功能需做变更。</li>
+</ul>
+</li>
+<li>软件维护是更加复杂的软件开发活动</li>
+<li>责任人：软件维护人员（泛指）、软件开发工程师（各种岗位）</li>
+</ul>
+<h3 id="传统软件生命周期模型">传统软件生命周期模型
+</h3><ul>
+<li>瀑布模型（Waterfall Model）</li>
+<li>演化模型（Evolutional Model）</li>
+<li>增量模型（Incremental Model）</li>
+<li>喷泉模型（Fountain Model）</li>
+<li>V模型和W模型（V &amp; W Model）</li>
+<li>螺旋模型（Spiral Model）</li>
+<li>构件组装模型（Component Assembly Model）</li>
+<li>快速应用开发模型（Rapid Application Development Model）</li>
+<li>原型方法（Prototype Method）</li>
+</ul>
+<h4 id="瀑布模型">瀑布模型
+</h4><p>Winston W. Royce 在1970年提出瀑布模型</p>
+<p>六个基本工程活动，并且规定了它们自上而下、相互衔接的固定次序，如同瀑布流水，逐级下落 。</p>
+<ol>
+<li>系统需求</li>
+<li>软件需求</li>
+<li>分析</li>
+<li>程序设计</li>
+<li>编码</li>
+<li>测试</li>
+<li>运行</li>
+</ol>
+<p>瀑布模型将软件生命周期划分为定义阶段、开发阶段和维护阶段</p>
+<pre><code>在定义阶段部署了计划和需求分析活动；
+在开发阶段部署了设计、编码和测试活动，
+维护阶段部署了运行/维护活动。
+</code></pre>
+<p>它在软件开发早期为消除非结构化软件、降低软件复杂度、促进软件开发工程化方面起着显著的作用。</p>
+<p>瀑布模型的特点：</p>
+<pre><code>本阶段的工作对象来自于上一阶段活动的输出，这些输出一般是代表上一阶段活动结束的里程碑式的文档。 
+根据本阶段的活动规程执行相应的任务。
+产生本阶段活动相关产出—软件工件，作为下一阶段活动的输入。
+对本阶段活动执行情况进行评审。 
+
+但是需求很难调研充分，所以很难一次性开发成功。
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-13.png"
+	width="1080"
+	height="303"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-13_hu10408301388325801827.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-13_hu15939158667925030808.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="356"
+		data-flex-basis="855px"
+	
+></p>
+<h4 id="演化模型">演化模型
+</h4><p>ps: 有点小作坊的味道
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-14.png"
+	width="789"
+	height="229"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-14_hu13080297143904345547.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-14_hu4595632502912165044.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="344"
+		data-flex-basis="826px"
+	
+></p>
+<ol>
+<li>第一次是试验开发，得到试验性的原型产品，其目标只是在于探索可行性，弄清软件需求；</li>
+<li>第二次在此基础上获得较为满意的软件产品。</li>
+</ol>
+<p>演化模型的特点：</p>
+<pre><code>优点：
+    明确用户需求、提高系统质量、降低开发风险；
+缺点：
+    难于管理、结构较差、技术不成熟；
+    可能会抛弃瀑布模型的文档控制优点；
+    可能会导致最后的软件系统的系统结构较差 ；
+</code></pre>
+<p>演化模型使用范围：</p>
+<pre><code>需求不清楚；
+小型或中小型系统；
+开发周期短
+</code></pre>
+<h4 id="增量模型">增量模型
+</h4><pre><code>Mills等人于1980年提出 ，指
+首先对系统最核心或最清晰的需求进行分析、设计、实现、测试并集成到系统中。
+再按优先级逐步对后续的需求进行上述工作，
+逐步建设成一个完整系统的开发方法。
+结合了瀑布模型和演化模型的优点。 
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-15.png"
+	width="980"
+	height="429"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-15_hu6439555426202997573.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-15_hu12098717612705713432.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="548px"
+	
+>
+从最核心的需求入手，先写出系统，再一步一步添加。体会“增量”的意思</p>
+<p>增量模型的优点：</p>
+<ul>
+<li>客户可以在第一次增量后就使用到系统的核心功能，增强了客户使用系统的信心；</li>
+<li>项目总体失败的风险较低，因为核心功能先开发出来，即使某一次增量失败，核心功能的产品客户仍然可以使用。</li>
+<li>由于增量是按照从高到低的优先级确定的，最高优先级的功能得到最多次的测试，保障了系统重要功能部分的可靠性。</li>
+<li>所有增量都是在同一个体系结构指导下进行集成的，提高了系统的稳定性和可维护性。</li>
+</ul>
+<p>增量模型的缺点：</p>
+<ul>
+<li>增量粒度难以选择；</li>
+<li>确定所有的需求比较困难 ；</li>
+</ul>
+<h4 id="迭代模型喷泉模型">迭代模型/喷泉模型
+</h4><p>喷泉模型也称迭代模型，认为软件开发过程的各个阶段是相互重叠和多次反复的，就象喷泉一样，水喷上去又可以落下来，既可以落在中间，又可以落到底部。</p>
+<p>各个开发阶段没有特定的次序要求，完全可以并行进行，可以在某个开发阶段中随时补充其他任何开发阶段中遗漏的需求。</p>
+<p>优点：</p>
+<ul>
+<li>提高开发效率</li>
+<li>缩短开发周期</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>难于管理，工作计划要随时更新</li>
+</ul>
+<h4 id="v模型和w模型">V模型和W模型
+</h4><p>V模型：</p>
+<pre><code>Paul Rook 在1980年代提出的，是瀑布模型的变种
+将测试活动提前，使得瀑布模型能够驾驭风险
+V模型将测试分等级，并和前面的开发阶段对应起来
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-16.png"
+	width="1504"
+	height="811"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-16_hu14489349384127549876.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-16_hu14307320205213428485.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>V模型的优缺点（测试重点）</p>
+<ul>
+<li>优点：
+<ul>
+<li>包含了底层测试（单元测试）和高层测试（系统测试）；</li>
+<li>清楚的标识了开发和测试的各个阶段；</li>
+<li>自上而下逐步求精，每个阶段分工明确，便于整体项目的把控。</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>自上而下的顺序导致了，测试工作在编码之后，就导致错误不能及时的进行修改；</li>
+<li>实际工作中，需求经常变化，导致v模型步骤，反复执行，返工量很大，灵活度较低。</li>
+<li>在V模型中，只是把测试作为编码之后的一个阶段，并没有在需求开发阶段就进入测试。这也算是他的一个缺点了。</li>
+</ul>
+</li>
+<li>改良：每个步骤都可以进行小的迭代工作。</li>
+</ul>
+<p>W模型：</p>
+<pre><code>Evolutif公司在V模型的基础上提出了W模型。 
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-17.png"
+	width="875"
+	height="423"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-17_hu13535436828926137040.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-17_hu6865811945847024524.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<p>W模型增加了软件各开发阶段中应<b>同步进行的验证和确认活动</b></p>
+<p>W模型由两个V字型模型组成，分别代表测试与开发过程，图中明确表示出了测试与开发的<b>并行</b>关系。</p>
+<p>W模型特点：</p>
+<pre><code>测试的对象不仅是程序，需求、设计等同样要测试，测试与开发是同步进行的
+</code></pre>
+<ul>
+<li>
+<p>优点</p>
+<ul>
+<li>测试伴随着整个开发周期，需求和设计同样要测试；</li>
+<li>更早的介入测试，可以发现初期的缺陷，修复成本低；</li>
+<li>分阶段工作，方便项目整体管理。</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>开发和测试依然是线性的关系，需求的变更和调整，依然不方便；</li>
+<li>如果没有文档，根本无法执行w模型；</li>
+<li>对于项目组成员的技术要求更高！</li>
+</ul>
+</li>
+</ul>
+<h4 id="螺旋模型">螺旋模型
+</h4><p>主要针对大型软件项目</p>
+<p>四个象限</p>
+<ul>
+<li>制定计划</li>
+<li>风险分析
+<ol>
+<li>需求不清晰的风险，需要开发一个原型来逐步明确需求；</li>
+<li>可靠性要求较高的风险需要开发一个原型来试验技术方案能否达到可靠性要求；</li>
+<li>对于时间性能要求较高的风险需要开发一个原型来试验算法性能能否达到时间要求等。</li>
+<li>风险管理措施应该纳入选定的项目实施方案中。</li>
+</ol>
+</li>
+<li>实施工程
+<ul>
+<li>针对每一个开发阶段的任务要求参照某一种生命周期模型执行本开发阶段的活动。</li>
+</ul>
+</li>
+<li>客户评价
+<ul>
+<li>根据客户的反馈，决定是否要进行下一步的迭代</li>
+</ul>
+</li>
+</ul>
+<h4 id="构建组件模型">构建组件模型
+</h4><pre><code>利用模块化思想将整个系统模块化，
+并在一定构件模型的支持下复用构件库中软件构件，
+通过组装高效率、高质量地构造软件系统。
+</code></pre>
+<p>构件组装模型<b>本质上是演化</b>的，<b>开发过程</b>是<b>迭代</b>的 。</p>
+<p>开发过程就是构建的组装过程，维护和升级过程就是构建的更新替换过程</p>
+<ul>
+<li>优点：
+<ul>
+<li>充分利用软件复用，提高了软件开发的效率。</li>
+<li>允许多个项目同时开发，降低了费用，提高了可维护性，可实现分步提交软件产品。</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>缺乏通用的构件组装结构标准，风险较大；</li>
+<li>构件可重用性和系统高效性之间不易协调；</li>
+<li>由于过分依赖于构件，构件质量影响着最终产品的质量。</li>
+</ul>
+</li>
+</ul>
+<h4 id="快速应用开发模型-rad">快速应用开发模型 RAD
+</h4><p>使用构件组装方法进行快速开发。</p>
+<p>是一个增量型的软件开发过程模型，强调极短的开发周期</p>
+<ul>
+<li>缺点
+<ul>
+<li>并非所有应用都适合采用RAD</li>
+<li>由于时间约束，开发人员和客户必须在较短的时间内完成一系列的需求分析，沟通配合不当都会导致应用RAD模型的失败</li>
+<li>RAD适合于管理信息系统的开发，对于其他类型的应用系统，如技术风险较高、与外围系统的互操作性较高等，不太合适
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-46.png"
+	width="1059"
+	height="484"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-46_hu5743067573242781358.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-46_hu855550683490727713.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="525px"
+	
+></li>
+</ul>
+</li>
+</ul>
+<h3 id="新型软件生命周期模型">新型软件生命周期模型
+</h3><h4 id="up模型">UP模型
+</h4><p>UP是一个二维可视化的软件开发模型。
+<br>横轴在时间上将什么鬼周期过程展开成四个阶段，每个阶段特有的里程碑是该阶段结束的标志。从第二个阶段开始又划分为多次的迭代，体现了软件开发过程的动态灵活性；
+<br>纵轴按照活动的内容进行组织，包括活动、活动产出的工件、活动的执行角色以及活动执行的工作流，体现软件开发过程中每次迭代做必须执行活动的静态结构</p>
+<p>UP模型的特点就是突出表明软件开发活动中的<b>每一项活动不是一次性能完成的</b>。下图曲线展示了每一项活动在不同阶段的工作量的动态分配；而且说明了每一项活动在不同阶段与其他活动之间的关系，也展示了每一个迭代所必须执行的活动。UP的特点可以用三段话来概述：<b>用例为驱动，以架构为核心的迭代增量式开发模型</b>。通过多次迭代将瀑布一个完整的开发过程分解成多个小的瀑布过程，其优点正好解决了瀑布模型开发周期太长的问题，并且在短时间内可以给客户和用户呈现系统的结构以及对需求理解是否正确。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-47.png"
+	width="1243"
+	height="839"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-47_hu8737792421003736742.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-47_hu10112756415251929458.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="355px"
+	
+></p>
+<h4 id="敏捷建模">敏捷建模
+</h4><p>为了解决多变的用户需求以及能够快速迭代和交付软件，一些软件工程咨询性质的组织结合在一起，对现存的一些基于变更的软件开发方法进行分类，并将其共性归纳出来取名敏捷，并正式成立了敏捷联盟，并共同起草了敏捷宣言</p>
+<pre><code>We are uncovering better ways of developing software by doing it and helping others do it.
+Through this work we have come to value:
+    Individuals and interactions over processes and tools       个人和交互 胜过流程和工具
+    Working software over comprehensive documentation       工作软件胜过全面的文档
+    Customer collaboration over contract negotiation        客户协作胜过合同谈判
+    Responding to change over following a plan              响应变化胜过遵循计划
+That is, while there is value in the items on the right, we value the items on the left more.
+</code></pre>
+<h5 id="极限编程">极限编程
+</h5><p>作为敏捷思想的核心代表，Kent Beck 在为Daimler Chrysler 所做的一个项目中引入了新的软件开发方法：极限编程XP</p>
+<p>极限编程的特点</p>
+<ol>
+<li>一种轻量级的软件开发方法，以实践为基础的软件工程过程和思想。</li>
+<li>它使用快速的反馈，大量而迅速的交流，通过及时和大量的测试来最大限度的保证和满足用户的需求</li>
+<li>强调用户满意，开发人员可以对需求的变化做出快速的反应</li>
+<li>任务代码质量的重要程度超出其他所有的内容</li>
+<li>强调团队合作，除了开发人员还特别将用户置于开发团队之内，他们之间的关系不是对立的，而是互相协作的，具有共同的目标：提交正确的软件。</li>
+</ol>
+<p>最上层工作流程
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-48.png"
+	width="1745"
+	height="544"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-48_hu7369461980247906936.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-48_hu14893267577414617246.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="320"
+		data-flex-basis="769px"
+	
+></p>
+<ol>
+<li>
+<p>用户故事</p>
+<p>用户故事由客户编写，是站在用户角度描述具体的期望需求。它不局限于只描述用户界面，还推动了验收测试的创建。开发过程中，团队必须创建一个或多个自动接受测试，以验证产品是否正确实施了用户案例。
+<br>用户故事不宜过大。每个故事的“理想开发时间”分别为1、2或3周，理想的开发时间是在团队没有正在进行的其他任务，没有干扰，并且有明确计划的情况下用代码实现用户故事所需的时间。</p>
+</li>
+<li>
+<p>Spike 方案架构</p>
+<p>当团队开发过程中遇到棘手的技术或者技术问题的时候，需要创建一个spike解决方案。<br>
+spike解决方案是一个非常简单的程序，通过构建峰值来解决正在检查的问题。因此团队往往将它用于探索潜在的解决方案，以降低技术问题的风险或增加用户故事估算的可靠性。</p>
+</li>
+<li>
+<p>发布计划</p>
+<p>该计划对整个项目进行总体布局，再为每个迭代周期创建迭代计划，其实质是让开发团队根据理想的编程周来评估每个用户故事
+<br>发布计划的基本原理是，一个项目可以通过四个变量来量化。范围、资源、时间和质量：范围是要完成的工作量；资源是多少有空的人；时间是项目或发布完成的时间；质量是软件的质量以及测试的质量。没有人可以控制所有4个变量，当一个变量改变时，其他三个都会随之变化。因此，发布计划会议中最重要的是，客户、经理、开发团队需要协商出一个可接受的发布计划，然后在执行计划中合理地控制变量以达到理想效果。</p>
+</li>
+<li>
+<p>迭代开发</p>
+<p>极限编程将复杂的开发过程分解成一个个小的开发周期，对需求分析、设计、编码、测试进行反复迭代。每个迭代周期为1到3周，在每次迭代开始都召开一次迭代会议，计划要完成的工作，及时调整工作规划。
+<br>在每个开发周期中，通过客户、业务人员和开发人员的交流、反馈能够清楚地发现软件开发过程中现存的问题并进行及时调整。另外，极限编程还要求将每次迭代看作最后一次迭代，团队中每个人都要时刻为按时交付产品做好准备。</p>
+</li>
+<li>
+<p>验收测试</p>
+<p>在迭代过程中，迭代计划会议期间选择的用户案例将转换为验收测试。该客户指定测试场景，以验证用户故事是否被正确执行。
+<br>每个验收测试代表系统的预期结果。客户负责验证验收测试的正确性，并检查测试分数，以确定哪些失败的测试需要优先进行调整。在最终产品发布之前，验收测试还用作回归测试。
+<br>此外，每个迭代中都要创建验收测试，只有通过了验收测试才能进行迭代的交付，否则进度依然为零。</p>
+</li>
+<li>
+<p>频繁发布小版本</p>
+</li>
+</ol>
+<p>迭代流程示意图
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-49.png"
+	width="1003"
+	height="472"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-49_hu5406299581641194748.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-49_hu16837521350127214768.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="510px"
+	
+></p>
+<ol>
+<li>
+<p>Release Plan（发布计划）：</p>
+<p>在开始时，根据用户故事（User Stories）制定一个发布计划。这些用户故事描述了系统需要实现的功能和特性。</p>
+</li>
+<li>
+<p>Iteration Planning（迭代规划）：</p>
+<p>迭代规划会考虑项目的进度（Project Velocity），用户故事以及之前迭代中未完成的任务（Unfinished Tasks），还有未通过的验收测试（Failed Acceptance Tests）和发现的缺陷（Bugs）。</p>
+<p>制定一个迭代计划（Iteration Plan），确定在接下来的迭代中需要完成的工作。</p>
+</li>
+<li>
+<p>Development（开发）：</p>
+<p>开发阶段是迭代的核心，团队每天进行开发工作，包括实现新功能（New Functionality）和修复缺陷（Bug Fixes）。</p>
+<p>在这个过程中，团队成员会不断学习和交流（Learn and Communicate）以提高开发效率和代码质量。</p>
+</li>
+<li>
+<p>Latest Version（最新版本）：</p>
+<p>每天的开发结果会集成到系统的最新版本中，确保系统始终处于可运行状态。
+<br>最新版本中包含了新功能和已修复的缺陷。</p>
+</li>
+<li>
+<p>Next Iteration（下一次迭代）：</p>
+<p>每次迭代结束后，项目团队会评估迭代成果，并将未完成的任务、未通过的验收测试和发现的缺陷带入到下一次迭代中。
+<br>基于项目进度和新的用户故事，重新规划下一次迭代的工作内容。</p>
+</li>
+<li>
+<p>Bugs（缺陷）：</p>
+<p>在整个迭代过程中，发现的缺陷会记录下来并进行修复。
+<br>缺陷修复是日常开发工作的一部分，确保系统的质量不断提升。</p>
+</li>
+</ol>
+<p>开发流程示意图
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-50.png"
+	width="989"
+	height="478"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-50_hu5618089159960340445.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-50_hu12347481738991384032.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<ol>
+<li>
+<p>Iteration Plan（迭代计划）：</p>
+<p>从迭代计划中分配任务，这些任务可能包括新的功能开发和修复缺陷。</p>
+</li>
+<li>
+<p>Stand Up Meeting（站立会议）：</p>
+<p>每天的站立会议（Daily Standup）讨论当前任务的进展、存在的障碍以及下一步的计划。
+<br>会议还会讨论未完成的任务（Unfinished Tasks）和未通过的验收测试（Failed Acceptance Tests）。</p>
+</li>
+<li>
+<p>Collective Code Ownership（集体代码所有权）：</p>
+<p>团队中的所有成员对代码拥有共同的责任，任何人都可以修改任何代码。
+<br>集体代码所有权有助于提高代码的质量和一致性，同时避免单点故障。</p>
+</li>
+<li>
+<p>Learn and Communicate（学习和沟通）：</p>
+<p>团队成员通过结对编程（Pair Programming）、重构（Refactor Mercilessly）、移动人员（Move People Around）和使用CRC卡片（CRC Cards）来学习和交流。
+<br>CRC卡片（Class-Responsibility-Collaborator Cards）用于设计和讨论系统的类和职责。</p>
+</li>
+<li>
+<p>New Functionality（新功能）：</p>
+<p>在开发过程中实现新功能，确保通过100%的单元测试（100% Unit Tests Passed）和验收测试（Acceptance Test Passed）。</p>
+</li>
+<li>
+<p>Bug Fixes（缺陷修复）：</p>
+<p>在开发过程中持续进行缺陷修复，确保系统的稳定性和可靠性。</p>
+</li>
+</ol>
+<p>设计、编码及测试流程示意图
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-51.png"
+	width="1006"
+	height="579"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-51_hu272084707079873353.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-51_hu8857121960177453716.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="416px"
+	
+></p>
+<ol>
+<li>
+<p>Next Task or Failed Acceptance Test（下一个任务或未通过的验收测试）：</p>
+<p>团队成员根据任务列表或未通过的验收测试选择下一个任务。</p>
+</li>
+<li>
+<p>Pair Up（结对编程）：</p>
+<p>团队成员进行结对编程，共同编写代码，提高代码质量和知识共享。</p>
+</li>
+<li>
+<p>Create a Unit Test（创建单元测试）：</p>
+<p>为每个新功能或修复创建相应的单元测试，确保功能实现符合预期。</p>
+</li>
+<li>
+<p>Pass/Fail Unit Test（通过/未通过单元测试）：</p>
+<p>运行单元测试，确保代码正确性。
+<br>如果单元测试失败，则继续调试和修复，直到通过测试。</p>
+</li>
+<li>
+<p>Continuous Integration（持续集成）：</p>
+<p>持续将代码集成到主代码库中，运行所有单元测试和验收测试，确保系统的稳定性。
+<br>通过持续集成发现和修复集成问题，减少集成风险。</p>
+</li>
+<li>
+<p>Refactor  Mercilessly（无情重构）：</p>
+<p>持续对代码进行重构，优化代码结构，提高代码的可维护性。</p>
+</li>
+<li>
+<p>Move People Around（人员轮换）：</p>
+<p>定期轮换团队成员，增加团队的灵活性和知识共享，避免知识孤岛。</p>
+</li>
+<li>
+<p>CRC Cards（CRC卡片）：</p>
+<p>使用CRC卡片进行简单设计和讨论复杂问题，有助于明确系统的类和职责。</p>
+</li>
+</ol>
+<h2 id="3-软件需求分析">3 软件需求分析
+</h2><h3 id="需求的定义">需求的定义
+</h3><h4 id="ieee定义">IEEE定义
+</h4><ol>
+<li>用户解决问题或达到目标所需要的条件或权能</li>
+<li>系统或系统部件要满足合同、标准、规范或其他正式规定文档所需具有的条件或权能。</li>
+<li>一种反应上面（1）或（2）所描述的条件或权能的文档说明</li>
+</ol>
+<h4 id="通俗的定义">通俗的定义
+</h4><p>软件开发人员通过与软件产品的拥有者和使用者的交流和调研获取相关的业务职能、业务知识和业务流程等信息，并对这些信息进行分析和整理后形成的有关该软件产品必须提供的功能和性能等指标的规格描述。</p>
+<h3 id="软件需求分析的任务和目标">软件需求分析的任务和目标
+</h3><h4 id="任务">任务
+</h4><p>研究一种无二义性的表达工具，它能为用户和软件人员双方都接受，并能够把“需求”严格地、形式地表达出来。</p>
+<p>通俗：确定系统的目标，回答系统必须“做什么”的问题并编制需求规格说明书</p>
+<h4 id="目标">目标
+</h4><p>就是借助于（业务）系统的逻辑模型导出目标系统的逻辑模型，解决目标系统的“做什么”的问题
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-52.png"
+	width="1165"
+	height="403"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-52_hu7946938895786939278.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-52_hu181321378957395855.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="693px"
+	
+></p>
+<h3 id="软件需求分析建模的原则">软件需求分析建模的原则
+</h3><p>数据、功能、行为建模</p>
+<ol>
+<li>问题的信息域必须被表示和理解</li>
+<li>软件将完成的功能必须被定义</li>
+<li>软件的行为（作为外部事件的结果）必须被表示</li>
+</ol>
+<h3 id="软件需求工程">软件需求工程
+</h3><h4 id="软件需求的获取">软件需求的获取
+</h4><p>需求获取是在问题及其最终解决方案之间架设桥梁的第一步。其目的是清楚地理解所要解决的问题，完整的获得用户的需求，并提出这些需求实现条件，以及需求应达到的标准。获取需求的一个必不可少的结果是对项目中描述的用户需求的普遍理解，进而探索出描述这些需求的多种解决方案</p>
+<h4 id="软件需求的管理">软件需求的管理
+</h4><p>需求管理的目的是在客户与软件开发方之间建立对需求的共同理解，维护需求与其他工作成果的一致性，并控制需求的变更。需求管理过程有3个主要活动：</p>
+<ol>
+<li>需求确认：指软件开发方和客户或用户共同对需求文档进行评审，双方对需求达成共识后作出书面承诺，使需求文档具有商业合同效果。</li>
+<li>需求跟踪：指通过比较需求文档与后续工作成果之间的对应关系，建立与维护“需求跟踪矩阵”，确保软件产品依据需求文档进行开发</li>
+<li>需求变更控制：指依据“变更申请-审批-更改-重新确认”的流程处理软件需求的变更，防止需求变更失去控制而导致项目发生混乱。</li>
+</ol>
+<h3 id="软件需求的类别">软件需求的类别
+</h3><ol>
+<li>功能需求：列举出所开发软件在功能上应做什么</li>
+<li>性能需求：给出所开发软件的技术性能指标，尤其是系统的实时性和其他时间要求，如响应时间、处理时间、消息传送时间等；资源配置要求，精确度，数据处理量等要求</li>
+<li>其它需求：包括环境需求、可靠性需求、安全保密需求、用户界面需求、资源使用需求、软件成本及开发进度需求等</li>
+</ol>
+<h3 id="需求分析说明书类别">需求分析说明书类别
+</h3><h4 id="用户需求说明书">用户需求说明书
+</h4><p>需求分析员对收集到的所有需求信息进行整理和分析，消除错误，归纳与总结共性的用户需求，按照指定的文档模板撰写《用户需求说明书》，调查过程中获取的需求信息可以作为《用户需求说明书》的附件。《用户需求说明书》撰写完毕之后，需求分析员应当邀请同行专家和用户（包括客户和最终用户）一起评审《用户需求说明书》，尽最大努力使《用户需求说明书》能够正确无误地反映用户的真实意愿。</p>
+<h4 id="软件需求规格说明书">软件需求规格说明书
+</h4><p>软件开发人员需从《用户需求说明书》出发，对比较复杂的用户需求进行建模分析，以帮助软件开发人员更好地理解需求，进而逐步细化所有的软件功能，找出系统各元素之间的联系、接口特性和设计上的限制，分析它们是否满足功能要求，是否合理。依据功能需求，性能需求，运行环境需求等，剔除不合理的部分，增加其需要部分。最终综合成系统的解决方案，给出目标系统的逻辑模型。</p>
+<h4 id="软件需求的确认和评审">软件需求的确认和评审
+</h4><p>需求确认是指开发方和客户方共同对需求文档如《用户需求说明书》和《软件需求规格说明书》进行评审，双方对需求达成共识后作出承诺。</p>
+<h2 id="4-面向对象分析">4 面向对象分析
+</h2><h3 id="oo建模的发展历程">OO建模的发展历程
+</h3><p>OOA/OOD 方法：1991年由P.Coad 和 E.Yourdon
+Booch 方法：1986年由Grady Booch
+OMT方法：1991年J.Rambaugh
+OOSE方法：I.Jacobson</p>
+<h3 id="uml建模语言">UML建模语言
+</h3><p>统一建模语言 UML 是由Grady Booch、Ivar Jacobson 和 James Rumbaugh 发起，在Booch方法、OOSE方法和OMT方法基础上，广泛征求意见，集众家之长，几经修改而形成的一个面向对象分析与设计建模语言。这种建模语言得到了工业界的广泛支持，由OMG组织采纳作为面向对象建模的行业标准，成为软件行业第一个统一的建模语言。</p>
+<h4 id="uml发展历史">UML发展历史
+</h4><p>1996年由Booch、Rambaugh、jacobson发起形成第一个版本UML0.9</p>
+<p>1997年9月被OMG组织认可，并发布UML1.1</p>
+<p>目前OMG组织发布的最新版本是2017年的UML2.5.1</p>
+<h4 id="uml定义">UML定义
+</h4><p>UML是一种标准的图形化建模语言，它是面向对象分析与设计的一种标准表示。</p>
+<p>它不是一种可视化的程序设计语言，而是一种可视化的建模语言；</p>
+<p>不是工具或知识库的规格说明，而是一种建模语言规格说明，是一种表示的标准；</p>
+<p>不是过程，也不是方法，但允许任何一种过程和方法使用它。</p>
+<h4 id="uml基本结构">UML基本结构
+</h4><p>UML 语法定义了UML的概念、元素、符合表示法以及用法，为开发者或开发工具使用这些图形符号和文本语法进行建模提供了标准和规范。</p>
+<p>基本构造块：Thing, Relationship, Diagram</p>
+<ol>
+<li>Structural thing：Class，interface，collaboration，use case，component，node</li>
+<li>Behavior thing：Interaction，state machine</li>
+<li>Group thing：package</li>
+<li>Annotation thing：note</li>
+<li>Relationship：Dependency，Association，Generalization，Realization</li>
+</ol>
+<p>语义规则：name、scope、cisibility、integrity、execution</p>
+<p>通用机制：specification、adornment、common division、extensibility mechanism</p>
+<h3 id="41视图">4+1视图
+</h3><p>UML是用来描述模型的，通过模型来描述系统的结构（或静态特征）以及行为（或动态特征）。它从不同的视角为系统的架构建模，以<b>用例视图为核心</b>描述系统的不同视图（view），称为4+1视图，如图所示
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-53.png"
+	width="570"
+	height="332"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-53_hu5210400029028722668.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-53_hu10637629585482094612.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="412px"
+	
+></p>
+<pre><code>逻辑视图、组件视图、进程视图、部署视图、用例视图
+</code></pre>
+<p>用例视图</p>
+<pre><code>强调从用户的角度看到的或需要的系统功能
+</code></pre>
+<p>逻辑视图</p>
+<pre><code>展现系统的静态或结构组成及特征
+</code></pre>
+<p>进程视图</p>
+<pre><code>描述设计的并发和同步等特性，关注系统非功能性需求
+</code></pre>
+<p>组件视图</p>
+<pre><code>关注软件代码的静态组织与管理
+</code></pre>
+<p>部署视图</p>
+<pre><code>描述硬件的拓扑结构以及软件和硬件的映射问题，关注系统非功能性需求（性能、可靠性等）
+</code></pre>
+<h3 id="领域模型">领域模型
+</h3><h4 id="活动图">活动图
+</h4><pre><code>活动图的起点用来描述活动图的开始状态，用黑的实心圆表示。
+活动图的中止点描述活动图的终止状态，用一个含有实心圆的空心圆表示。
+活动图中的活动既可以是手动执行的任务，也可以是自动执行的任务。
+</code></pre>
+<h5 id="活动图的组成">活动图的组成
+</h5><ol>
+<li>
+<p>动作状态</p>
+ <p>原子性的动作或操作的执行状态，它不能被外部事件的转换中断
+ <p>动作状态使用平滑的圆角矩形表示，动作状态表示的动作写在矩形内部
+</li>
+</ol>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-8.png"
+	width="472"
+	height="181"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-8_hu7019368992936513611.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-8_hu8857447743584476771.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="260"
+		data-flex-basis="625px"
+	
+></p>
+<ol start="2">
+<li>活动状态
+ <p>活动状态可以<b>分解</b>成其他子活动状态或动作状态，可以被使转换离开状态的时间从外部中断。
+ <p>活动状态可以有<b>内部转换</b>，可以有入口动作和出口动作。活动状态具有<b>至少一个输出完成转换</b>，当状态中的活动完成时该转换被激发。
+ <p>活动状态和动作状态的表示图标相同，都是平滑的圆角矩形。不同的是，活动状态可以在图标中给出入口动作和出口动作等信息，如下图：
+</li>
+</ol>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-9.png"
+	width="537"
+	height="222"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-9_hu11656697857611081815.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-9_hu7879591285859920916.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="241"
+		data-flex-basis="580px"
+	
+></p>
+<ol start="3">
+<li>
+<p>组合活动</p>
+ <p>可以在活动中被中断
+</li>
+<li>
+<p>分叉与结合</p>
+ <p>分叉表示将一个控制流分成两个或多个并发运行的分支，结合用来表示并行分支在此得到汇合
+ <p>分叉具有一个输入转换，两个或多个输出转换，每个转换都可以是独立的控制流，如下图：
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-10.png"
+	width="873"
+	height="673"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-10_hu13715700437519228347.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-10_hu13096776997505418732.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="311px"
+	
+></p>
+ <p>结合与分叉相反，结合具有两个或多个输入转换，只有一个输出转换。先完成的控制流需要在此等待，只有当所有的控制流都到达结合点时，控制才能继续进行，如下图：
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-11.png"
+	width="972"
+	height="725"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-11_hu895489928840496393.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-11_hu10259704736443328063.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="321px"
+	
+></p>
+</li>
+<li>
+<p>分支与合并</p>
+</li>
+<li>
+<p>泳道</p>
+</li>
+<li>
+<p>对象流</p>
+</li>
+</ol>
+<h4 id="uml类图">UML类图
+</h4><p>每个类有三层：</p>
+<ol>
+<li>类名</li>
+<li>成员变量</li>
+<li>类方法</li>
+</ol>
+<p>修饰符有四种——对应java的四种保护类型</p>
+<ol>
+<li>“+”表示 public；</li>
+<li>“-”表示 private；</li>
+<li>“#”表示 protected；</li>
+<li>不带符号表示 default。</li>
+</ol>
+<p>抽象类的类名以及抽象方法用斜体表示</p>
+<p>接口</p>
+<pre><code>接口在类图中也是用矩形框表示，但是与类的表示法不同的是，
+接口在类图中的第一层顶端用构造型 &lt;&lt;interface&gt;&gt;表示，
+下面是接口的名字，
+第二层是方法。
+此外，接口还有另一种表示法，俗称棒棒糖表示法，就是类上面的一根棒棒糖（圆圈+实线）。圆圈旁为接口名称，接口方法在实现类中出现。
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image.png"
+	width="1149"
+	height="345"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image_hu12082194701884801555.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image_hu18115664857178632116.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="333"
+		data-flex-basis="799px"
+	
+></p>
+<p>包
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-1.png"
+	width="1151"
+	height="319"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-1_hu16662923303320218780.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-1_hu10582232013048113103.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="360"
+		data-flex-basis="865px"
+	
+></p>
+<h5 id="类图中表示关系">类图中表示关系
+</h5><p>由弱到强的排序：依赖关系、关联关系、聚合关系、组合关系、继承关系</p>
+<ol>
+<li>
+<p>实现关系</p>
+<p>实现关系用空心三角和虚线组成的箭头来表示，从实现类指向接口
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-2.png"
+	width="1137"
+	height="322"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-2_hu8187485207469810510.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-2_hu3546492807454451027.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="353"
+		data-flex-basis="847px"
+	
+>
+在Java代码中，实现关系可以直接翻译为关键字 implements
+<br>    就是某个类实现了某个接口</p>
+</li>
+<li>
+<p>泛化关系</p>
+<p>指对象与对象之间的继承关系</p>
+<p>如果对象A和对象B之间的“is a”关系成立，那么二者之间就存在继承关系，对象B是父对象，对象A是子对象</p>
+<p>A is a B : B 是父类，A是子类</p>
+<p>泛化关系用空心三角和实线组成的箭头表示，从子类指向父类
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-3.png"
+	width="1158"
+	height="336"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-3_hu12126768309951533097.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-3_hu6975216774445136445.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="344"
+		data-flex-basis="827px"
+	
+></p>
+</li>
+<li>
+<p>关联关系</p>
+<p>它使一个对象知道另一个对象的属性和方法</p>
+<p>双向关联关系用带双箭头的实线或者无箭头的实线双线表示</p>
+<p>单向关联用一个带箭头的实线表示，箭头指向被关联的对象。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-4.png"
+	width="1165"
+	height="320"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-4_hu6199733449464074135.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-4_hu17645591191083057122.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="364"
+		data-flex-basis="873px"
+	
+></p>
+<p>数字：精确的数量<br>
+<em>或者0..</em>：表示0到多个<br>
+0..1：表示0或者1个，在Java中经常用一个空引用来实现<br>
+1..*：表示1到多个</p>
+</li>
+<li>
+<p>依赖关系</p>
+<p>是一种弱关联关系。<br>
+如果对象A用到对象B，但是和B的关系不是太明显的时候，就可以把这种关系看作是依赖关系。
+<br>
+B为A的构造器或方法中的局部变量、方法或构造器的参数、方法的返回值，或者A调用B的静态方法。</p>
+<p><br>如果对象A依赖于对象B，则 A “use a” B。比如驾驶员和汽车的关系，驾驶员使用汽车，二者之间就是依赖关系。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-5.png"
+	width="1159"
+	height="322"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-5_hu11823587088555240710.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-5_hu13177836283397244903.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="359"
+		data-flex-basis="863px"
+	
+></p>
+<p>聚合是关联关系的一种特例，它体现的是整体与部分的拥有关系，即 “has a” 的关系。
+<br>此时整体与部分之间是可分离的，<b>它们可以具有各自的生命周期</b>，部分可以属于多个整体对象，也可以为多个整体对象共享，所以聚合关系也常称为共享关系。
+<br>例如，公司部门与员工的关系，一个员工可以属于多个部门，一个部门撤消了，员工可以转到其它部门。<br>
+A has a B : A -&gt; B
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-6.png"
+	width="1154"
+	height="328"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-6_hu1790618454482642221.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-6_hu7630959428963607107.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="351"
+		data-flex-basis="844px"
+	
+>
+聚合关系两端的生命周期是不一样的</p>
+</li>
+<li>
+<p>组合关系</p>
+<p>组合关系的两端生命周期是一样的</p>
+<p>A contains a B ： A -&gt; B</p>
+<p>如果A组合B，则A需要知道B的生存周期，即可能A负责生成或者释放B，或者A通过某种途径知道B的生成和释放。</p>
+<p>例如，人包含头、躯干、四肢，它们的生命周期一致。当人出生时，头、躯干、四肢同时诞生。当人死亡时，作为人体组成部分的头、躯干、四肢同时死亡。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-7.png"
+	width="1143"
+	height="337"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-7_hu5630861608394488189.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-7_hu1720805876679164892.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="339"
+		data-flex-basis="814px"
+	
+></p>
+</li>
+</ol>
+<h3 id="用例模型">用例模型
+</h3><h4 id="用例图">用例图
+</h4><p>用例图由三个基本元素组成</p>
+<ul>
+<li>Actor：称为角色或者参与者，表示使用系统的对象，代表角色的不一定是人，也可以是组织、系统或设备</li>
+<li>Use_case：称为用例，描述角色如何使用系统功能实现需求目标的一组成功场景和一系列失败场景的集合（1. 如何使用系统功能实现需求目标  2. 成功场景和失败场景的集合）</li>
+<li>Association：表示角色与用例之间的关系，以及用例和子用例之间的关系</li>
+</ul>
+<p>用例比传统需求分析的功能性列表更有效，原因如下：</p>
+<ol>
+<li>用例将系统的特性和功能放到面向用户目标的语境中去考虑，从而能使识别出来的功能是真正为用户提供价值的功能</li>
+<li>用例描述功能的方式是让用户写出多种使用系统的场景，和用户日常工作序列一致，使得交流更简单有效</li>
+</ol>
+<p>包含子用例</p>
+<pre><code>在ATM的取款、查询余额、更改密码的操作场景中，经分析都存在一段验证银行卡有效性及身份验证的场景，而且都是基本用例必须执行的操作，为此可以将其抽取出来作为基本用例的包含子用例。
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-57.png"
+	width="936"
+	height="520"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-57_hu3959956392375747829.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-57_hu17994022357418747976.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
+	
+></p>
+<p>扩展子用例</p>
+<pre><code>在取款和查询余额的操作场景中，存在一段是否打印操作凭据的情景，经分析该功能可以成为一个子用例，且符合在某种条件下可以执行的用例，为此该子用例应为基本用例的扩展子用例。
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-55.png"
+	width="923"
+	height="345"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-55_hu10586788512095591790.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-55_hu13646250103689915835.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="642px"
+	
+></p>
+<h4 id="用例说明">用例说明
+</h4><p>基于已经找到的用例和子用例，并参考之前的需求定义以及场景描述的内容，将用例交互的成功场景和失败场景以标准的格式归纳描述。
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-56.png"
+	width="1517"
+	height="501"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-56_hu16735347869122885042.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-56_hu5912074287894303047.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="726px"
+	
+></p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-58.png"
+	width="1548"
+	height="771"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-58_hu16380306876001428937.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-58_hu14496137990720754611.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<p>例子
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-59.png"
+	width="1651"
+	height="1006"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-59_hu3480809066221900299.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-59_hu16417567058151865397.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="393px"
+	
+></p>
+<h4 id="ssd图-系统顺序图">SSD图 系统顺序图
+</h4><h4 id="操作契约">操作契约
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Operation： Name
+</span></span><span class="line"><span class="cl">Cross Reference：此操作所属用例的名字
+</span></span><span class="line"><span class="cl">Precondition：在执行此操作前领域模型的对象的状态
+</span></span><span class="line"><span class="cl">Postcondition：对象状态的变化
+</span></span><span class="line"><span class="cl">Postcondition中可以写：
+</span></span><span class="line"><span class="cl">(1)实例的创建活消除；
+</span></span><span class="line"><span class="cl">(2)关联的形成活消除；
+</span></span><span class="line"><span class="cl">(3)属性的修改；
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="结构化需求分析方法老师的知识点总结没有不看了">结构化需求分析方法（老师的知识点总结没有，不看了）
+</h2><h3 id="结构化分析由来">结构化分析由来
+</h3><p>结构化设计 的目的是需要一种图形符号体系来表示数据和对数据进行变换的处理，这些处理最终能被映射到软件体系结构的设计中</p>
+<h4 id="分析模型的结构">分析模型的结构
+</h4><p>需求分析的分析模型必须达到三个主要目标</p>
+<pre><code>描述客户的需求
+建立创建软件设计的基础
+定义在软件完成后可以被确认的一组需求
+</code></pre>
+<p>结构化分析模型的组成</p>
+<pre><code>数据流图：描述功能模型
+ER图、数据词典：描述数据模型
+状态迁移图：描述行为模型
+</code></pre>
+<h4 id="数据建模">数据建模
+</h4><p>概念性数据模型是一种面向问题的数据模型，是按照用户的观点来对数据和信息的建模，其表示方法称为ER法，也称实体关系模型。</p>
+<p>描述了从用户角度看到的数据，反应了用户的现实环境，但与软件系统中的实现方法无关。</p>
+<p>软件系统本质上是信息处理系统，因此在开发过程中必须考虑</p>
+<ol>
+<li>
+<p>数据</p>
+<p>需要什么？数据之间的联系？本身的性质？数据结构&hellip;</p>
+</li>
+<li>
+<p>对数据处理</p>
+<p>进行哪些处理？每个处理的逻辑功能是什么？</p>
+</li>
+</ol>
+<p>数据建模的作用</p>
+<pre><code>反映了与任何数据处理应用相关的一组特定问题
+
+系统处理哪些主要的数据对象？
+每个数据对象的组成如何？
+哪些属性描述了这些数据对象？
+这些数据对象当前位于何处？
+每个数据对象与其他数据对象有哪些关系？
+数据对象和变换它们的处理之间有哪些关系？ 
+</code></pre>
+<h5 id="数据对象">数据对象
+</h5><p>通常将数据对象简称为实体</p>
+<p>数据对象的属性和关系</p>
+<p>数据对象的基数</p>
+<pre><code>一对一、一对多、多对多
+</code></pre>
+<h5 id="er图">ER图
+</h5><p>主要目的是以图形形式表示实体与实体之间的关系</p>
+<h5 id="数据结构规范化">数据结构规范化
+</h5><p>数据对象之间的基数关系，在关系型数据库中就会造成数据存储的冗余现象。为了消除数据冗余，就需要对实体-关系图中的数据进行规范化处理，即数据范式。</p>
+<p>规范化的好处：</p>
+<pre><code>消除多义性
+关系单纯化
+是关系模式更灵活
+</code></pre>
+<h2 id="6-软件设计">6 软件设计
+</h2><h3 id="软件设计的目标">软件设计的目标
+</h3><p>根据软件需求分析的结果，设想并设计软件，即根据“目标系统”的逻辑模型确定“目标系统”的物理模型，概况地描述系统如何实现用户所提出来的功能和性能</p>
+<p>软件设计包括：</p>
+<pre><code>软件系统的结构设计、处理方式（性能）设计
+数据结构和数据存储的设计
+界面和可靠性设计
+</code></pre>
+<h3 id="软件设计的过程">软件设计的过程
+</h3><p>软件设计是一个把软件需求变换成包含软件功能模型、数据模型以及行为模型的过程。</p>
+<p>从工程管理的角度，软件设计分成：</p>
+<pre><code>概要设计：只需描绘出可直接反映功能、数据、行为需求的软件总体框架；
+详细设计：即过程设计，通过对软件结构进行细化，得到各功能模块的详细数据结构和算法，使得功能模块在细节上非常接近于源程序的软件设计模型。 
+</code></pre>
+<p>从技术的角度看分为</p>
+<ul>
+<li>
+<p>结构设计</p>
+<p>定义了软件系统各主要元素（主要指功能模块）之间的关系，其中包括软件的模块接口设计；</p>
+</li>
+<li>
+<p>数据设计</p>
+<p>软件各模块所需要处理的数据以及系统需要长久保存的数据进行数据结构和数据存储的设计；</p>
+</li>
+<li>
+<p>过程设计</p>
+<p>确定各功能模块内部结构的详细定义，包括模块主要算法逻辑和局部数据结构的定义。</p>
+</li>
+</ul>
+<h4 id="软件概要设计">软件概要设计
+</h4><ol>
+<li>
+<p>制定设计规范</p>
+<p>在进入软件开发阶段之初，首先应为软件开发小组指定设计阶段应该共同遵守的标准，作为后续设计和编码工作的基础，方便协调组内各成员可以在一个相同认可的语境下工作和讨论的问题。</p>
+</li>
+<li>
+<p>软件系统结构的总体设计</p>
+<p>根据需求分析的结果，采用某种设计方法，将一个复杂的系统按功能划分成模块的层次结构。
+确定每个模块的功能，建立需求与功能之间的对应关系
+确定模块间的调用关系及模块间的接口
+优化已有结构使系统达到要求的性能指标</p>
+</li>
+<li>
+<p>处理方式设计（性能设计）</p>
+<p>首先，为每一个已确定的功能模块定义所必须的算法，并评估算法的性能。
+其次，还需要确定为满足软件系统的性能需求所必须的算法和模块间的控制方式</p>
+</li>
+<li>
+<p>数据结构设计</p>
+<p>确定软件涉及的文件系统结构以及数据库的模式、子模式，进行数据完整性和安全性的设计。</p>
+</li>
+<li>
+<p>可靠性设计（质量设计）</p>
+<p>软件可靠性指软件系统在长时间的运行过程中出现的错误数以及系统恢复的能力，以及由此而发现的各类文档中出现的描述性错误和设计性错误。</p>
+</li>
+<li>
+<p>界面设计</p>
+</li>
+</ol>
+<h4 id="软件详细设计">软件详细设计
+</h4><p>也称之为软件的过程设计。相对于概要设计而言，就是针对软件概要设计的结果进行功能模块内部结构的设计</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-18.png"
+	width="953"
+	height="227"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-18_hu10297369650408197530.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-18_hu18367419565544270623.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="419"
+		data-flex-basis="1007px"
+	
+></p>
+<h3 id="软件设计的主要内容">软件设计的主要内容
+</h3><h4 id="软件体系结构设计">软件体系结构设计
+</h4><p>结合软件体系结构已有的类型或风格，决定当前软件系统的体系结构和框架，作为后续软件设计活动的基础</p>
+<h4 id="软件功能结构设计">软件功能结构设计
+</h4><p>根据需求分析的结果，并结合以及确定的软件体系结构，进一步确定需求对应的软件功能模块及其功能模块之间的关系</p>
+<h4 id="软件的数据设计">软件的数据设计
+</h4><h5 id="软件的数据存储结构设计">软件的数据存储结构设计
+</h5><p>根据需求分析结果中的<b>领域模型或者问题域描述</b>，并结合软件体系结构，确定系统需要持久保存数据的数据模型</p>
+<h5 id="软件的局部数据结构设计">软件的局部数据结构设计
+</h5><p>根据确定的软件<b>功能结构以及相应的业务处理逻辑</b>，确定每个功能模块内部所需要的局部数据结构，并满足功能模块之间调用接口的要求</p>
+<h4 id="软件的接口设计">软件的接口设计
+</h4><p>根据软件的<b>功能结构</b>，进一步确定功能模块之间调用的接口机制，以及软件层次结构之间功能模块调用的接口机制</p>
+<h4 id="软件的过程设计">软件的过程设计
+</h4><p>即软件的详细设计，根据已经确定的每个功能模块，进一步确定每个功能模块内部的处理逻辑，并结合软件的局部数据结构的设计，完善每个功能模块的处理过程</p>
+<h3 id="软件设计模型">软件设计模型
+</h3><ol>
+<li>
+<p>动态结构设计</p>
+<p>以某种方式表示功能响应客户请求时处理数据的过程或条件，用于进一步解释软件结构中各功能之间是如何协调工作的机制，解释这些功能存在的必要性。</p>
+</li>
+<li>
+<p>静态结构设计</p>
+<p>由软件的功能结构和数据结构组成，展示软件系统能够满足所有需求的框架结构；展示为了满足所有功能需求系统所必备的功能模块及其关系。</p>
+</li>
+</ol>
+<h3 id="软件设计基础">软件设计基础
+</h3><h4 id="一般性原则">一般性原则
+</h4><h5 id="衡量设计过程的原则">衡量设计过程的原则
+</h5><ol>
+<li>设计过程应该是<b>可追踪和可回溯</b>的</li>
+<li>设计必须<b>实现</b>分析模型中描述的所有<b>显示需求</b>，必须<b>满足</b>用户希望的所有<b>隐式需求</b></li>
+<li>设计说明<b>文档</b>必须是可读的、可理解的，使得将来已于编程、易于测试、易于维护</li>
+</ol>
+<h5 id="衡量设计模型的原则">衡量设计模型的原则
+</h5><ol>
+<li>设计模型应该展现软件的全貌，包括从实现角度可以看到的数据、功能、行为</li>
+<li>设计模型应该是一个<b>分层结构</b></li>
+<li>设计应当<b>模块化</b>，应当建立具有独立功能特征的构件</li>
+<li>设计应当<b>建立</b>能够降低模块与外部环境之间复杂连接的<b>接口</b></li>
+<li>设计应当根据将要实现的对象和数据模式导出合适的数据结构</li>
+</ol>
+<h4 id="软件结构的模块化">软件结构的模块化
+</h4><h5 id="模块的定义">模块的定义
+</h5><p>整个软件可被划分成若干个<b>可单独命名</b>且<b>可编址</b>组成部分，这些部分称之为模块。</p>
+<p>模块的3个基本属性</p>
+<ul>
+<li>功能：实现什么功能，做什么事情。</li>
+<li>逻辑：描述模块内部怎么做。</li>
+<li>状态：该模块使用时的环境和条件。</li>
+</ul>
+<h5 id="模块的表示">模块的表示
+</h5><p>在表示一个模块的时候，须按模块的外部特性和内部特性分别描述</p>
+<p>模块的外部特性</p>
+<pre><code>模块的模块名、参数表、以及给程序以至整个系统造成的影响
+</code></pre>
+<p>模块的内部特性</p>
+<pre><code>完成其功能的程序代码和仅供该模块内部使用的数据
+</code></pre>
+<h4 id="模块的独立性和耦合性">模块的独立性和耦合性
+</h4><p>如果一个模块能够独立于其他模块被编程、测试和修改，而和软件系统中其它的模块的接口是简单的，则该模块具有功能独立性。</p>
+<p>1978年Meyer提出了两个准则度量模块独立性，即模块间的耦合和模块的内聚。</p>
+<h5 id="模块的内聚性">模块的内聚性
+</h5><p>内聚是模块功能强度的度量，一个模块内部各元素之间的联系越紧密，则它的内聚性就越高，相对地，它与其他模块之间的耦合性就会减低，而模块独立性就越强。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-19.png"
+	width="745"
+	height="274"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-19_hu6094896268344683357.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-19_hu7021993309707189441.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="652px"
+	
+></p>
+<ol>
+<li>
+<p>巧合内聚</p>
+<p>当几个模块内凑巧由一些程序段代码相同，有没有明确表现出独立的功能，程序员为了减少存储，把这些代码独立出来建立一个新的模块，是内聚成都最低的模块
+<br>比如常见的一个项目下有Utils模块</p>
+</li>
+<li>
+<p>逻辑内聚</p>
+<p>这种模块把几种相关的功能组合在一起，每次被调用时由传送给模块的控制型参数来确定该模块应执行哪一种功能，比巧合内聚模块的内聚程度要高</p>
+<p>比如有一个文件操作模块A，还有一个调用模块B。A包含有读文件和写文件。B调用A的功能，然后A在该功能内部判断要用写还是读。</p>
+</li>
+<li>
+<p>时间内聚</p>
+<p>时间内聚又称为经典内聚。这种模块一般为多功能模块，但模块的各个功能的执行与时间有关，通常要求所有功能必须在同一时间段内执行。</p>
+<p>例如初始化模块和终止模块。</p>
+</li>
+<li>
+<p>过程内聚</p>
+<p>一个模块由几个部分（子模块）组成，且通过一定的次序执行，这种模块称为过程内聚。</p>
+<p>使用流程图做为工具设计程序时，把流程图中的某一部分划出组成模块，就得到过程内聚模块。
+<br>例如，把流程图中的循环部分、判定部分、计算部分分成三个模块，这三个模块就是过程内聚模块</p>
+</li>
+<li>
+<p>通信内聚</p>
+<p>如果一个模块内各功能部分都使用了相同的输入数据，或产生了相同的输出数据，则称之为通信内聚模块。
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-20.png"
+	width="1091"
+	height="423"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-20_hu2959226924354742596.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-20_hu5578153294004710505.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="257"
+		data-flex-basis="619px"
+	
+></p>
+</li>
+<li>
+<p>信息内聚</p>
+<p>这种模块具有多个功能，各功能都在同一数据结构上操作，每项功能有一个唯一的入口点。这个模块将根据不同的要求，确定该执行哪一个功能。</p>
+<p>可以看成是多个功能内聚模块的组合，并且达到信息的隐蔽</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-21.png"
+	width="477"
+	height="353"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-21_hu17926741451911048445.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-21_hu15928203152850001901.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="135"
+		data-flex-basis="324px"
+	
+></p>
+</li>
+<li>
+<p>功能内聚</p>
+<p>一个模块中各个部分都是完成某一具体功能<b>必不可少</b>的组成部分，或者说该模块中所有部分都是为了完成一项具体功能而协同工作，紧密联系，不可分割的。则称该模块为功能内聚模块。</p>
+</li>
+</ol>
+<h5 id="模块的耦合性">模块的耦合性
+</h5><p>耦合是模块之间互相连接的紧密程度的度量。模块之间的连接越紧密，联系越多，耦合性就越高，而其模块独立性就越弱。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-22.png"
+	width="779"
+	height="278"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-22_hu4921950286684590390.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-22_hu7052342389247465966.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="280"
+		data-flex-basis="672px"
+	
+></p>
+<ol>
+<li>
+<p>内容耦合</p>
+<ul>
+<li>如果一个模块直接访问另一个模块的内部数据</li>
+<li>或者一个模块不通过正常入口转到另一个模块内部</li>
+<li>或者两个模块有一部分程序代码重叠</li>
+<li>或者一个模块有多个入口，则两个模块之间就发生了内容耦合
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-23.png"
+	width="839"
+	height="217"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-23_hu13874551715932436514.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-23_hu7146317241602408761.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="386"
+		data-flex-basis="927px"
+	
+></li>
+</ul>
+</li>
+<li>
+<p>公共耦合</p>
+<ul>
+<li>
+<p>若一组模块都访问同一个公共数据环境，则它们之间的耦合就称为公共耦合。公共的数据环境可以是全局数据结构、共享的通信区、内存的公共覆盖区等。</p>
+</li>
+<li>
+<p>公共耦合的复杂程度随耦合模块的个数增加而显著增加。若只是两模块间有公共数据环境，则公共耦合有两种情况。松散公共耦合和紧密公共耦合。</p>
+</li>
+</ul>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-24.png"
+	width="800"
+	height="300"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-24_hu5604620904908119806.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-24_hu13232769898522678699.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="640px"
+	
+></p>
+<p>所有公共耦合模块都与某一个公共数据环境内部各项的物理安排有关，若修改某个数据的大小，将会影响到所有的模块。</p>
+<p>无法控制各个模块对公共数据的存取，严重影响软件模块的可靠性和适应性。</p>
+<p>公共数据名的使用，明显降低了程序的可读性。</p>
+<p>例题</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-60.png"
+	width="1085"
+	height="266"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-60_hu2297142006663208544.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-60_hu5994382207555455794.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="407"
+		data-flex-basis="978px"
+	
+></p>
+</li>
+<li>
+<p>外部耦合</p>
+<p>一组模块都访问同一全局<b>简单变量</b>而不是同一全局数据结构，而且不是通过参数表传递该全局变量的信息，则称之为外部耦合。</p>
+<p>一组模块共享一个数据格式、通信协议或者外部接口定义</p>
+</li>
+<li>
+<p>控制耦合</p>
+<p>如果一个模块通过传送开关、标志、名字等控制信息，明显地控制选择另一模块的功能，就是控制耦合。</p>
+</li>
+<li>
+<p>标记耦合</p>
+<p>如果一组模块通过参数表传递记录信息，就是标记耦合。这个记录是某一数据结构的子结构，而不是简单变量。</p>
+<p>一组模块共享一组数据结构，且只需要使用数据结构中的某一部分</p>
+</li>
+<li>
+<p>数据耦合</p>
+<p>如果一个模块访问另一个模块时，彼此之间是通过数据参数来交换输入、输出信息的情况。</p>
+</li>
+<li>
+<p>非直接耦合</p>
+<p>如果两个模块之间没有直接关系，它们之间的联系完全是通过主（上级）模块的控制和调用来实现的，这就是非直接耦合。这种耦合的模块独立性最强。</p>
+</li>
+</ol>
+<h3 id="面向对象的设计原则">面向对象的设计原则
+</h3><h4 id="单一职责">单一职责
+</h4><p>针对类，应该只有一个引起它变化的原因，“职责”定义为变化的原因</p>
+<ul>
+<li>
+<p>如果有其他原因去改变一个类，那么这个类就具有其他的职责。类具有多个职责，等于这些职责具有耦合关系。</p>
+</li>
+<li>
+<p>为了提高类的内聚度，应将对象的不同职责分离至两个或多个类中，确保引起该类变化的原因只有一个。</p>
+</li>
+</ul>
+<h4 id="里氏替换原则">里氏替换原则
+</h4><p>子类应当可以替换父类并出现在父类能够出现的任何地方。</p>
+<h4 id="依赖倒置原则">依赖倒置原则
+</h4><p>高层模块不应依赖于低层模块，二者都应依赖于抽象；抽象不应依赖于实现细节，细节应该依赖于抽象。</p>
+<h4 id="接口隔离原则">接口隔离原则
+</h4><p>采用多个与特定客户类的接口 比 采用一个通用的涵盖多个业务方法的接口要好。</p>
+<h4 id="迪米特法则">迪米特法则
+</h4><p>最少知识原则：一个对象应当可能少的了解其它对象。</p>
+<h4 id="开闭原则">开闭原则
+</h4><p>软件实体（类、模块、函数）可以扩展，但不能修改。</p>
+<p>对于已存在的软件类的扩展是开放的，对于更改是封闭的。当需求改变时，对模块进行扩展，以满足需求的变化。但对于更改已有类的功能是不允许的。</p>
+<h4 id="组合聚合复用">组合/聚合复用
+</h4><p>在一个新对象里面使用一些已有对象，使之成为新对象的一部分</p>
+<p>新对象通过向已有对象委托一部分责任而达到复用已有对象的目的</p>
+<h2 id="7-面向对象设计方法">7 面向对象设计方法
+</h2><h3 id="面向对象设计任务">面向对象设计任务
+</h3><p>基于UML建模语言，将 软件需求分析阶段获得的用例模型和领域模型的内容 运用 一系列软件设计原则 转换成 软件设计阶段设计模型的 动态结构和静态结构。</p>
+<p>在软件设计阶段考虑如何将系统职责映射到软件的功能上，并且还需要进一步定义哪些软件对象具有这些功能，以及这些对象之间如何协调完成用例规定的内容。</p>
+<p>软件概要设计</p>
+<ul>
+<li>
+<p>系统的动态结构设计：</p>
+<ul>
+<li>
+<p>用例实现过程设计，针对用例对应的SSD中的每个系统事件，运用UML的 sequence diagram / collaboration diagram 给出符合该系统事件定义的操作契约的内容；</p>
+</li>
+<li>
+<p>如果软件对象具有多种不同的职责（主要考虑对应于不同的用例）的情况下，需要运用 state machines diagram 对该软件对象进行状态迁移的设计；</p>
+</li>
+</ul>
+</li>
+<li>
+<p>系统的静态结构设计</p>
+<ul>
+<li>对所有用例的交互图进行归纳，运用UML的 Class diagram 结合软件架构给出系统的静态结构；</li>
+<li>如果系统规模较大，建议分为以下两个阶段进行设计
+<ul>
+<li>基于用例的功能结构类图</li>
+<li>基于系统的功能结构类图</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>软件的详细设计</p>
+<ul>
+<li>针对系统静态结构中每个对象的方法，运用UML activity diagram 或程序流程图或NS图对其进行逻辑结构的设计</li>
+</ul>
+<p>面向对象设计的关键步骤</p>
+<ol>
+<li>发现对象（发现软件类）</li>
+<li>确定对象之间的关系</li>
+<li>确定对象行为</li>
+</ol>
+<h3 id="软件的层次化结构">软件的层次化结构
+</h3><p>一共五层
+<img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-25.png"
+	width="688"
+	height="833"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-25_hu8808991542580218100.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-25_hu3838356335232584564.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="82"
+		data-flex-basis="198px"
+	
+></p>
+<ul>
+<li>用户界面层</li>
+<li>控制器层</li>
+<li>业务/应用层</li>
+<li>持久化层</li>
+<li>系统层</li>
+</ul>
+<p>模型层次化的好处：</p>
+<ul>
+<li>增加软件的健壮性，易于扩展和维护</li>
+<li>增加软件的可移植性</li>
+</ul>
+<h4 id="用户界面层">用户界面层
+</h4><p>用户界面层指与用户进行交互的部分，代表客户端，包含应用程序中用户界面部分的代码。</p>
+<p>系统与用户的界面可以以多种形式出现：</p>
+<ul>
+<li>图形用户界面GUI</li>
+<li>命令行界面</li>
+<li>其他交互界面（语音等）</li>
+</ul>
+<h4 id="控制器层对象设计原则">控制器层对象设计原则
+</h4><p>根据分层的软件体系结构的框架，接收界面层消息请求的软件对象应该位于控制器层，这些对象称为控制器对象，</p>
+<p>通常为每一个用例设计一个控制器对象</p>
+<h4 id="业务应用层对象设计原则">业务/应用层对象设计原则
+</h4><p>应用逻辑层的这些软件对象应该选择代表具体的业务功能需求，为了保持OOA（OOA是面向对象分析，输出领域模型）和OOD（OOD是面向对象设计，输出类图和交互图）的一致性应该参考领域模型中相关的概念类作为设计参考</p>
+<ul>
+<li>在面向对象分析阶段，已经了解了<b>业务对象</b>是如何提供服务的（业务规则不会由于软件系统的引入而发生改变），为此在面向对象设计阶段，<b>将会参考这些业务对象并将其转变为软件系统中应用逻辑层中的软件对象</b>；为了增加可扩展性和可维护性可进行必要的修改和调整，最终使之成为设计模型中业务/领域层中的<b>软件类</b>。</li>
+</ul>
+<h4 id="持久化层对象设计原则">持久化层对象设计原则
+</h4><p>引入持久化层的目的在于当数据存储机制或策略发生变化的时候，能减少对应用逻辑层对象的维护工作。为了提高处理性能，则需要将经常性访问的数据同步到内存中，也就是初九话对象中，而不必每次请求都需要访问数据库</p>
+<ul>
+<li>该软件对象的职责就是管理（增删改查）经过业务逻辑对象处理后的需要持久保存的数据，又能与业务逻辑的功能相分离保持其独立性，又能与数据库保持同步，这些对象称为持久化对象。</li>
+</ul>
+<h3 id="基于类职责分配grasp的设计">基于类职责分配GRASP的设计
+</h3><p>General Responsibility Assignment Software Patterns
+通用之职责分配软件模式</p>
+<p>GRASP一共包括9种模式，描述对象设计和职责分配的基本原则。</p>
+<p>解决如何把现实世界的业务功能抽象成对象，如何决定一共系统有多少对象，每个对象都包括什么职责，GRASP模式给出了最基本的指导原则</p>
+<h4 id="控制器模式">控制器模式
+</h4><p>将前端发送过来的请求或系统事件分配给一各能够代表用例或者整个系统的类，进行必要的合法性判断和检查后转发给应用逻辑层对应的软件对象。</p>
+<p>它们只是接收系统事件消息，并没有实现系统操作的职责，系统操作应该委托给领域对象处理。</p>
+<ul>
+<li>它代表整个系统（系统简单且不复杂），称为外观（facade）控制器；</li>
+<li>它代表一个发生系统事件的用例场景，这个类通常命名为“&lt;用例名&gt;控制器”，称为用例控制器或者会话控制器。</li>
+</ul>
+<h4 id="创建者模式">创建者模式
+</h4><p>当控制器对象将系统事件转发或者派送给应用逻辑层对象时，该设计模式负责解决这些对象实例如何被创建以及哪个对象来负责创建对象的实例的原则</p>
+<ul>
+<li>创建者模式体现了低耦合的设计思想，是对迪米特法则的具体运用。</li>
+</ul>
+<h4 id="信息专家模式">信息专家模式
+</h4><p>用以解决给对象分配功能的模式，即将职责分配给拥有履行功能所必须信息的类，即信息专家。</p>
+<p>对象具有处理自己拥有信息的职责或能力。</p>
+<p>在UML交互图中接收消息的对象就应该具有处理该消息的职责和能力</p>
+<h2 id="8-软件实现">8 软件实现
+</h2><p>软件实现是软件详细设计的后续阶段及任务，即程序编码</p>
+<p>软件实现的 目标就是选择某种程序设计语言，将软件详细设计结果进行编码实现，并形成可执行的软件系统的过程</p>
+<h3 id="软件实现的任务包括">软件实现的任务包括
+</h3><ol>
+<li>程序设计语言的选择</li>
+<li>集成开发环境的选择</li>
+<li>程序实现算法的设计</li>
+<li>程序编码实现</li>
+</ol>
+<h3 id="源程序文档化">源程序文档化
+</h3><p>为了提高源程序的可维护性和可阅读性，要求源程序具有良好的风格，包括标识符命名、程序注释、程序布局等内容。</p>
+<h4 id="标识符命名">标识符命名
+</h4><p>根据所选择的编程语言，制定或使用编码规范的要求，规范化源程序中的标识符的命名规则</p>
+<h4 id="源程序的注释">源程序的注释
+</h4><p>为了提高源程序的可阅读性，规定源程序必须提供以下两种注释</p>
+<ol>
+<li>
+<p>序言性注释</p>
+<p>通常置于每个程序模块的开头部分，给出程序的整体说明，对于理解程序本身具有引导作用。要求逐项列出：模块名词、模块功能和目的 的说明、、主要算法、接口说明、有关数据描述、模块位置、开发简历等</p>
+</li>
+<li>
+<p>功能性注释：</p>
+<p>用以描述当前或其后的语句或程序段目的和逻辑</p>
+</li>
+</ol>
+<h4 id="源程序的布局">源程序的布局
+</h4><p>源程序布局指源程序的代码编排格式。</p>
+<p>合理的源程序布局能够提高代码的清晰性，增强代码的可读性，进而提高程序的可维护性</p>
+<h2 id="9-软件测试超级重点">9 软件测试（超级重点）
+</h2><h3 id="软件测试的定义">软件测试的定义
+</h3><p>为发现软件中存在的错误，对软件开发过程中形成的各项输出进行检查的过程。以最少的事件和人力，系统地找出软件中潜在的各种错误和缺陷，并证明软件的功能和性能与需求说明相符合</p>
+<h3 id="软件测试的目的">软件测试的目的
+</h3><h4 id="用户角度">用户角度
+</h4><p>通过软件测试暴露软件中的错误和缺陷，以考虑是否可接收该软件产品</p>
+<h4 id="开发者角度">开发者角度
+</h4><p>希望测试成为表明软件产品中不存在错误，验证该软件已正确地实现了用户的要求，确立人名对软件质量的信息</p>
+<h4 id="glenford-jmyers-认为">Glenford J.Myers 认为
+</h4><p>测试是程序的执行过程，目的在于发现错误</p>
+<p>一个好的测试用例在于能发现至今未发现的错误</p>
+<p>一个成功的测试是发现了至今未发现的错误的测试</p>
+<p>测试不能表明软件中不存在错误，只能说明软件中存在错误。</p>
+<h3 id="软件测试的原则">软件测试的原则
+</h3><ul>
+<li>所有测试都应该以用户的需求为依据</li>
+<li>应当把“尽早地和不断地进行软件测试”作为软件开发者的座右铭</li>
+<li>程序员应避免检查自己的程序</li>
+<li>测试用例应由测试输入数据和对应的预期输出结果这两部分组成</li>
+<li>在设计测试用例时，应当包括合理的输入条件和不合理的输入条件</li>
+<li>充分注意测试中的群集现象，针对重点模块进行更充分的测试</li>
+<li>完全测试是不可能的，测试需要终止</li>
+<li>严格执行测试计划，排除测试随意性。应当对每一个测试结果做全面检查</li>
+<li>妥善保存测试计划，测试用例，出错统计和最终分析报告，为维护提供方便</li>
+</ul>
+<h3 id="软件测试对象">软件测试对象
+</h3><p>软件测试对象包括软件开发过程中产生的各种里程碑文档，包括软件需求规格说明、软件概要设计说明、软件详细设计说明、源代码等文档</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-26.png"
+	width="979"
+	height="522"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-26_hu11215364989243237548.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-26_hu11368851372137134120.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="450px"
+	
+></p>
+<h3 id="软件测试流程">软件测试流程
+</h3><p>为了开展软件测试，就需要首先组建开发团队、进行软件测试活动之前的一系列准备活动，执行软件测试后还需要进行测试结果分析、软件排错以及必要的可靠性分析等活动。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-27.png"
+	width="1046"
+	height="479"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-27_hu14487636062240909346.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-27_hu9149912414114219324.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<ul>
+<li>软件配置：软件需求规格说明、软件设计规格说明、源代码等；</li>
+<li>测试配置：测试计划、测试用例、测试程序等；</li>
+<li>测试工具：测试数据自动生成程序、静态分析程序、动态分析程序、测试结果分析程序、以及驱动测试的测试数据库等等。</li>
+</ul>
+<h3 id="软件测试方法">软件测试方法
+</h3><h4 id="白盒测试-必考一题应用题">白盒测试 必考一题应用题
+</h4><p>将测试对象看做一个透明的盒子，允许利用程序内部的逻辑结构及有关信息，设计或选择测试用例，对程序所有逻辑路径进行测试。通过在不同点检查程序的状态，确定实际的状态是否与预期的状态一致，又称为结构测试或逻辑驱动测试。</p>
+<p>又称为结构测试、逻辑驱动测试或基于程序的测试，指根据软件产品的内部工作过程，设计测试用例，以证实每种内部操作是否符合设计规格要求，允许测试人员利用程序内部的逻辑结构及有关信息设计或选择测试用例，对程序所有程序元素进行覆盖测试</p>
+<h5 id="白盒测试原则">白盒测试原则
+</h5><ul>
+<li>程序模块的所有独立的执行路径至少测试一次</li>
+<li>对所有的逻辑判定，取真与取假的两种情况都至少测试一次</li>
+<li>在循环的边界和运行界限内执行循环体</li>
+</ul>
+<h5 id="逻辑覆盖">逻辑覆盖
+</h5><p>逻辑覆盖的种类</p>
+<pre><code>逻辑覆盖是以程序内部的逻辑结构为基础设计的测试用例技术，包括以路径覆盖为基础的语句覆盖、判定覆盖、条件覆盖、判定+条件覆盖、条件组合覆盖的测试方法
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-28.png"
+	width="839"
+	height="601"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-28_hu9208977652978474999.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-28_hu1726841404562050845.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="335px"
+	
+></p>
+<p>确定测试路径的逻辑表达式</p>
+<pre><code>L1 、L2 、L3 、L4
+
+L1: a-&gt;c-&gt;e
+    {(A&gt;1) AND (B=0)} AND {(A=2) OR (X/A &gt; 1)}
+    = (A=2) AND (B=0) OR  (A&gt;1) AND (B=0) AND (X/A &gt; 1) 
+L2: a-&gt;b-&gt;d
+L3: a-&gt;b-&gt;e
+L4: a-&gt;c-&gt;d
+
+要记得把变量值的更改也算进去
+</code></pre>
+<p>语句覆盖</p>
+<pre><code>在图例中，整合所有的可执行语句都在L上，所以选择L1设计测试用例，就可以覆盖所有的可执行语句
+</code></pre>
+<p>判定覆盖</p>
+<pre><code>使得程序中每个判断的取真分支和取假分支至少经历一次，又称为分支覆盖
+根据要求，可以选择L1和L2，也可以选择L3和L4
+就是几条路径加起来，可以覆盖所有的分支就行
+</code></pre>
+<p>条件覆盖</p>
+<pre><code>使得程序中每个判断的每个条件的可能取值至少执行一次
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-29.png"
+	width="1193"
+	height="409"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-29_hu13283889287283203356.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-29_hu11076924057266700842.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="291"
+		data-flex-basis="700px"
+	
+></p>
+<p>判定-条件覆盖</p>
+<pre><code>使得判断中每个条件的所有可能取值至少执行一次，同时每个判断的所有可能判断结果取值至少执行一次。
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-30.png"
+	width="1129"
+	height="411"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-30_hu15168708445368301414.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-30_hu6094652568315147875.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="274"
+		data-flex-basis="659px"
+	
+></p>
+<p>条件组合覆盖</p>
+<pre><code>使得每个判断的所有可能的条件取值组合至少执行一次。
+需要将多重条件判断分解成有多个基本判断组成的流程图
+</code></pre>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-31.png"
+	width="1011"
+	height="453"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-31_hu4736826474302693581.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-31_hu9558897686706697970.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="535px"
+	
+></p>
+<p>路径测试</p>
+<pre><code>路径测试就是设计足够的测试用例，覆盖程序中所有可能的路径。
+</code></pre>
+<h5 id="基本路径测试">基本路径测试
+</h5><p>要求对包含循环结构和分支结构的复杂程序确定必须被测试路径的方法，通过对原始的程序逻辑进行简化表示成一个控制流图，进而根据控制流图的节点、边以及区间确定必须被测试的路径。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-32.png"
+	width="283"
+	height="436"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-32_hu7013068685467600672.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-32_hu10825402556070041635.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="64"
+		data-flex-basis="155px"
+	
+></p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-33.png"
+	width="1138"
+	height="296"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-33_hu10082815262063053473.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-33_hu14354674068127956661.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="384"
+		data-flex-basis="922px"
+	
+></p>
+<h5 id="控制流图转换">控制流图转换
+</h5><ul>
+<li>顺序结构的多个结点可以合并成一个</li>
+<li>在选择或多分支结构中，分支的汇聚处应有一个虚拟汇聚节点</li>
+<li>如果判断中的条件表达式是由一个或多个逻辑运算符连接的复合条件表达式，则需要改为一系列只有单个条件的嵌套的判断</li>
+</ul>
+<h5 id="控制流图的的环路复杂度计算">控制流图的的环路复杂度计算
+</h5><p>控制流图的环路复杂度确定了程序中独立路径的上界，以此为依据可以找出程序中的全部独立路径。</p>
+<p>环路复杂度的三种计算方法</p>
+<ol>
+<li>等于控制流图中的区域数，包括封闭区域和开放区域</li>
+<li>设E为控制流图的变数，N为图的结点数，环路复杂性V(G)=E-N+2</li>
+<li>若设P为控制流图中的判定结点数，则有V(G)=P+1</li>
+</ol>
+<p>基本路径集：指程序的控制流图中，从入口到出口的路径，该路径至少经历一个从未走过的边。</p>
+<ul>
+<li>基本路径集不是唯一的</li>
+<li>最大的基本路径条数就是环路复杂度</li>
+</ul>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-34.png"
+	width="1118"
+	height="517"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-34_hu14215023722376827023.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-34_hu2428014375019074792.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="518px"
+	
+></p>
+<h4 id="黑盒测试--必考一题应用题">黑盒测试  必考一题应用题
+</h4><p>又叫做功能测试、数据驱动测试或基于规格说明的测试，指在不考虑程序内部结构和内部特征的情况下，根据软件产品的<b>需求规格说明、功能设计规格说明</b> 设计测试用例进行的测试，以证实各项软件功能是否符合要求</p>
+<h5 id="等价类划分">等价类划分
+</h5><p>等价类是指输入域的子集。在该子集中，各个输入数据对于揭露程序中的错误都是等效的。并合理地假定：测试某等价类值就等价于对这一类其他值的测试。因此，我们可以把全部输入数据合理划分为若干等价类，在每一个等价类中取一个典型值作为测试的输入，这样就可用少量代表性测试数据，取得较好的测试效果</p>
+<ol>
+<li>
+<p>有效等价类</p>
+<p>指对于规格说明来说，是合理的、有意义的输入数据构成的集合。利用它，可以测试软件在合法输入的情况下，是否给出了符合规格说明的输出</p>
+</li>
+<li>
+<p>无效等价类</p>
+<p>指对于规格说明来说，是不合理、无意义的输入数据构成的集合。利用它，可以测试软件对于不合理的输入，是否进行了充分的判断并给出了提示。</p>
+</li>
+</ol>
+<h5 id="划分等价类的原则">划分等价类的原则
+</h5><ol>
+<li>
+<p>按区间划分</p>
+<p>如果某个字段的输入条件属于一个取值范围[x,y]，则可以确立</p>
+<ul>
+<li>一个有效等价类</li>
+<li>两个无效等价类</li>
+</ul>
+</li>
+<li>
+<p>按数值集合划分</p>
+<p>如果输入条件规定了输入数据的集合，则可以划分</p>
+<ul>
+<li>一个有效等价类：所有符合输入条件的数据集合</li>
+<li>一个无效等价类：所有不允许输入的数据集合</li>
+</ul>
+</li>
+<li>
+<p>如果输入条件是一个布尔</p>
+<ul>
+<li>一个有效等价类</li>
+<li>一个无效等价类</li>
+</ul>
+</li>
+<li>
+<p>按数值划分</p>
+<p>如果规定了输入数据的一组值，而且程序要对每个输入值分别进行处理，这时可以划分为</p>
+<ul>
+<li>每一个输入值确立一个有效等价类</li>
+<li>一个无效等价类，包含所有不允许输入的数值</li>
+</ul>
+</li>
+<li>
+<p>按限制条件或规则划分</p>
+<p>如果规定了输入数据必须遵守的规则或限制条件，则可以确立</p>
+<ul>
+<li>一个有效等价类，即各方面均符合规则要求</li>
+<li>若干个无效等价类，每个无效等价类从不同角度违反输入规则</li>
+</ul>
+</li>
+</ol>
+<h5 id="等价类划分的方法">等价类划分的方法
+</h5><ol>
+<li>划分等价类，包括有效和无效等价类</li>
+<li>对所有有效等价类进行顺序编号，对所有无效等价类进行顺序编号</li>
+<li>设计测试用例，尽可能多的覆盖尚未覆盖的有效等价类，重复这一步骤，直到全部有效等价类均被覆盖到为止</li>
+<li>设计测试用例，每次只覆盖一个无效等价类，重复这一步骤，直到全部无效等价类均被覆盖到为止</li>
+</ol>
+<h5 id="边界值分析">边界值分析
+</h5><p>是对等价类划分方法的补充</p>
+<p>这里所说的边界是指，相当于输入等价类和输出等价类而言，稍高于其边界值及稍低于其边界值的一些特定情况。</p>
+<p>使用边界值分析方法设计测试用例，首先应确定边界情况。应当选取正好等于，刚刚大于，或刚刚小于边界的值做为测试数据，而不是选取等价类中的典型值或任意值做为测试数据。</p>
+<h5 id="因果图">因果图
+</h5><p>因果图法就是一种适合于检查软件多个输入条件的各种组合情况下，系统是否存在问题的黑盒测试用例设计方法，通过因果图可以有效<b>降低黑盒测试用例的数量</b></p>
+<p>通常在因果图中用Ci表示原因，用Ei表示结果，各结点表示状态。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-35.png"
+	width="804"
+	height="235"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-35_hu15349353003500870235.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-35_hu9108931575237181784.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="342"
+		data-flex-basis="821px"
+	
+></p>
+<p>表示约束条件的符号</p>
+<ul>
+<li>为了表示原因与原因之间，结果与结果之间可能存在的约束条件，在因果图中可以附加一些表示约束条件的符号</li>
+</ul>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-36.png"
+	width="1887"
+	height="870"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-36_hu16758794975618673506.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-36_hu7691015584176384228.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="520px"
+	
+></p>
+<p>例子</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-37.png"
+	width="1111"
+	height="275"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-37_hu800836394347489082.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-37_hu11764776662575071331.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="404"
+		data-flex-basis="969px"
+	
+></p>
+<p>步骤：</p>
+<ol>
+<li>建立原因</li>
+</ol>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-38.png"
+	width="583"
+	height="399"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-38_hu15665799370259098720.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-38_hu12179531923030154135.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="350px"
+	
+></p>
+<ol start="2">
+<li>建立结果</li>
+</ol>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-61.png"
+	width="773"
+	height="396"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-61_hu8052241410319009312.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-61_hu12999242854959605297.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+></p>
+<ol start="3">
+<li>建立中间结果</li>
+</ol>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-40.png"
+	width="1032"
+	height="337"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-40_hu5462125091285216713.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-40_hu12379816070541976644.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="306"
+		data-flex-basis="734px"
+	
+></p>
+<ol start="4">
+<li>
+<p>绘制因果图并添加约束条件</p>
+<p>所有原因结点列在左边，所有结果结点列在右边。</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-41.png"
+	width="1500"
+	height="642"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-41_hu10280458790507063211.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-41_hu4070190787255866804.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<p>由于 2 与 3 ，4 与 5 不能同时发生，分别加上约束条件E。</p>
+</li>
+<li>
+<p>列出转换表</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-42.png"
+	width="1405"
+	height="878"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-42_hu9941383894030964704.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-42_hu11964783951330320123.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="384px"
+	
+>
+有5个因，就有2^5 = 32列条件
+<br>对于不合法的输入，没有中间结果和果
+<br>对于合法输入，要判断中间结果和结果是否成立
+<br>最后判断测试用例是否成立</p>
+</li>
+</ol>
+<h3 id="软件测试的基本类型">软件测试的基本类型
+</h3><h4 id="单元测试">单元测试
+</h4><p>编码阶段运用白盒测试方法，对已实现的最小单位代码进行正确性检查</p>
+<p>单元测试是对软件基本组成单元进行的测试，其目的在于发现源代码中各单元模块内部可能存在的各种问题。
+<br>单元测试可以通过静态测试合动态测试来完成，一般是由开发人员为主，测试人员为辅来开展的测试活动</p>
+<h4 id="集成测试">集成测试
+</h4><p>编码阶段在单元测试的基础上，运用<b>黑盒测试</b>方法检查被测单元的<b>接口问题</b>，并检查代码集成后各功能的完整性。</p>
+<p>集成测试是对集成到一起的功能单元进行测试，以检查这些单元之间的接口是否存在问题。集成测试需要<b>开发人员与测试人员</b>共同配合来完成相关的测试工作。主要采用黑盒测试用例设计方法来设计测试用例。</p>
+<h4 id="确认测试">确认测试
+</h4><p>开发后期，针对系统级的软件验证所实现的功能合性能是否与用户的要求一致。</p>
+<p>当软件完成集成测试之后，已经形成了一个基本可运行的软件系统。这时，开发组织需要对系统的各方面进行确认测试。确认测试的任务是检查已实现的软件是否<b>满足了需求规格说明中定义的各种需求，以及软件配置是否完全、正确</b>。确认测试一般是由开发组织中<b>专门的测试人员</b>完成是系统级测试活动，采用<b>黑盒测试</b>的用例设计方法设计测试用例</p>
+<h4 id="系统测试">系统测试
+</h4><p>在开发环境或实际运行环境中，以<b>系统需求分析规格说明书</b>作为验收标准，对软硬件系统进行的一系列集成和确认测试。系统测试的工作范围、测试方法合测试计划一般由<b>甲方</b>确定，具体测试执行可以由甲方测试小组与乙方测试小组共同完成。</p>
+<h4 id="验收测试">验收测试
+</h4><p>在实际运行环境中，试运行一段时间后所进行的测试活动，确认系统功能和性能符合生成要求，验收通过后交付给用户使用。呀魔兽测试应该由软件的委托单位组织专门的验收小组完成，小组成员应该包括相关领导、业务人员、项目成员、领域专家等。</p>
+<h2 id="10-软件项目管理">10 软件项目管理
+</h2><h3 id="项目及软件项目的定义">项目及软件项目的定义
+</h3><h4 id="项目定义">项目定义
+</h4><p>ppt:是一项为了创造某一<b>唯一的产品或服务</b>的<b>时限性</b>工作。具有以下特征</p>
+<ul>
+<li>需要由人来完成</li>
+<li>收到有限资源的限制</li>
+<li>需要计划、执行和控制</li>
+</ul>
+<p>肖老师：是指为了提供某项独特的产品、服务或成果在<b>有限的资源、有限的时间内</b>为<b>特定的客户</b>完成<b>特定目标</b>的<b>一次性</b>的工作</p>
+<h4 id="软件项目的定义">软件项目的定义：
+</h4><pre><code>肖老师：是一种成果体现为软件产品的项目，在有限资源、有限时间内为特定的客户完成特定的软件产品的一次性工作
+
+ppt：软件项目是一种成功体现为软件产品的项目，其特有的特征表现为：
+    软件产品是无形的
+    软件产品没有标准的软件过程
+    大型软件项目开发常常是“一次性的”
+</code></pre>
+<h3 id="软件项目管理的定义">软件项目管理的定义
+</h3><p>在软件开发过程中，通过对各个开发环节的管理，在有限资源和规定时间内，完成客户要求的特定软件产品。为了实现项目目标，使软件项目开发获得成功，需要对软件开发项目的工作范围、可能遇到的风险、需要的资源（人力、硬件和软件）、要完成的任务、经历的里程碑、花费的工作量（成本）以及进度的安排等进行有效的管理</p>
+<p>项目管理包括以下九个知识领域</p>
+<ul>
+<li>范围管理</li>
+<li>时间管理</li>
+<li>成本管理</li>
+<li>质量管理</li>
+<li>人力资源管理</li>
+<li>沟通管理</li>
+<li>风险管理</li>
+<li>采购管理</li>
+<li>综合管理</li>
+</ul>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-43.png"
+	width="994"
+	height="682"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-43_hu16550014005241215073.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-43_hu17864518171030943334.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="349px"
+	
+></p>
+<h3 id="软件项目管理的过程">软件项目管理的过程
+</h3><p>项目管理过程是一组为了完成一系列事先指定的产品、成果或服务而须执行的相互联系的行动和活动。软件项目管理分为启动、计划、执行、监控和收尾5个过程</p>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-44.png"
+	width="802"
+	height="371"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-44_hu11008704342925267729.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-44_hu12590452683231199489.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="518px"
+	
+></p>
+<h3 id="软件项目计划">软件项目计划
+</h3><p>软件项目计划是一项软件开发活动中必不可少的任务，根据软件开发的任务分配适当的工作量及资源以适应整个软件项目的工期。</p>
+<h4 id="软件项目估算">软件项目估算
+</h4><p>为了指定合理有效的项目计划，就必须事先进行项目估算，确定项目的范围、所需的资源、所能投入的成本以及项目开发所必需的时间。</p>
+<p>每个任务的期望值 = （1个最乐观时间 + 4个最可能时间 + 1个最悲观时间）/ 6</p>
+<h4 id="软件的进度安排">软件的进度安排
+</h4><ul>
+<li>根据项目的生命周期模型确定每个阶段的任务列表</li>
+<li>为每一个任务确定起止时间</li>
+<li>为每一个任务分配人力资源</li>
+<li>确定任务之间的先后次序和关系，构建任务网络</li>
+<li>确定每个阶段任务的关键路径，如下图</li>
+</ul>
+<p><img src="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-45.png"
+	width="1086"
+	height="443"
+	srcset="/p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-45_hu6901132853609074472.png 480w, /p/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/image-45_hu18051368613655675028.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="588px"
+	
+></p>
+<h2 id="11-软件维护">11 软件维护
+</h2><h3 id="软件维护的定义">软件维护的定义
+</h3><p>软件维护就是在软件以及交付使用之后，为了改正错误或满足新的需要而修改软件的过程，即在软件运行/维护阶段对软件产品所进行的一切改动</p>
+<h3 id="软件维护的类别">软件维护的类别
+</h3><h4 id="改正性维护">改正性维护
+</h4><p>改正在系统运行过程中发现的一些潜在程序错误或设计缺陷</p>
+<h4 id="适应性维护">适应性维护
+</h4><p>为了适应在软件使用过程中<b>数据环境</b>发生变化或<b>处理环境</b>发生变化而进行的软件修改</p>
+<h4 id="完善性维护">完善性维护
+</h4><p>在软件的使用过程中，针对用户对软件提出新的功能与性能要求而进行修改或再开发软件，以扩充软件功能、增强软件性能、改进加工效率、提高软件的可维护性，称为完善性维护</p>
+<p>为了满足用户的其他要求</p>
+<h4 id="预防性维护">预防性维护
+</h4><p>为了提高软件的可维护性、可靠性等而<b>事先</b>进行的软件改动</p>
+<h3 id="软件维护的活动">软件维护的活动
+</h3><p>为了有效地进行软件维护，应进行维护的组织工作，建立维护的机构，确定维护申请报告的流程及评价过程</p>
+<p>为每一个维护申请规定标准的处理步骤</p>
+<p>建立维护活动的等级制度以及评审的标准</p>
+<h3 id="维护周期的软件开发">维护周期的软件开发
+</h3><p>进行软件维护时，须对源程序进行修改，通常对源程序的修改需要经历以下三个步骤：</p>
+<ol>
+<li>分析和理解程序</li>
+<li>修改程序</li>
+<li>重新验证程序</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

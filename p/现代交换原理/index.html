@@ -1,0 +1,5355 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="概论 通信与电信 通信系统模型 通信网三要素 由 终端设备、交换设备、传输设备 组成\n交换方式 所谓电信交换，就是在电信网上，在通信的源点和目的点之间建立通信通道，并传送信息的机制。\n交换和选路的区别：\n选路：每一个交换设备如何选择合适的出线，从而在交换网中建立最佳的从源点到目的点的信息通道； 交换：每个交换设备内部如何将入线的信息送到出线上。 电路交换 三个阶段是面向连接方式最显著的特征：建立、传输、释放\nPSTN采用电路交换方式\n实时、恒定速率的话音业务 电路交换系统的特点\n呼叫建立时向网络申请资源，建立一条从主叫到被叫的通路；呼叫结束时释放该通路。 用基于呼叫损失制的方法来处理业务流量.如果申请不到资源，则发生呼损。 面向连接。通信过程中，双方始终占有这条通路，保证数据快速传递。支持实时的、交互的通信，但线路利用率低。 只提供透明传输。对通路上的通信内容，交换系统不进行差错控制。 适于交换同步时分复用的信号。 同步时分复用信号的最小交换单元为时隙。 比如30/32路的PCM系统\n一帧=32时隙=125μs 报文交换 采用 ‘存储—转发’ ，以报文为单位进行交换 无呼损，不需要叫通对方就可以发送报文 由多个报文送往同一地点时，要排队按顺序 报文传送中有检错纠错 提高线路利用率 交换机要有哒的存储容量（要先存储再转发） 不适用于即时交互式数据通信 分组交换 采用存储-转发，分组单位是packet\n分组是将报文截成许多短的、规格化了的‘分组’\n特点：\n‘分组’ 实时性比报文交换高 线路统计复用，通信线路的利用率高 可靠性高，分段进行差错校验，网络故障时可自动重选路由 非透明传输，交换节点要对分组进行处理 无呼损，但有可变的呼叫延迟 适于交换统计时分复用的信号，最小交换单元为分组 ">
+<title>现代交换原理</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="现代交换原理">
+<meta property='og:description' content="概论 通信与电信 通信系统模型 通信网三要素 由 终端设备、交换设备、传输设备 组成\n交换方式 所谓电信交换，就是在电信网上，在通信的源点和目的点之间建立通信通道，并传送信息的机制。\n交换和选路的区别：\n选路：每一个交换设备如何选择合适的出线，从而在交换网中建立最佳的从源点到目的点的信息通道； 交换：每个交换设备内部如何将入线的信息送到出线上。 电路交换 三个阶段是面向连接方式最显著的特征：建立、传输、释放\nPSTN采用电路交换方式\n实时、恒定速率的话音业务 电路交换系统的特点\n呼叫建立时向网络申请资源，建立一条从主叫到被叫的通路；呼叫结束时释放该通路。 用基于呼叫损失制的方法来处理业务流量.如果申请不到资源，则发生呼损。 面向连接。通信过程中，双方始终占有这条通路，保证数据快速传递。支持实时的、交互的通信，但线路利用率低。 只提供透明传输。对通路上的通信内容，交换系统不进行差错控制。 适于交换同步时分复用的信号。 同步时分复用信号的最小交换单元为时隙。 比如30/32路的PCM系统\n一帧=32时隙=125μs 报文交换 采用 ‘存储—转发’ ，以报文为单位进行交换 无呼损，不需要叫通对方就可以发送报文 由多个报文送往同一地点时，要排队按顺序 报文传送中有检错纠错 提高线路利用率 交换机要有哒的存储容量（要先存储再转发） 不适用于即时交互式数据通信 分组交换 采用存储-转发，分组单位是packet\n分组是将报文截成许多短的、规格化了的‘分组’\n特点：\n‘分组’ 实时性比报文交换高 线路统计复用，通信线路的利用率高 可靠性高，分段进行差错校验，网络故障时可自动重选路由 非透明传输，交换节点要对分组进行处理 无呼损，但有可变的呼叫延迟 适于交换统计时分复用的信号，最小交换单元为分组 ">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T09:31:48&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T09:31:48&#43;08:00'/>
+<meta name="twitter:title" content="现代交换原理">
+<meta name="twitter:description" content="概论 通信与电信 通信系统模型 通信网三要素 由 终端设备、交换设备、传输设备 组成\n交换方式 所谓电信交换，就是在电信网上，在通信的源点和目的点之间建立通信通道，并传送信息的机制。\n交换和选路的区别：\n选路：每一个交换设备如何选择合适的出线，从而在交换网中建立最佳的从源点到目的点的信息通道； 交换：每个交换设备内部如何将入线的信息送到出线上。 电路交换 三个阶段是面向连接方式最显著的特征：建立、传输、释放\nPSTN采用电路交换方式\n实时、恒定速率的话音业务 电路交换系统的特点\n呼叫建立时向网络申请资源，建立一条从主叫到被叫的通路；呼叫结束时释放该通路。 用基于呼叫损失制的方法来处理业务流量.如果申请不到资源，则发生呼损。 面向连接。通信过程中，双方始终占有这条通路，保证数据快速传递。支持实时的、交互的通信，但线路利用率低。 只提供透明传输。对通路上的通信内容，交换系统不进行差错控制。 适于交换同步时分复用的信号。 同步时分复用信号的最小交换单元为时隙。 比如30/32路的PCM系统\n一帧=32时隙=125μs 报文交换 采用 ‘存储—转发’ ，以报文为单位进行交换 无呼损，不需要叫通对方就可以发送报文 由多个报文送往同一地点时，要排队按顺序 报文传送中有检错纠错 提高线路利用率 交换机要有哒的存储容量（要先存储再转发） 不适用于即时交互式数据通信 分组交换 采用存储-转发，分组单位是packet\n分组是将报文截成许多短的、规格化了的‘分组’\n特点：\n‘分组’ 实时性比报文交换高 线路统计复用，通信线路的利用率高 可靠性高，分段进行差错校验，网络故障时可自动重选路由 非透明传输，交换节点要对分组进行处理 无呼损，但有可变的呼叫延迟 适于交换统计时分复用的信号，最小交换单元为分组 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#概论">概论</a>
+      <ol>
+        <li><a href="#通信与电信">通信与电信</a>
+          <ol>
+            <li><a href="#通信网三要素">通信网三要素</a></li>
+          </ol>
+        </li>
+        <li><a href="#交换方式">交换方式</a>
+          <ol>
+            <li><a href="#电路交换">电路交换</a></li>
+            <li><a href="#报文交换">报文交换</a></li>
+            <li><a href="#分组交换">分组交换</a></li>
+            <li><a href="#快速分组交换帧中继">快速分组交换——帧中继</a></li>
+            <li><a href="#各交换方式的比较">各交换方式的比较：</a></li>
+            <li><a href="#各种常用网络的交换方式">各种常用网络的交换方式</a></li>
+            <li><a href="#各种常用网络的重要信令协议">各种常用网络的重要信令/协议</a></li>
+            <li><a href="#电信交换系统的基本结构">电信交换系统的基本结构</a></li>
+          </ol>
+        </li>
+        <li><a href="#复用技术">复用技术</a>
+          <ol>
+            <li><a href="#时分复用">时分复用</a></li>
+            <li><a href="#频分复用">频分复用</a></li>
+            <li><a href="#码分复用">码分复用</a></li>
+            <li><a href="#波分复用">波分复用</a></li>
+          </ol>
+        </li>
+        <li><a href="#连接类型">连接类型</a></li>
+        <li><a href="#带宽分配">带宽分配</a></li>
+      </ol>
+    </li>
+    <li><a href="#2-交换网络">2 交换网络</a>
+      <ol>
+        <li><a href="#交换单元">交换单元</a>
+          <ol>
+            <li></li>
+          </ol>
+        </li>
+        <li><a href="#交换网络">交换网络</a>
+          <ol>
+            <li><a href="#clos网络">CLOS网络</a></li>
+            <li><a href="#tst网络">TST网络</a></li>
+            <li><a href="#banyan网络">banyan网络</a></li>
+            <li><a href="#benes-网络">benes 网络</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#3-电话交换系统">3 电话交换系统</a>
+      <ol>
+        <li><a href="#电话交换基础">电话交换基础</a></li>
+        <li><a href="#程控数字交换机的系统结构">程控数字交换机的系统结构</a>
+          <ol>
+            <li><a href="#用户模块">用户模块</a></li>
+            <li><a href="#控制子系统">控制子系统</a></li>
+            <li><a href="#话路子系统">话路子系统</a></li>
+          </ol>
+        </li>
+        <li><a href="#接口设备接口电路">接口设备/接口电路</a>
+          <ol>
+            <li><a href="#接口类型">接口类型</a></li>
+            <li><a href="#用户电路">用户电路</a></li>
+            <li><a href="#中继电路">中继电路</a></li>
+          </ol>
+        </li>
+        <li><a href="#数字交换网络-话路建立">数字交换网络-话路建立</a>
+          <ol>
+            <li><a href="#复用器和分路器">复用器和分路器</a></li>
+          </ol>
+        </li>
+        <li><a href="#程控交换软件技术">程控交换软件技术</a>
+          <ol>
+            <li><a href="#程控交换软件系统">程控交换软件系统</a></li>
+            <li><a href="#呼叫处理的基本原理--重点">呼叫处理的基本原理 —— 重点</a></li>
+            <li><a href="#程控交换软件技术-1">程控交换软件技术</a></li>
+          </ol>
+        </li>
+        <li><a href="#控制系统">控制系统</a>
+          <ol>
+            <li><a href="#呼叫处理能力与过负荷控制">呼叫处理能力与过负荷控制</a></li>
+            <li><a href="#控制系统的结构方式">控制系统的结构方式</a></li>
+            <li><a href="#多处理机的分担方式工作方式">多处理机的分担方式/工作方式</a></li>
+            <li><a href="#多处理机的通信方式">多处理机的通信方式</a></li>
+          </ol>
+        </li>
+        <li><a href="#电话通信网">电话通信网</a></li>
+      </ol>
+    </li>
+    <li><a href="#4-分组交换技术mpls">4 分组交换技术MPLS</a>
+      <ol>
+        <li><a href="#路由器技术">路由器技术</a></li>
+        <li><a href="#mpls的基本组成和原理">MPLS的基本组成和原理</a>
+          <ol>
+            <li><a href="#multi-protocol-label-switching概念">Multi-Protocol Label Switching概念</a></li>
+            <li><a href="#基本模型">基本模型</a></li>
+            <li><a href="#技术思路">技术思路</a></li>
+            <li><a href="#技术特点">技术特点</a></li>
+            <li><a href="#mpls-网络组成">MPLS 网络组成</a></li>
+          </ol>
+        </li>
+        <li><a href="#mpls-交换原理">MPLS 交换原理</a>
+          <ol>
+            <li><a href="#mpls-基本标记格式">MPLS 基本标记格式</a></li>
+            <li><a href="#基本交换原理">基本交换原理</a></li>
+            <li><a href="#控制平面与数据平面">控制平面与数据平面</a></li>
+            <li><a href="#标记分配过程ldp">标记分配过程（LDP）</a></li>
+            <li><a href="#标记分配方式">标记分配方式</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#5-信令-协议">5 信令 协议</a>
+      <ol>
+        <li><a href="#no7-信令系统">No.7 信令系统</a>
+          <ol>
+            <li><a href="#信令网组成">信令网组成</a></li>
+            <li><a href="#功能结构">功能结构</a></li>
+          </ol>
+        </li>
+        <li><a href="#voip技术">VoIp技术</a>
+          <ol>
+            <li><a href="#ip媒体网关语音处理功能">IP媒体网关——语音处理功能</a></li>
+            <li><a href="#h323">H.323</a></li>
+            <li><a href="#mgcp">MGCP</a></li>
+          </ol>
+        </li>
+        <li><a href="#sip">SIP</a>
+          <ol>
+            <li><a href="#sip协议的基本特点">SIP协议的基本特点</a></li>
+            <li><a href="#sip系统中各种设备的作用">SIP系统中各种设备的作用</a></li>
+            <li><a href="#sip消息">SIP消息</a></li>
+            <li><a href="#消息体-sdp">消息体 SDP</a></li>
+            <li><a href="#sip基本消息流程">SIP基本消息流程</a></li>
+            <li><a href="#sip消息与tup对应转换">SIP消息与TUP对应转换</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#6-移动通信系统">6 移动通信系统</a>
+      <ol>
+        <li><a href="#几个基本概念">几个基本概念</a></li>
+        <li><a href="#gsmgprs的基本网络结构和网元功能">GSM、GPRS的基本网络结构和网元功能</a>
+          <ol>
+            <li><a href="#gsm移动通信">GSM移动通信</a></li>
+            <li><a href="#gprs网络">GPRS网络</a></li>
+          </ol>
+        </li>
+        <li><a href="#3g">3G</a></li>
+        <li><a href="#4g">4G</a>
+          <ol>
+            <li><a href="#网络结构和网元功能">网络结构和网元功能</a></li>
+            <li><a href="#交换方式全ip">交换方式——全IP</a></li>
+            <li><a href="#控制平面与用户平面">控制平面与用户平面</a></li>
+            <li><a href="#lte中的数据传输过程">LTE中的数据传输过程</a></li>
+          </ol>
+        </li>
+        <li><a href="#5g">5G</a>
+          <ol>
+            <li><a href="#网络架构特点">网络架构特点</a></li>
+            <li><a href="#关键技术">关键技术</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#7-新一代交换控制技术">7 新一代交换控制技术</a>
+      <ol>
+        <li><a href="#软交换">软交换</a>
+          <ol>
+            <li><a href="#软交换的系统结构四层结构">软交换的系统结构、四层结构</a></li>
+          </ol>
+        </li>
+        <li><a href="#ims-ip-multimedia-subsystem">IMS IP Multimedia Subsystem</a>
+          <ol>
+            <li><a href="#ims-特点">IMS 特点</a></li>
+          </ol>
+        </li>
+        <li><a href="#sdn-软件定义网络">SDN 软件定义网络</a>
+          <ol>
+            <li><a href="#sdn-网络概述">SDN 网络概述</a></li>
+            <li><a href="#sdn-南向接口">SDN 南向接口</a></li>
+            <li><a href="#openflow流表概述">OpenFlow流表概述</a></li>
+            <li><a href="#sdn-北向接口">SDN 北向接口</a></li>
+            <li><a href="#sdn-技术应用">SDN 技术应用</a></li>
+            <li><a href="#sdn-产业现状">SDN 产业现状</a></li>
+            <li><a href="#sdn-研究方向">SDN 研究方向</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/">现代交换原理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 10 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="概论">概论
+</h2><h3 id="通信与电信">通信与电信
+</h3><p>通信系统模型
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-142.png"
+	width="949"
+	height="197"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-142_hu6165315395424914542.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-142_hu4687243472746975922.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="481"
+		data-flex-basis="1156px"
+	
+></p>
+<h4 id="通信网三要素">通信网三要素
+</h4><p>由 <b>终端设备、交换设备、传输设备</b> 组成</p>
+<h3 id="交换方式">交换方式
+</h3><p>所谓电信交换，就是在电信网上，在通信的源点和目的点之间建立通信通道，并传送信息的机制。</p>
+<p>交换和选路的区别：</p>
+<pre><code>选路：每一个交换设备如何选择合适的出线，从而在交换网中建立最佳的从源点到目的点的信息通道；
+
+交换：每个交换设备内部如何将入线的信息送到出线上。
+</code></pre>
+<h4 id="电路交换">电路交换
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-149.png"
+	width="749"
+	height="454"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-149_hu10786251476806521651.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-149_hu15553098942437130246.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="395px"
+	
+>
+三个阶段是面向连接方式最显著的特征：建立、传输、释放</p>
+<p>PSTN采用电路交换方式</p>
+<pre><code>实时、恒定速率的话音业务
+</code></pre>
+<p>电路交换系统的特点</p>
+<ul>
+<li>呼叫建立时向网络申请资源，建立一条从主叫到被叫的通路；呼叫结束时释放该通路。</li>
+<li>用基于呼叫损失制的方法来处理业务流量.如果申请不到资源，则发生<b>呼损</b>。</li>
+<li>面向连接。通信过程中，双方始终占有这条通路，保证数据快速传递。支持实时的、交互的通信，但线路利用率低。</li>
+<li>只提供透明传输。对通路上的通信内容，交换系统不进行差错控制。</li>
+<li>适于交换同步时分复用的信号。</li>
+<li>同步时分复用信号的最小交换单元为时隙。</li>
+</ul>
+<p>比如30/32路的PCM系统</p>
+<pre><code>一帧=32时隙=125μs
+</code></pre>
+<h4 id="报文交换">报文交换
+</h4><ul>
+<li>采用 ‘存储—转发’ ，以报文为单位进行交换</li>
+<li>无呼损，不需要叫通对方就可以发送报文</li>
+<li>由多个报文送往同一地点时，要排队按顺序</li>
+<li>报文传送中有检错纠错</li>
+<li>提高线路利用率</li>
+<li>交换机要有哒的存储容量（要先存储再转发）</li>
+<li>不适用于即时交互式数据通信</li>
+</ul>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-150.png"
+	width="581"
+	height="480"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-150_hu16226088072607057205.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-150_hu10930537160402796289.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="121"
+		data-flex-basis="290px"
+	
+></p>
+<h4 id="分组交换">分组交换
+</h4><p>采用存储-转发，分组单位是packet</p>
+<p>分组是将报文截成许多短的、规格化了的‘分组’</p>
+<p>特点：</p>
+<pre><code>‘分组’ 实时性比报文交换高
+线路统计复用，通信线路的利用率高
+可靠性高，分段进行差错校验，网络故障时可自动重选路由
+非透明传输，交换节点要对分组进行处理
+无呼损，但有可变的呼叫延迟
+适于交换统计时分复用的信号，最小交换单元为分组
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-151.png"
+	width="1045"
+	height="532"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-151_hu10289841509101040000.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-151_hu16867735190052527310.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
+	
+></p>
+<p>分组交换有两种工作模式</p>
+<ol>
+<li>
+<p>数据报Datagram</p>
+<p>每个数据分组都包含终点地址信息，独立寻找路径，在网络终点需要重新排序。
+<br>时延大
+<br>DG方式则不需要有建立过程，但对每个分组都要独立地进行选路。
+<br>DG方式中各个分组可选择不同路由，对故障的防卫能力较强，从而可靠性较高。
+<br>DG方式则适用于面向事务的询问／响应型数据业务。</p>
+</li>
+<li>
+<p>虚电路Virtual Circuit</p>
+<p>类似电路交换，通信要经过 连接建立、数据传输、连接拆除 三个阶段
+<br>不同于电路交换中的物理连接，而是逻辑连接
+<br>分组头中只含有对应于所建立的VC的逻辑信道标识
+<br>传输时延小，分组有序到达
+<br>VC方式预先有建立过程，但一旦虚电路建立，在端到端之间所选定的路由上的各个交换节点都具有映象表，存放出入逻辑信道的对应关系，每个分组到来时只要查找映象表，而不需要进行复杂的选路。
+<br>VC方式对故障较为敏感，当传输链路或交换节点发生故障时可能引起虚电路的中断，需要重新建立。
+<br>VC方式适用于较连续的数据流传送，其持续时间应显著地大于呼叫建立的时间，如文件传送、传真业务等</p>
+</li>
+</ol>
+<h4 id="快速分组交换帧中继">快速分组交换——帧中继
+</h4><ul>
+<li>取消原网络完成的逐段链路的差错控制，由网络的边缘完成； 交换节点只进行差错检查</li>
+<li>交换的基本数据单元为帧，实现不同协议的数据的封装和传输</li>
+<li>在链路层引入数据链路连接标示符DLCI，完成分组交换的虚电路功能</li>
+<li>用于LAN之间的互联</li>
+</ul>
+<h4 id="各交换方式的比较">各交换方式的比较：
+</h4><h5 id="支持的业务类型话音数据图像视频和典型的业务特征实时性突发性可靠性交互性">支持的业务类型（话音/数据/图像/视频）和典型的业务特征（实时性/突发性/可靠性/交互性…）
+</h5><p>电路交换：</p>
+<pre><code>话音业务
+实时性高，可靠性高，适合长时间连续传输
+</code></pre>
+<p>分组交换：</p>
+<pre><code>数据、图像、视频
+突发性强，实时性较低，适合短时间大量数据传输
+</code></pre>
+<h5 id="信息传送单元和信息传送长度可变固定">信息传送单元和信息传送长度（可变/固定）
+</h5><p>单位：</p>
+<pre><code>电路交换： 时隙，长度固定
+分组交换：分组，长度可变
+帧中继： 帧，长度可变
+</code></pre>
+<h5 id="适合的信息复用方式和电路利用率">适合的信息复用方式和电路利用率
+</h5><p>电路交换的复用方式是：时分复用TDM，链路利用率较低</p>
+<p>分组交换的复用方式是统计复用，链路利用率高</p>
+<p>帧中继交换的复用方式也是统计复用，链路利用率高</p>
+<h5 id="连接类型面向连接无连接物理连接逻辑连接和信息传输时延">连接类型（面向连接/无连接，物理连接/逻辑连接）和信息传输时延
+</h5><p>电路交换是面向连接的</p>
+<pre><code>时延低
+</code></pre>
+<p>分组交换是无连接的</p>
+<pre><code>分组交换中的虚电路方式，是逻辑连接而不是物理连接
+时延高
+</code></pre>
+<h5 id="对业务冲突或过载的处理方式">对业务冲突或过载的处理方式
+</h5><p>电路交换使用呼损</p>
+<p>分组交换采用呼叫延迟</p>
+<p>帧中继采用拥塞控制</p>
+<h5 id="信息可靠性">信息可靠性
+</h5><p>电路交换可靠性高</p>
+<p>分组交换和帧中继较低</p>
+<h4 id="各种常用网络的交换方式">各种常用网络的交换方式
+</h4><p>PSTN电话网、B_ISDN、Internet、No7信令网、GSM网络、GPRS网络、4G网络、5G网络、IMS系统、MPLS网络、SDN</p>
+<pre><code>PSTN电话网：电路交换
+B_ISDN：帧中继
+Internet：分组交换
+No7信令网：电路交换
+GSM网络：电路交换
+GPRS网络：电路交换和分组交换
+4G网络：分组交换
+5G网络：分组交换
+IMS系统：分组交换
+MPLS网络：帧中继+分组交换
+SDN：分组交换
+</code></pre>
+<h4 id="各种常用网络的重要信令协议">各种常用网络的重要信令/协议
+</h4><p>PSTN电话网、IMS、MPLS网络、SDN、Internet——No7信令网、LDP、SIP、Openflow</p>
+<pre><code>PSTN电话网：No7信令网
+IMS：SIP
+MPLS网络：LDP
+SDN：OpenFlow
+Internet：TCP/IP
+</code></pre>
+<h4 id="电信交换系统的基本结构">电信交换系统的基本结构
+</h4><p>程控电话交换机、IP路由器、MPLS路由器的结构</p>
+<p>程控电话交换机：</p>
+<pre><code>结构：控制单元、交换矩阵、接口单元、信令单元
+</code></pre>
+<p>IP路由器：</p>
+<pre><code>结构：控制平面（路由协议）、转发平面（数据包处理）、接口（网络接口）、管理平面（网络管理）
+</code></pre>
+<p>MPLS路由器：</p>
+<pre><code>结构：控制平面（LDP、RSVP）、转发平面（标签交换）、接口（MPLS接口）、管理平面（网络管理）
+</code></pre>
+<h3 id="复用技术">复用技术
+</h3><h4 id="时分复用">时分复用
+</h4><p>根据抽样定理使多路信号以时间分割的方式交替在同一条线路上互不干扰地传输</p>
+<p>同步时分复用</p>
+<pre><code>依据数字信号在时间轴上的位置区别各路信号，无信息传送时也占用信道
+各支路的信息比特率稳定
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-144.png"
+	width="730"
+	height="252"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-144_hu12389432296962593324.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-144_hu16318277683266107938.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="695px"
+	
+></p>
+<p>统计时分复用——分组化时分复用</p>
+<pre><code>标志化信道：信息属于哪路取决于标志码，与出现的时间无关；
+分组长度可变，分组头起定界作用；
+统计复用提高信道利用率
+一定容量的排队存贮器，解决瞬间的出线冲突；
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-145.png"
+	width="969"
+	height="218"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-145_hu17851054420295679264.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-145_hu11358940470971690646.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="444"
+		data-flex-basis="1066px"
+	
+></p>
+<p>统计时分复用——异步时分复用</p>
+<pre><code>标志化信道：分组长度固定，分组头标志输出端
+统计复用提高信道利用率
+插入空信元保持信元同步
+较小容量的排队存贮器，解决瞬间的出线冲突
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-146.png"
+	width="917"
+	height="188"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-146_hu15017449121140317847.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-146_hu11954296615085000207.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="487"
+		data-flex-basis="1170px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-147.png"
+	width="899"
+	height="271"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-147_hu7316142537223807130.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-147_hu6919896385466975946.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="331"
+		data-flex-basis="796px"
+	
+></p>
+<h4 id="频分复用">频分复用
+</h4><p>利用调制手段和滤波技术使多路信号以频率分割的方式同时在同一条线路上互不干扰地传输
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-143.png"
+	width="933"
+	height="445"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-143_hu3823897068703736419.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-143_hu14159184011875294334.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+<h4 id="码分复用">码分复用
+</h4><p>CDMA酒会，只过滤出有用的（俄罗斯语、中文、英文、德语&hellip;只关注到自己听得懂的）</p>
+<h4 id="波分复用">波分复用
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-148.png"
+	width="1012"
+	height="533"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-148_hu3113361252645247967.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-148_hu11110722059515061113.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
+	
+></p>
+<h3 id="连接类型">连接类型
+</h3><h3 id="带宽分配">带宽分配
+</h3><h2 id="2-交换网络">2 交换网络
+</h2><h3 id="交换单元">交换单元
+</h3><pre><code>四个端：输入、输出、控制、状态
+M条入线N条出现的称为 MxN 的交换单元，编号从0~M-1 0~N-1
+</code></pre>
+<p>分类：</p>
+<pre><code>按照信息流向，分为有向和无向开关
+按照使用需求分类，分为集中型（M&gt;N）、分配型（M==N）、扩散型（M&lt;N）
+</code></pre>
+<p>开关个数计算</p>
+<ol>
+<li>
+<p>有向交换单元</p>
+<p>MxN的无向交换单元，里面需要MxN个单向开关</p>
+</li>
+<li>
+<p>无向交换单元</p>
+<ul>
+<li>采用双向开关：每两个端口只需要一个双向开关，自己跟自己不用开关。所以需要1+2+&hellip;+N-1个开关 = N*(N-1)/2</li>
+<li>采用单向开关：每个端口不用跟自己连，需要N*N-N 个开关</li>
+</ul>
+</li>
+</ol>
+<p>交换过程：</p>
+<ol>
+<li>建立内部通道，完成信息交换</li>
+<li>完成信息交换后，拆除内部通道</li>
+</ol>
+<p>连接的定义：</p>
+<pre><code>对于一个入端t，和一组出端Rt，c={t, Rt}称为一个连接
+若r∈Rt ，Rt 中只含有一个元素，则称该连接是一对一（点对点 ）连接
+若r∈Rt ，Rt 中含有多个元素，则称该连接是一对多（点对多点 ）连接
+</code></pre>
+<p>同发与广播：</p>
+<pre><code>如果是点对多点的，就是同发
+如果出端是所有出线口，那么就是广播
+交换单元不允许多对多或多对一，这种情况叫出线冲突
+</code></pre>
+<p>连接函数</p>
+<ol>
+<li>
+<p>排列表示法</p>
+<p>一列是一个连接  ，上面表示出线，下面表示入线
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image.png"
+	width="581"
+	height="204"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image_hu14468610934160544268.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image_hu13941718917273847476.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="284"
+		data-flex-basis="683px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-1.png"
+	width="734"
+	height="367"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-1_hu489161745344191534.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-1_hu9399586565158720550.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-2.png"
+	width="626"
+	height="476"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-2_hu14053450871734092849.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-2_hu17163395641821681070.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="315px"
+	
+>
+当不存在同发时，可用简写成一行（一个出线只对应一个入线，不能多个入线发到同个出现上）
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-3.png"
+	width="733"
+	height="306"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-3_hu8866311682206196186.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-3_hu3235819646301132968.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="239"
+		data-flex-basis="574px"
+	
+>
+如果满足以下三个条件：<br>
+1. 交换单元的入端数M等于出端数N；<br>
+2. 没有空闲的入端和出端；<br>
+3. 没有点对多点的连接。<br>
+那么可以得到一个结论：一个N*N的交换单元有 N！种不同的点对点连接方式。</p>
+</li>
+<li>
+<p>函数表示法</p>
+<ol>
+<li>
+<p>直线连接</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-152.png"
+	width="954"
+	height="417"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-152_hu1928225034096146828.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-152_hu8016177541257644117.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
+	
+></p>
+</li>
+<li>
+<p>交叉连接</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-153.png"
+	width="909"
+	height="412"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-153_hu8470451977590136035.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-153_hu1243769551618616513.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+</li>
+<li>
+<p>间隔交叉连接</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-154.png"
+	width="832"
+	height="427"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-154_hu3758688687860430839.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-154_hu1988546438206026477.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></p>
+</li>
+<li>
+<p>均匀洗牌连接</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-155.png"
+	width="827"
+	height="409"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-155_hu3666151708165018982.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-155_hu1587532405395339274.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+>
+二进制表示法中，最高位移到最低位后面了</p>
+</li>
+<li>
+<p>蝶式连接</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-156.png"
+	width="797"
+	height="421"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-156_hu1298181905721742149.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-156_hu17944423896420449305.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="454px"
+	
+>
+二进制的头尾调换
+<br>连接的效果是前后直连</p>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="空分交换单元">空分交换单元
+</h5><p>空间接线器 ———— 基本开关阵列</p>
+<pre><code>实际的开关阵列里面的2*2交换单元有两种形式：
+    1. bar连接型 平行 上左入，下右出
+    2. cross连接型 交叉
+可以避免出现冲突，不支持同发
+</code></pre>
+<p>缺点</p>
+<pre><code> 交叉接点开关数量巨大
+ 交叉接点开关利用率低
+</code></pre>
+<p>克服缺点的方法</p>
+<pre><code> 时分交换
+ 多级网络
+</code></pre>
+<p>空间（S）接线器</p>
+<pre><code>实现一个时隙内任意母线（highway 高速复用线）间的交换。
+由电子交叉点（能快速打开闭合）矩阵、控制存贮器（控制谁和谁连接）CM和控制电路组成。
+控制方式分为：输入控制和输出控制
+</code></pre>
+<p>输出控制方式： 出现和哪条入线连接
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-4.png"
+	width="1126"
+	height="554"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-4_hu15083306780492905260.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-4_hu57602502922347652.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+></p>
+<pre><code>电子交叉矩阵，
+32个时隙，
+上方为出线号，
+一行代表一个时隙
+里面填的是入线
+只能填1个入线
+</code></pre>
+<p>输入控制方式
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-5.png"
+	width="1097"
+	height="563"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-5_hu895070318259599397.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-5_hu4377792634930877287.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></p>
+<pre><code>和输出控制相似，
+矩阵里面填的是出线号
+</code></pre>
+<p>空间交换单元的工作原理（以输出控制方式为例）
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-6.png"
+	width="1059"
+	height="673"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-6_hu16869901462718781274.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-6_hu7582663647049601214.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="377px"
+	
+></p>
+<pre><code>每条出现都对应8条入线，是一个8选1的选择器，所以是输出控制方式
+</code></pre>
+<h5 id="时分交换单元">时分交换单元
+</h5><p>内部只存在一条惟一的通路，由输入复用线上各子信道分时共享
+<br>PCM线路连接，作为复用线，有多少时隙，就能交换多少路数据
+<br>通过这个通路的类型来划分</p>
+<h5 id="时分交换单元共享存储器型交换单元">时分交换单元——共享存储器型交换单元
+</h5><pre><code>交换单元有N路输入信号和N路输出信号，
+存储器被划分成N各区域，
+N路信号被放在存储器的N个区域中，不同区域的N路信号被读出，形成N路输出信号
+</code></pre>
+<p>基本结构</p>
+<pre><code>信号存储器
+控制器
+</code></pre>
+<p>工作方式</p>
+<pre><code>入线缓冲，控制读出
+出线缓冲，控制读入
+</code></pre>
+<p>输入缓冲方式：</p>
+<pre><code>N个区域与N路输入信号一一对应，0~N-1路输入信息分别对应存放在存储器的0~N-1个区域中
+并在适当的时候输出到目的输出信道上
+
+比如 1-&gt;N, 2-&gt;1, N-&gt;2 这样的连接
+首先1~N号区域都存储每个输入端要交换的信息，以及交换的出现号
+再从0~N遍历出线号
+比如1号出线，就是2号入线的信息，2号出线就是N号入线的信息，N号出现就是1号入线的信息
+这样进行交换
+</code></pre>
+<p>输出缓冲方式：</p>
+<pre><code>0~N-1 路输出信息 分别对应0~N-1路输出信息。从不同输入信道来的信息如果要交换到输出信道中，就把信息放在这个输出信道所对应存储器的相应区域中，当输出时刻到来时输出信息
+
+在存储器的0~N-1号区域，分别存储对应出线号的连接信息，比如
+1—&gt;N 2-&gt;1 N-&gt;2
+就是在a[N]=1, a[1]=2, a[2]=N
+</code></pre>
+<p><b>共享存储器的同步时分复用</b></p>
+<p>时间T接线器</p>
+<pre><code>实现一条母线上的时隙交换
+由话音存储器、控制存储器和控制电路组成
+控制方式分为：输出控制和输入控制
+</code></pre>
+<p>话音存储器SM</p>
+<pre><code>用来暂时存放数字编码的话音信息。
+话音存储器的大小与入复用线（或出复用线）上的时隙数相关。如果一条入复用线（或出复用线）上有n个时隙，那么话音存储器对应地必须有n个单元（一般为32个时隙 0~31 ）。
+由于每个时隙上传输的是8位编码，所以话音存储器每个单元的大小也应该是8位。
+</code></pre>
+<p>控制存储器CM</p>
+<pre><code>用来控制话音存储器的读或写。
+它存放的内容是话音存储器在当前时隙内因该写入或读出的地址。
+控制存储器与话音存储器的大小相等，假设话音存储器有n个单元，那么控制存储器也应该有n个单元
+CM一个单元的大小和时隙数有关，比如有32个时隙，那么一个单元是5bit
+</code></pre>
+<p>控制存储器单元数=话音存储器单元数=入复用线（或出复用线）的时隙数</p>
+<p>它的输出和输入控制方式的区别在于：SM的写入和读出是控制的还是顺序的</p>
+<pre><code>输出控制的话，SM就是顺序写入，控制读出
+输入控制的话，SM就是控制写入，顺序读出
+
+CM在两者里面都是控制写入，顺序读出
+</code></pre>
+<p>输出控制方式</p>
+<pre><code>1. CPU先往CM填输出地址（第j个时隙交换的信息在第i号SM单元里）CM[j]=i
+2. 入复用线信息按时隙号顺序写入SM，
+3. 第j个时隙到来时，出复用线读CM的第j个单元信息（存放SM对应地址）i
+4. 再从SM的第i个单元读出信息，发到出复用线上
+这样就完成了入复用线i和出复用线j的交换
+
+CM下标和内容： &lt;出时隙 —— SM地址&gt;
+SM下标和内容： &lt;入时隙 —— 交换信息&gt;
+
+1. CM 控制写入
+2. SM 自动写入
+3. CM 自动读出
+4. SM 控制读出
+</code></pre>
+<p>总结为：顺序写入，<b>控制读出</b></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-7.png"
+	width="1093"
+	height="602"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-7_hu4082799954866942922.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-7_hu3464846487376641704.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+>
+输入控制方式</p>
+<pre><code>1.1 入复用线第i个时隙到来时，接线器从CM第i个单元读出一个地址j，该地址是话音存储i时隙信息的地址
+1.2 随后，接线器把输入复用线上第i个时隙的信息存储在SM的j中
+2.1 出复用线在第j个时隙到来时，从SM的第j个单元读出
+这样就完成了入复用线i时隙跟出复用线j时隙的交换
+
+1. CM 控制写入
+2. CM 自动读出
+3. SM 控制写入
+4. SM 自动读出
+</code></pre>
+<p>总结为：<b>控制写入</b>，顺序读出
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-8.png"
+	width="1127"
+	height="557"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-8_hu17440648389977886440.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-8_hu7747190501285193083.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<p>时间T接线器特点：</p>
+<pre><code>以空间位置的划分实现时隙交换
+SM划分为N个区域，每个区域一个字节，存放一个话音数据。各个区域间不共享，各个区域内无排队缓冲。
+交换的控制过程由硬件CM实现，速度快。
+交换时延小，且稳定。
+严格无阻塞。
+可避免出线冲突。
+易于实现同发和广播。
+带宽（速率）固定为64kb/s。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-9.png"
+	width="907"
+	height="268"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-9_hu451405597327148002.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-9_hu6726267367481959717.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="338"
+		data-flex-basis="812px"
+	
+></p>
+<pre><code>一秒有8k次交换，1分钟60s，就是60*8k = 480k
+</code></pre>
+<h5 id="时分交换单元共享总线型交换单元">时分交换单元——共享总线型交换单元
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-157.png"
+	width="1026"
+	height="447"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-157_hu13574837380407987552.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-157_hu8510325321377392242.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="550px"
+	
+></p>
+<h3 id="交换网络">交换网络
+</h3><pre><code>交换网络从外部看，也有一组输入端和一组输出端，将其分别称为交换网络的入线和交换网络的出线。如果交换网络有M条入线和N条出线，则把这个交换网络称为MxN的交换网络
+</code></pre>
+<p>单级交换网络和多级交换网络</p>
+<pre><code>相同容量的多级网络比单级网络的交叉点数量减少
+</code></pre>
+<p>有阻塞交换网络和无阻塞交换网络</p>
+<pre><code>- 严格无阻塞交换网络  
+    只要入端与出端空闲时，就可以通过交换网络建立一个连接
+- 可重排无阻塞交换网络    
+    只要入端与出端空闲时，通过对已有连接的重排，就可以通过交换网络建立一个连接
+- 广义无阻塞交换网络  
+    一个给定的网络存在着固有的阻塞可能，但又可能存在着一种精巧的选路方法，使得所有的阻塞均可避免，而不必重新安排网络中已建立起来的连接
+</code></pre>
+<p>单通路交换网络和多通路交换网络</p>
+<p>时分交换网络和空分交换网络</p>
+<h4 id="clos网络">CLOS网络
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-10.png"
+	width="944"
+	height="208"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-10_hu10596216831463786038.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-10_hu8819392332542210348.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="453"
+		data-flex-basis="1089px"
+	
+>
+3级CLOS网络</p>
+<pre><code>入线N条，被分为r组，每组n条：N = r*n。第一级就有r个交换单元
+假如第二级有m个交换单元，那么第二级每个交换单元都有r条入线，第一级每个交换单元有m条出线
+</code></pre>
+<p>3级CLOS网络严格无阻塞条件</p>
+<pre><code>本级的入线 = 上级的交换单元数
+本级的出线 = 下一级的交换单元数
+用5元组（m1 , n3 , r1 , r2 , r3）表示
+m1表示第一级的入线数，n3表示第三级的出线数，r表示每一级的交换单元个数
+
+
+假如第一级的某个条入线a要到第三级的一条出现b
+最不利的情况是：a当前的交换单元其他n-1条入线都有信息要交换，并且所有的n-1条输出线都连接到第2级的不同的交换单元上；最后一级与b相连的交换单元除b以外所有的n-1条输出线也均有信息要交换出来，并且对第2级来说，需要另外的n-1个交换单元，且这些交换单元都要有一条出线和b的交换单元相连。
+
+那么在最坏的情况下，共需要(n-1)+(n-1)=2(n-1)个可供选择的第2级交换单元，这时候为了保证a~b严格无阻塞，则需要多加一个交换单元，所以一共需要2(n-1)+1=2n-1个交换单元
+
+一般的CLOS网络严格无阻塞的条件为：
+    n2 &gt;= (i1-1)+(o3-1)+1 
+        = i1 + o3 -1
+    中间个数 &gt;= 出线数 + 入线数 - 1
+</code></pre>
+<p>3级CLOS网络可重排无阻塞条件</p>
+<pre><code>充要条件： r2 ≥ Max ( m1 , n3 )
+重排次数≤ r1 + r3 - 2
+</code></pre>
+<h4 id="tst网络">TST网络
+</h4><pre><code>由时间(T)接线器和空间(S)接线器组成
+反向路由的半帧选择  TS(A-&gt;B)+F/2 = TS(B-&gt;A)
+控制存储器的合用    (因为双向差半帧，存储的内容是一样的)
+网络完全无阻塞的条件：m（内部时隙数）=2n（输入时隙数）
+</code></pre>
+<p>同发特性：</p>
+<pre><code>初 T 顺入控出， S 输出控制/输入控制， 次 T 控入顺出。
+初 T 控入顺出， S 输出控制/输入控制， 次 T 顺入控出。
+</code></pre>
+<p>TST网络结构</p>
+<ul>
+<li>每一条PCM线路连接到一个T接线器，有多少条输入或输出PCM线路，就有多少个T接线器</li>
+<li>S级的出入数决定于两侧T接线器的数量，即等于输入输出线数量</li>
+</ul>
+<p>工作原理
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-13.png"
+	width="1001"
+	height="743"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-13_hu10715758761078397624.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-13_hu8035186230167174420.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+>
+A和B要通信</p>
+<pre><code>首先A到B，A的TS2时隙空闲，往第一级的SM中顺序写入，
+第二级的TS7为内部时隙(表示该时隙空闲，S接线器可以交换)
+在TS7的时候，从第一级的SM中拿出信息，交换到B上，
+B是TS31空闲，该级接线器是输入控制，所以在TS7时控制输入，B在TS31时得到信息
+话音交换是双向的
+所以B也要向A建立连接。
+一般认为反向路由的内部时隙和正向路由的内部时隙差半帧，所以在TS31时，B往第一级顺序输入，在TS23时交换到第二级传给第三级接线器，接线器在A空闲时TS2传给A
+</code></pre>
+<h4 id="banyan网络">banyan网络
+</h4><pre><code>由2*2的交换单元构成的n*n矩阵banyan网络
+
+构造2N*2N的BANYAN网络，可以用两个N*N的BANYAN网络 和N个2*2交换单元组成
+
+前一级N*N BANYAN网络的出线分别连接最后N个2*2交换单元的相同序号的入线
+
+N*N的BANYAN网络，级数为log2N；每一级需要N/2个2*2交换单元。共需要
+( N/2 )*log2N 个交换单元
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-158.png"
+	width="550"
+	height="318"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-158_hu15921364344835488630.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-158_hu12431739874462721471.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="415px"
+	
+></p>
+<p>PPT上的BANYAN例子</p>
+<p>内部阻塞和出线冲突</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-159.png"
+	width="668"
+	height="668"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-159_hu1395709328099392814.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-159_hu7846671220269872635.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+></p>
+<h5 id="交叉连接单元">交叉连接单元
+</h5><pre><code>平行
+交换
+点到多点(上播，下播)
+环回
+</code></pre>
+<h5 id="banyan网络及其特性">banyan网络及其特性
+</h5><pre><code>banyan是基于树形结构
+banyan网络级数为k=lb N, 每级有N/2个交换单元
+
+
+已有N*N的banyan网络，要构成2N*2N的扮演网络，需要2组N*N的banyan网络以及N个2*2的交换单元
+第一组N*N的N条出线分别与N个2*2的交换单元的某一入线相连，第二组的N*N的N条出线分别与2*2的另一入线相连
+
+自选路由特性
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-14.png"
+	width="874"
+	height="491"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-14_hu16086515942179062360.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-14_hu13829942368952795797.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="427px"
+	
+>
+从任意入线到任意出线都有且只有一条通路
+但是每条通路并不是完全分离的，会有公共的内部链路，所以会有内部竞争
+banyan网络是有阻塞网络
+解决内部冲突的方法</p>
+<ol>
+<li>
+<p>使用排序的banyan网络
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-15.png"
+	width="929"
+	height="565"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-15_hu7574086046228254423.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-15_hu321638313503757466.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="394px"
+	
+>
+先经过batcher排序网络，如果某个排序节点只有一个输入，那么就往小的方向送</p>
+<p>根据连接的目的地址将其按升序排列，每个节点比较两个连接目的地址，并将高地址连接送到高端，低地址连接送到低端。仅有一个连接时，送到低端。</p>
+<p>大值向箭头方向</p>
+</li>
+<li>
+<p>构造多通路的banyan网络</p>
+<p>输出地址不变的情况下，增加输出的链路</p>
+</li>
+<li>
+<p>增加级数</p>
+<p>增加级数，每增加一级，多一倍通路</p>
+<ul>
+<li>benes</li>
+</ul>
+</li>
+<li>
+<p>增加平面数</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-16.png"
+	width="1006"
+	height="479"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-16_hu10556769701572074235.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-16_hu10094818346105975169.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+>
+一个BANYAN网是一个平面，多几个网，在一个平面有阻塞的适合去另一个平面就可以了</p>
+</li>
+</ol>
+<h4 id="benes-网络">benes 网络
+</h4><pre><code>可重排无阻塞网络。
+</code></pre>
+<p>使用2x2的交换单元来构成NxN的benes网络的方法</p>
+<pre><code>两侧各有N/2个2X2交换单元，中间为两个N/2 X N/2的子网络，每个交换单元以一条链路连到每个子网络；再将中间子网络按上述方法继续分解，直到中间子网络就是2X2交换单元为止。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-11.png"
+	width="988"
+	height="476"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-11_hu12390133305201354504.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-11_hu1609345472826986912.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-12.png"
+	width="1052"
+	height="457"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-12_hu2479606708462597684.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-12_hu14423515648620135875.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="552px"
+	
+></p>
+<h2 id="3-电话交换系统">3 电话交换系统
+</h2><h3 id="电话交换基础">电话交换基础
+</h3><p>拨号：</p>
+<ol>
+<li>
+<p>脉冲式</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-160.png"
+	width="991"
+	height="290"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-160_hu1282593046859660507.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-160_hu14367535246422412592.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="820px"
+	
+></p>
+</li>
+<li>
+<p>音频式</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-161.png"
+	width="949"
+	height="370"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-161_hu14227115865101542105.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-161_hu2459222377500594365.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="256"
+		data-flex-basis="615px"
+	
+>
+极性保护：</p>
+<p>交换机向用户提供直流电，该电路保证：无论外部a、b线极性如何，内部电路c、d的极性固定</p>
+</li>
+</ol>
+<p>程控交换机的基本组成</p>
+<pre><code>由话路部分和控制部分组成
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-17.png"
+	width="887"
+	height="369"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-17_hu9542702864554046282.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-17_hu353433862318694951.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="576px"
+	
+></p>
+<h3 id="程控数字交换机的系统结构">程控数字交换机的系统结构
+</h3><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-18.png"
+	width="983"
+	height="564"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-18_hu1537790564843921760.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-18_hu10347700158090828228.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="418px"
+	
+></p>
+<pre><code>用户模块通过PCM连到数字交换网络，再连到远端模块
+每个电话机通过双绞线连接到用户电路
+绿色是话路部分，红色是控制部分
+
+接口设备：是实现数字交换系统和外围环境的接口。
+远端接口：是到集中维护操作中心、网管中心、计费中心等的数据传送接口。
+用户集中级：完成话务集中功能，集中比一般为2:1到8:1一般为单T交换网络。
+用户模块：用户集中级+用户电路
+远端模块：设置在远端的用户模块。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-19.png"
+	width="936"
+	height="551"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-19_hu9598585558997621331.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-19_hu15821993521391963856.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="407px"
+	
+></p>
+<h4 id="用户模块">用户模块
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-162.png"
+	width="1031"
+	height="484"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-162_hu9835743619498862982.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-162_hu11954300916756306229.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="511px"
+	
+></p>
+<p>用户电路</p>
+<pre><code>每个电话用户对应一个用户电路。一块用户电路板包含多个用户电路
+</code></pre>
+<p>用户级交换网络</p>
+<pre><code>T接线器，集中话务，连接收号器
+</code></pre>
+<p>收号器</p>
+<pre><code>各种交换机设计不同，收号器可能位于中央交换网络侧
+</code></pre>
+<p>扫描存储器</p>
+<pre><code>存储用户环路状态（摘机状态、挂机状态的信息）
+</code></pre>
+<p>分配存储器</p>
+<pre><code>存储处理机送给用户电路的控制命令
+</code></pre>
+<p>微处理机</p>
+<pre><code>控制用户级的交换，读写各个存储器
+</code></pre>
+<p>信号提取插入</p>
+<pre><code>提取接收中央处理机发来的信息，插入送给中央处理机的信息
+</code></pre>
+<h4 id="控制子系统">控制子系统
+</h4><ol>
+<li>中央级
+<ul>
+<li>系统资源分配</li>
+<li>中央交换网络控制</li>
+<li>呼叫处理</li>
+<li>信令处理</li>
+<li>控制用户级CPU以及完成系统的操作、维护、管理等</li>
+</ul>
+</li>
+<li>用户级
+<ul>
+<li>对用户模块内所有用户线路进行监视扫描</li>
+<li>控制用户级交换网络</li>
+<li>完成话路集中</li>
+<li>对相关资源进行分配</li>
+</ul>
+</li>
+</ol>
+<h4 id="话路子系统">话路子系统
+</h4><p>由中央级交换网络和用户级交换网络以及各种借口设备组成</p>
+<ol>
+<li>交换网络主要完成交换功能</li>
+<li>接口设备主要完成外部信号与交换机内部信号的转换</li>
+</ol>
+<h3 id="接口设备接口电路">接口设备/接口电路
+</h3><p>接口设备主要有</p>
+<ol>
+<li>用户电路</li>
+<li>中继电路</li>
+<li>信令收发设备</li>
+</ol>
+<p>接口设备的功能是完成外部信号与交换机内部信号的转换</p>
+<h4 id="接口类型">接口类型
+</h4><p>数字接口</p>
+<ul>
+<li>V接口</li>
+<li>网络侧的A、B类接口</li>
+</ul>
+<p>模拟接口</p>
+<ul>
+<li>Z类接口</li>
+<li>网络侧的C类接口</li>
+</ul>
+<h4 id="用户电路">用户电路
+</h4><p>是程控交换机通过用户线与用户终端相连的接口电路</p>
+<p>用户电路也有模拟和数字电路之分</p>
+<p>模拟用户电路功能有：BORSCHT
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-25.png"
+	width="1315"
+	height="732"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-25_hu7542212773051339859.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-25_hu1350093460335894096.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="431px"
+	
+></p>
+<ol>
+<li>B 馈电 —— battery feeding
+<ul>
+<li>通过电容（隔直流，通交流）和电感（隔交流，通直流）的设置，既保证了向用户供电，减少对话音信号的影响，又可将话音信号传送到交换机里</li>
+<li>-48V ~ 0V
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-20.png"
+	width="1380"
+	height="696"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-20_hu12438138675687018253.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-20_hu14276825529665359784.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></li>
+</ul>
+</li>
+<li>O 过压保护 —— overvolatage protection
+<ul>
+<li>防止外来高压袭击</li>
+<li>阻止高的电流
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-21.png"
+	width="1298"
+	height="536"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-21_hu279025450377434588.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-21_hu11634469386267081554.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
+	
+></li>
+</ul>
+</li>
+<li>R 振铃控制 —— ringing control
+<ul>
+<li>用户摘机后，振铃开关送出解铃信号
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-22.png"
+	width="1465"
+	height="742"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-22_hu6878488315477631084.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-22_hu6729998532199414474.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="473px"
+	
+></li>
+</ul>
+</li>
+<li>S 监视 —— supervision
+<ul>
+<li>监视用户线上的直流环流 通/断 来判断下面三种状态</li>
+</ul>
+<ol>
+<li>用户话机的摘挂机状态</li>
+<li>用户话机（号盘）发出的拨号脉冲</li>
+<li>投币、磁卡等话机的输入信号
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-23.png"
+	width="1303"
+	height="648"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-23_hu7393544709382591041.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-23_hu15465947926408121343.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="482px"
+	
+></li>
+</ol>
+</li>
+<li>C 编译码和滤波 —— CODEC &amp; filters
+<ul>
+<li>完成模拟和数字信号的转换
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-24.png"
+	width="1164"
+	height="287"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-24_hu17240890440955265914.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-24_hu2270003691053173435.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="405"
+		data-flex-basis="973px"
+	
+></li>
+</ul>
+</li>
+<li>H 混合电路 —— hybrid
+<ul>
+<li>完成二/四线的转换</li>
+</ul>
+</li>
+<li>T 测试 —— test
+<ul>
+<li>配合外部测试设备对用户线进行测试</li>
+</ul>
+</li>
+</ol>
+<h4 id="中继电路">中继电路
+</h4><p>交换机和中继器的接口设备，也叫中继器</p>
+<p>有以下六个功能</p>
+<ol>
+<li>码型变换</li>
+</ol>
+<ul>
+<li>内部的NRZ（单极性不归零码）与外部的HDB3（高密度双极性码）的转换</li>
+</ul>
+<ol start="2">
+<li>帧同步</li>
+</ol>
+<ul>
+<li>就是从接收的数据流中搜索并识别到同步码，以确定一帧的开始，以便接收端的帧结构排列和发送端的完全一致。</li>
+<li>帧同步码0011011在PCM的偶帧的TS0中</li>
+</ul>
+<ol start="3">
+<li>复帧同步</li>
+</ol>
+<ul>
+<li>PCM的一个复帧由16个帧组成。</li>
+<li>使接收端与发送端的复帧结构排列完全一致</li>
+<li>复帧同步码在F0（复帧的第一个帧）的TS16的高4个比特中传输，码字为0000</li>
+<li>一帧32个时隙（一帧是125μs），一个时隙8bits，所以一帧是256bits，换算成带宽是2048kbits/s
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-27.png"
+	width="1386"
+	height="868"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-27_hu3198433921651657557.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-27_hu234240260679521226.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="159"
+		data-flex-basis="383px"
+	
+></li>
+</ul>
+<ol start="4">
+<li>时钟提取</li>
+</ol>
+<ul>
+<li>就是从输入的数据流中提取时钟信号，作为输入数据流的基准时钟。同时该时钟信号还用来作为本端系统时钟的外部参考时钟源。</li>
+</ul>
+<ol start="5">
+<li>提取和插入信号
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-26.png"
+	width="1347"
+	height="599"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-26_hu2115611647074464075.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-26_hu16480899318057380247.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="539px"
+	
+></li>
+<li>帧定位（再定时）</li>
+</ol>
+<ul>
+<li>把输入数据的时钟调整到本局系统时钟上，实现系统时钟的同步</li>
+</ul>
+<h3 id="数字交换网络-话路建立">数字交换网络-话路建立
+</h3><h4 id="复用器和分路器">复用器和分路器
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-175.png"
+	width="1542"
+	height="664"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-175_hu14941237969007739199.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-175_hu14527951623010635952.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="232"
+		data-flex-basis="557px"
+	
+></p>
+<ul>
+<li>
+<p>1 点速率为 2048 kbit/s，传输信号为串行码；2 点速率为 256 kbit/s，传输信号为 8 位并行码；3 点速率为 1024 kbit/s，传输信号为 8 位并行码。</p>
+</li>
+<li>
+<p>如果复用器输入线数为n，依次编号为0,1,…,n−1，且i号输入线上j时隙信号TSj经复用器串并变换和复用后，在输出线上第k个时隙输出，即在TSk出现，则有：k=jn+i。</p>
+</li>
+</ul>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-176.png"
+	width="2012"
+	height="1186"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-176_hu13967046838774290690.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-176_hu17811918168890967023.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="407px"
+	
+>
+话路建立：</p>
+<ul>
+<li>用户 A 呼叫用户 B：用户级出线HW0TS8经过复用器M0交换为ITS16=2∗8+0，选择交换时隙ITS20；</li>
+<li>用户 B 建立到用户 A 的连接：采用反向法（半帧法）计算，由ITS20，T 接线器输入信号每帧为 64 时隙（由两条 PCM32 线路复用而来），半帧为 32，故 20+32=52，所以 B 到 A 的连接选择ITS52。</li>
+</ul>
+<p>完整版：</p>
+<ul>
+<li>每个用户模块连接 256 个用户，内部提供 8 条 HW，32TS/HW（即 256*256）的交换</li>
+<li>所有模块（包括用户模块/中继模块/信号音源）连接到 TST 的中央交换网络，支持 16K * 16K 的交换（每个 T 支持 512*512 交换）。用户模块采用复接方式接入 TST（A 为复接点），实现话务集中</li>
+<li>用户 A 接至模块 0 的 HW0TS1，用户 B 接至模块 n 的 HW7TS31 （双向都使用该时隙）</li>
+<li>系统为用户 A 选择模块 0 的空闲时隙 HW0TS3（双向），模块 0 的 HW0 固定连接到 M0 的 HW0; 为用户 B 选择模块 n 的空闲时隙 HW3TS8（双向），模块 n 的 HW3 固定连接到 M31 的 HW8</li>
+<li>A→B 连接时，TST 网络选择使用内部时隙 ITS4；B→A 连接时， 使用反相法选择内部时隙</li>
+</ul>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-28.png"
+	width="1584"
+	height="1082"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-28_hu14389631534025212217.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-28_hu6708879535587895877.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="351px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-177.png"
+	width="1554"
+	height="1186"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-177_hu8254036173859166967.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-177_hu4082658910590561175.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="314px"
+	
+></p>
+<h3 id="程控交换软件技术">程控交换软件技术
+</h3><h4 id="程控交换软件系统">程控交换软件系统
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-38.png"
+	width="1329"
+	height="622"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-38_hu2159654806461288952.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-38_hu14882207786419025282.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+>
+特点：</p>
+<ol>
+<li>实时性</li>
+<li>多任务并发执行</li>
+<li>高可靠性</li>
+</ol>
+<p>组成：</p>
+<ul>
+<li>由系统软件和应用软件组成</li>
+</ul>
+<p>交换机操作系统：是交换机硬件和应用软件之间的接口</p>
+<p>程控交换机的操作系统对任务调度一般采用基于优先级的抢占式调度算法。每个任务都有一个优先级。</p>
+<p>优先级分为三种：</p>
+<ol>
+<li>故障级任务，具有最高优先级</li>
+<li>周期级任务</li>
+<li>基本级任务
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-37.png"
+	width="1206"
+	height="299"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-37_hu15212320818250849541.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-37_hu15298603602140540714.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="403"
+		data-flex-basis="968px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-36.png"
+	width="1332"
+	height="247"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-36_hu55877454470606620.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-36_hu10317150803106218682.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="539"
+		data-flex-basis="1294px"
+	
+></li>
+</ol>
+<h4 id="呼叫处理的基本原理--重点">呼叫处理的基本原理 —— 重点
+</h4><p>一个呼叫的处理过程：</p>
+<ol>
+<li>摘机呼叫</li>
+<li>送拨号音，准备收号</li>
+<li>收号</li>
+<li>号码分析</li>
+<li>接至被叫用户</li>
+<li>向被叫用户振铃</li>
+<li>被叫应答和通话</li>
+<li>挂机，通话结束</li>
+</ol>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-39.png"
+	width="1501"
+	height="1099"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-39_hu13768114813845342519.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-39_hu6103123068323573853.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="327px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-40.png"
+	width="1490"
+	height="846"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-40_hu1784816914990342132.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-40_hu9762214115367696745.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="422px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-41.png"
+	width="1469"
+	height="968"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-41_hu815593081864303179.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-41_hu13648965805170266251.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="364px"
+	
+></p>
+<p>呼叫处理过程的特点：</p>
+<ol>
+<li>整个呼叫处理过程可分为若干个阶段，每个阶段可以用一个<b>稳定的状态</b>来表示；</li>
+<li>整个呼叫处理的过程就是在一个稳定状态下，<b>处理机监视、识别输入信号，进行分析处理，执行任务和输出命令</b>，然后跃迁到下一个稳定状态的循环过程；</li>
+<li>两个稳定的状态之间要执行各种处理；</li>
+<li>在一个稳定状态下，若没有输入信号，状态不会迁移；</li>
+<li>相同的输入信号在不同的状态下会有不同的处理，并迁移到不同的状态；</li>
+<li>在同一状态下，对不同输入信号的处理是不同的；</li>
+<li>同一状态下，输入相同信号，也可能因不同情况得出不同结果</li>
+</ol>
+<p>呼叫的处理过程：</p>
+<ol>
+<li>输入处理
+<ul>
+<li>识别并接收外部输入的处理请求和信号，生成事件</li>
+</ul>
+</li>
+<li>分析处理
+<ul>
+<li>根据目前状态和输入信号进行分析、判别，决定下一步任务</li>
+</ul>
+</li>
+<li>任务执行和输出处理
+<ul>
+<li>根据分析结果，发布控制命令</li>
+</ul>
+</li>
+</ol>
+<h5 id="sdl图">SDL图
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-42.png"
+	width="1334"
+	height="782"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-42_hu4047688151273941163.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-42_hu2690550171464745958.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="409px"
+	
+></p>
+<p>用SDL图表示呼叫处理过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-43.png"
+	width="1020"
+	height="1181"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-43_hu17684429275023991797.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-43_hu11417451485704721553.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="86"
+		data-flex-basis="207px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-44.png"
+	width="1134"
+	height="1178"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-44_hu8457299916364920330.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-44_hu5599621328135303867.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="96"
+		data-flex-basis="231px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-45.png"
+	width="929"
+	height="1151"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-45_hu15271119516021490447.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-45_hu15167622723961536273.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="80"
+		data-flex-basis="193px"
+	
+></p>
+<h5 id="输入处理">输入处理
+</h5><p>对用户线、中继线、信令设备进行监视、检测并进行识别，生成相应事件放入队列，以便其他程序取用。大多是周期级程序，包括：
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-46.png"
+	width="1108"
+	height="396"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-46_hu15257176717804666653.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-46_hu238657138261163833.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="279"
+		data-flex-basis="671px"
+	
+></p>
+<ol>
+<li>
+<p>用户线状态扫描：</p>
+<ul>
+<li>
+<p>摘挂机识别
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-47.png"
+	width="1257"
+	height="633"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-47_hu13788245488440304950.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-47_hu2156843938098090313.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+>
+比对这次扫描结果和前次扫描结果进行判断</p>
+</li>
+<li>
+<p>脉冲识别</p>
+</li>
+<li>
+<p>位间隔识别</p>
+</li>
+</ul>
+</li>
+<li>
+<p>按钮拨号DTMF信号</p>
+<ul>
+<li>当信号标志 SP = 0 表示DTMF收号器正在收号，可以从收号器读取号码信息</li>
+<li>当收号标志 SP = 1 表示DTMF收号器没有收号，无信息可读
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-48.png"
+	width="1333"
+	height="684"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-48_hu6300713577306074354.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-48_hu14192055079102553028.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></li>
+</ul>
+</li>
+</ol>
+<h5 id="分析处理">分析处理
+</h5><p>属于基本级程序</p>
+<ul>
+<li>
+<p>去号分析</p>
+<p>根据输入分析检测的摘机信号，根据用户数据，确定下一步动作
+<br>基于主叫用户数据
+<br>去号分析的结果决定下一步接续动作
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-49.png"
+	width="1082"
+	height="496"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-49_hu10017910004499822142.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-49_hu317405745980248481.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-50.png"
+	width="1358"
+	height="1101"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-50_hu1017782405810631038.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-50_hu7696242451980238244.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="123"
+		data-flex-basis="296px"
+	
+></p>
+</li>
+<li>
+<p>号码分析</p>
+<p>号码分析可分为二步：<b>号首分析、号码翻译</b></p>
+<p>号首分析：判断前几位（1~3位），以判定呼叫的接续类型，获取应收号长和路由等信息。</p>
+<p>号码翻译：通过接收到的被叫号码来找到对应的被叫用户。确定被叫用户的用户设备号，从而确定其实际所处的物理端口。
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-51.png"
+	width="1455"
+	height="816"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-51_hu5216281258902589654.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-51_hu14384692125924100512.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="427px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-52.png"
+	width="1460"
+	height="785"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-52_hu8229781258327587381.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-52_hu11057798384403095538.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="446px"
+	
+></p>
+</li>
+<li>
+<p>来号分析</p>
+<p>来话分析的数据来源是被叫用户数据。
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-53.png"
+	width="1077"
+	height="521"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-53_hu10116266633576063289.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-53_hu10071770858024432802.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-54.png"
+	width="1349"
+	height="923"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-54_hu9310328411832026748.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-54_hu3072981219980456352.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="350px"
+	
+></p>
+</li>
+<li>
+<p>状态分析</p>
+<p>状态分析的信息源是状态和输入的事件。
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-55.png"
+	width="956"
+	height="403"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-55_hu4756892656989408533.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-55_hu11734619704116836930.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="569px"
+	
+></p>
+</li>
+</ul>
+<h5 id="执行和输出">执行和输出
+</h5><p>任务执行是指 从一个稳定状态跃迁到下一个稳定状态之前，根据分析处理的结果，处理机完成相关任务的过程</p>
+<ol>
+<li>分配和释放各种资源</li>
+<li>启动和停止各种计时器</li>
+<li>形成信令、处理机间通信消息和驱动硬件的控制命令</li>
+<li>开始和停止计费</li>
+<li>计算操作</li>
+<li>存储各种号码</li>
+<li>对用户数据、局数据的读写操作</li>
+</ol>
+<p>在任务执行中，要输出一些信令、消息或动作命令，这就是输出处理</p>
+<ol>
+<li>送各种信号音、停各种信号音，向用户振铃和停振铃</li>
+<li>驱动交换网络建立或拆除通话话路</li>
+<li>连接DTMF收号器</li>
+<li>发送公共信道信令</li>
+<li>发送线路信令和MFC信令</li>
+<li>发送处理机间通信信息</li>
+<li>发送计费脉冲等</li>
+</ol>
+<h4 id="程控交换软件技术-1">程控交换软件技术
+</h4><ol>
+<li>
+<p>群处理</p>
+<p>对一群对象同时进行逻辑运算和处理
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-56.png"
+	width="1366"
+	height="727"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-56_hu4036576782852114811.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-56_hu11179829245490256555.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="450px"
+	
+>
+从群处理结果可知：用户5和0摘机，用户7挂机</p>
+</li>
+<li>
+<p>逐次展开法</p>
+<p>基于逐次展开分析表（多级检索表）</p>
+ <p>每一级对应一位号码
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-57.png"
+	width="1646"
+	height="991"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-57_hu7549639653923355223.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-57_hu2424607293530564179.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="398px"
+	
+></p>
+</li>
+<li>
+<p>表格驱动</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-58.png"
+	width="1280"
+	height="1108"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-58_hu3905956072523416235.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-58_hu15879876501205910399.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="115"
+		data-flex-basis="277px"
+	
+>
+时间表每一行代表一个时间</p>
+ <p>每一列代表一个程序
+ <p>若某一行某一列的值为1，则代表在该时刻程序要被调用，若为0，则不用调用
+ <p>屏蔽表为0时，代表该任务被屏蔽，不管时间表是1还是0，都不做。
+ <p>屏蔽表&&时间表 == 1 才会在该时刻做当前任务
+</li>
+<li>
+<p>有限状态机的实现</p>
+<ul>
+<li>
+<p>二维数组的有限状态机的实现
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-59.png"
+	width="1195"
+	height="786"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-59_hu529588769667099317.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-59_hu12597063811598419528.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="364px"
+	
+>
+通过状态号和事件号得出要做的任务</p>
+</li>
+<li>
+<p>多级表的有限状态机的实现
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-60.png"
+	width="1256"
+	height="840"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-60_hu15621933991796761596.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-60_hu8263218940317544084.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="358px"
+	
+></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="控制系统">控制系统
+</h3><h4 id="呼叫处理能力与过负荷控制">呼叫处理能力与过负荷控制
+</h4><ol>
+<li>
+<p>呼叫处理能力</p>
+<ul>
+<li>用BHCA来衡量：最大忙时呼叫次数，单位时间内控制系统能够处理的呼叫次数</li>
+</ul>
+<p>系统开销 = 固有开销+非固有开销</p>
+<p>BHCA计算模型：t = a+bN
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-29.png"
+	width="1225"
+	height="357"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-29_hu9397640068514155407.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-29_hu7612388989695860650.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="343"
+		data-flex-basis="823px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-30.png"
+	width="1387"
+	height="386"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-30_hu15069512174696416528.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-30_hu12483935526968998423.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="359"
+		data-flex-basis="862px"
+	
+></p>
+<p>当交换设备上试呼总次数超过它的设计负荷能力的10%时，此时称为10%过负荷</p>
+ <p>当交换机设备出现过负荷，交换机要采取过负荷控制，避免交换机的处理能力大幅下降
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-31.png"
+	width="1311"
+	height="703"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-31_hu11984596081399632578.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-31_hu15106407694860501699.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="447px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-32.png"
+	width="1247"
+	height="713"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-32_hu14992770604501504996.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-32_hu5113398997348051796.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+</li>
+<li>
+<p>高可靠性</p>
+</li>
+</ol>
+<h4 id="控制系统的结构方式">控制系统的结构方式
+</h4><ol>
+<li>
+<p>集中控制
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-33.png"
+	width="1301"
+	height="624"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-33_hu14415562290873448640.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-33_hu13836589435347927241.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+ <p>处理机可以对交换系统内的所有功能及资源实施统一控制
+ <p>n个CPU，每个都能完成所有的功能及控制
+ <p>三个特点：
+<ol>
+<li>处理机直接控制所有功能的完成和资源的使用，控制关系简单，处理机间通信接口简单</li>
+<li>每台处理机上运行的应用软件包含了对交换机所有功能的处理，因而单个处理机上的应用软件复杂、庞大</li>
+<li>处理机几种完成所有功能，一旦处理机系统出现故障，整个控制系统失效，可靠性低</li>
+</ol>
+</li>
+<li>
+<p>分散控制
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-34.png"
+	width="1246"
+	height="600"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-34_hu3341790897841837865.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-34_hu9111250709722136182.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+>
+由多个处理机分担完成，每个处理机只完成交换机的部分功能及控制部分资源</p>
+<ol>
+<li>
+<p>全分散控制</p>
+<p>采用全分散控制方式的控制系统，其多个处理机之间<b>独立工作</b>，分别完成<b>不同</b>的功能和对不同的资源实施控制，这些处理机之间<b>不分等级</b>，不存在控制与被控制关系，各处理机有自主能力。</p>
+</li>
+<li>
+<p>分级分散控制</p>
+<p>就是控制系统由多个处理机构成，各处理机分别完成不同的功能和对不同的资源实施控制，处理机之间是分等级的，高级别的处理机控制低级别的，协同完成整个系统的功能。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="多处理机的分担方式工作方式">多处理机的分担方式/工作方式
+</h4><ol>
+<li>
+<p>功能分担方式</p>
+<p>多个处理机完成不同的功能，不同的处理机完成不同功能</p>
+<ul>
+<li>提高整个系统的适应性，完成不同功能的处理机可以有不同的配置；模块可以按需配置</li>
+</ul>
+</li>
+<li>
+<p>话务分担方式（负荷分担）</p>
+<p>多个处理机各自完成一部分话务功能</p>
+<ul>
+<li>提高BHCA ，提高可靠性</li>
+</ul>
+</li>
+<li>
+<p>冗余方式</p>
+<ul>
+<li>双机冗余配置</li>
+<li>N+m冗余配置：N个处理机在线运行，m个处理机处于备用状态
+除了正常运行的处理机外，还配置备用的处理机</li>
+</ul>
+<ol>
+<li>
+<p>同步方式</p>
+<p>主备机同时接收外部事件，同时处理，并比较处理结果。结果相同时，由主用机发命令；结果不同时，双机均进行自检。若主机故障，则进行主备切换；若备机故障，则备机脱机检修；若都无故障，则保持原状态。这种方式可以保证切换时不损失任何呼叫，但技术复杂</p>
+</li>
+<li>
+<p>互助方式</p>
+<p>正常工作时，双机按话务分担方式工作，当一个处理机故障时，另一个处理机接管全部业务。这种方式可以保证故障时通话状态的呼叫不损失，但故障时单机的话务负荷比较高。</p>
+</li>
+<li>
+<p>热备用方式</p>
+<p>正常工作时，由主机负责全部话务，并随时将呼叫数据送给备用机，备用机不处理任何呼叫；主用机故障时，进行主备机切换，备用机接管全部话务，并根据已有的呼叫数据保证一部分呼叫不损失。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="多处理机的通信方式">多处理机的通信方式
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-35.png"
+	width="1375"
+	height="697"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-35_hu18216849060721272686.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-35_hu9779105113903262028.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="473px"
+	
+></p>
+<h3 id="电话通信网">电话通信网
+</h3><h2 id="4-分组交换技术mpls">4 分组交换技术MPLS
+</h2><h3 id="路由器技术">路由器技术
+</h3><p>交换单元结构
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-163.png"
+	width="1084"
+	height="719"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-163_hu12401538824743337408.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-163_hu14823845492629762850.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="361px"
+	
+></p>
+<p>包转发原理：</p>
+<ol>
+<li>信息到达路由器的入线</li>
+<li>线路卡按不同线路的帧格式提出净荷，并将校验正确的帧送入I/O管理ASIC</li>
+<li>I/O管理ASIC按不同的协议格式（IPv4或MPLS）提出3层的包，根据包的交换要求设置“寻路关键字”，并将包分段成64字节的块，一起送分布缓冲管理器</li>
+<li>缓冲管理器将“块”轮流放入共享存贮器</li>
+<li>缓冲管理器根据块中的“寻路关键字”构造“包通告”，送寻路部件</li>
+<li>寻路部件查找路由</li>
+<li>寻路部件将包含了转发决定的“包通告”送缓冲管理器，缓冲管理器再将此包通告转发给输出端口的I/O管理器，输出端口的I/O管理器将所有的包通告排队，逐一处理</li>
+<li>I/O管理器处理到某一个包通告时，通告缓冲管理器产生一个读“块”的请求，将数据读出</li>
+<li>I/O管理器将块重新组装成包，送线路卡</li>
+<li>线路卡按线路要求将数据包作为净荷置入线路帧格式中，发出。</li>
+</ol>
+<h3 id="mpls的基本组成和原理">MPLS的基本组成和原理
+</h3><h4 id="multi-protocol-label-switching概念">Multi-Protocol Label Switching概念
+</h4><p>MPLS是一个可以在多种第二层媒质上进行标记交换的网络技术。它结合了第二层的交换和第三层路由的特点，将第二层的基础社死和第三层的路由有机地结合起来。</p>
+<p>MPLS是一种有效的封装机制，通过在packets上使用标记Labels进行数据传递</p>
+<p>同时可以支持多协议，也就是它不仅可以支持多种上层网络协议，包括IPv4、IPv6等，而且可以运行于不同底层（ATM、FR、PPP）的网络上。</p>
+<h4 id="基本模型">基本模型
+</h4><p>指一种结合分组路由和电路交换的混合模型</p>
+<pre><code>使用固定长度的标记表示转发信息，使用精确匹配算法进行转发判决，故称标记交换
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-164.png"
+	width="846"
+	height="325"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-164_hu13151598842086906021.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-164_hu8148110897363046053.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="260"
+		data-flex-basis="624px"
+	
+></p>
+<h4 id="技术思路">技术思路
+</h4><ol>
+<li>传统路由协议选路</li>
+<li>无连接变面向连接</li>
+<li>增加标记分发协议</li>
+</ol>
+<p>路由选择和数据转发分开进行</p>
+<p>采用精确地址匹配方法进行寻址</p>
+<h4 id="技术特点">技术特点
+</h4><ul>
+<li>
+<p>以路由判决为基础，先使用相关协议为信息流建立虚连接，分组按分配的标记为基础进行转发</p>
+</li>
+<li>
+<p>以分组头的某些定长字段标识这个虚连接</p>
+</li>
+<li>
+<p>标记都是本地（逐段）有效的</p>
+</li>
+<li>
+<p>MPLS的PDU允许变长</p>
+</li>
+<li>
+<p>MPLS可以使用多种2层完了过技术</p>
+</li>
+<li>
+<p>允许直接使用已有的路由技术</p>
+</li>
+<li>
+<p>标记置换：将 2 层的交换速度带到 3 层</p>
+</li>
+<li>
+<p>控制平面与转发平面分离：便于采用新的路由协议和交换技术</p>
+</li>
+<li>
+<p>通过标记堆栈实现多层次的转发：提高可扩展性</p>
+</li>
+</ul>
+<p>与传统IP交换的区别</p>
+<pre><code>传统 IP 交换采用逐跳转发，路由选择与数据转发同时进行，其核心交换机制是无连接工 作模式。 MPLS 将路由选择与数据转发分开进行，在信息传输之前需要建立虚连接，其核心交换 机制是面向连接的工作模式。
+</code></pre>
+<h4 id="mpls-网络组成">MPLS 网络组成
+</h4><p>LSP</p>
+<pre><code>Label Switched Path
+是指在某逻辑层次上（相应于标记堆栈）由多个LSR组成的交换式分组传输通路。
+LSP来自于面向虚电路的思想，类似于ATM中的虚连接。
+</code></pre>
+<p>LER</p>
+<pre><code>Label Edge Router
+入口边缘路由器，为每个 FEC 生成 Label，映射到 LSP 下一跳的标记。对入口 IP 分组进行分类，确定 FEC，根据 FEC 查询 LIB 得到下一跳 Label，将 Label 插入 IP 包头，从相应端口发送。
+</code></pre>
+<p>FEC</p>
+<pre><code>Forward Equivalence Class
+是一组沿相同路径、有相同处理过程的数据分组。可以按照IP地址前缀划分等，有多种划分方式。
+同一组FEC具有相同的Label，走相同的LSP
+</code></pre>
+<p>LIB</p>
+<pre><code>Label Information Base 
+标记信息库，保存转发 Labeled 分组所需要的信息。
+</code></pre>
+<p>LSR</p>
+<pre><code>Label Switch Router，维护 LIB、完成标记置换。
+</code></pre>
+<p>Egress LER</p>
+<pre><code>去掉 Label 还原成普通 IP 包继续转发。
+</code></pre>
+<h3 id="mpls-交换原理">MPLS 交换原理
+</h3><h4 id="mpls-基本标记格式">MPLS 基本标记格式
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-165.png"
+	width="910"
+	height="221"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-165_hu15981197453839734742.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-165_hu1844321523802598627.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="411"
+		data-flex-basis="988px"
+	
+></p>
+<p>Label 20bits 、COS/EXP=Class of Service 3bits、S=Bottom of stcack 1bit、TTL 8bits</p>
+<h4 id="基本交换原理">基本交换原理
+</h4><p>建立连接</p>
+<ul>
+<li>通过LDP等协议，在LSR和LER、LSR和LSR之间完成标记信息的分发，形成与FEC对应的LSP路径</li>
+</ul>
+<p>数据传输</p>
+<ul>
+<li>入口LER接收分组，完成第三层功能，判定分组所属的FEC，并给分组加上标记形成MPLS标记分组</li>
+<li>LSR依据分组上的标记以及标记转发表通过交换单元对其进行转发，不再进行任何第三层处理</li>
+<li>出口LER将分组中的标记去掉后转发至目的地</li>
+</ul>
+<p>拆除连接</p>
+<ul>
+<li>取消标记，释放LSP</li>
+</ul>
+<h4 id="控制平面与数据平面">控制平面与数据平面
+</h4><p>控制平面</p>
+<ul>
+<li>处理MPLS的信令和路由协议，负责LSP的建立、拆除、维护、重建等</li>
+<li>FEC—LSP</li>
+<li>标记分配协议LDP协议</li>
+</ul>
+<p>数据平面</p>
+<ul>
+<li>规定如何利用标记进行数据传输</li>
+<li>标记的格式和封装</li>
+</ul>
+<h4 id="标记分配过程ldp">标记分配过程（LDP）
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-166.png"
+	width="1052"
+	height="653"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-166_hu15283317476925624316.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-166_hu11860939065355310945.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="386px"
+	
+></p>
+<h4 id="标记分配方式">标记分配方式
+</h4><p>上游标记分配（一般不使用）
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-167.png"
+	width="1097"
+	height="166"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-167_hu9210426939783749477.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-167_hu13311715352068168517.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="660"
+		data-flex-basis="1586px"
+	
+></p>
+<p>下游主动标记分配
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-168.png"
+	width="1061"
+	height="149"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-168_hu17901195324919633002.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-168_hu5968280222081425534.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="712"
+		data-flex-basis="1708px"
+	
+></p>
+<p>下游按需标记分配（常用）
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-169.png"
+	width="1107"
+	height="202"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-169_hu11370957764768791109.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-169_hu3599926491071418832.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="548"
+		data-flex-basis="1315px"
+	
+></p>
+<h5 id="例子1">例子1
+</h5><p>建立路由
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-170.png"
+	width="1075"
+	height="609"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-170_hu3097046474508893745.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-170_hu7362360570670151787.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="423px"
+	
+></p>
+<p>标记请求
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-171.png"
+	width="1096"
+	height="623"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-171_hu602155704543436381.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-171_hu13202313392729609883.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="422px"
+	
+></p>
+<pre><code>上游向下游请求标记
+</code></pre>
+<p>标记分配
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-172.png"
+	width="1090"
+	height="576"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-172_hu750327893228433969.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-172_hu15772768911557619681.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="454px"
+	
+></p>
+<pre><code>下游告诉上游相关的FEC要使用哪个标签，并将上游的相应标签填入字节的In label中
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-173.png"
+	width="1080"
+	height="602"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-173_hu8201075724586711740.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-173_hu6808582259686596437.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="430px"
+	
+></p>
+<pre><code>上游将标签和端口号填入Out Label和out I'face中
+</code></pre>
+<p>之后可以进行分组转发</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-174.png"
+	width="1094"
+	height="628"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-174_hu18235303598636726987.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-174_hu14272420239519541741.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="418px"
+	
+></p>
+<h2 id="5-信令-协议">5 信令 协议
+</h2><p>信令工作过程：
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-61.png"
+	width="923"
+	height="649"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-61_hu4397235876906453374.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-61_hu15777887079460345619.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="341px"
+	
+></p>
+<p>信令的分类：</p>
+<ol>
+<li>按照信令完成的功能分类</li>
+</ol>
+<ul>
+<li>
+<p>线路信令</p>
+<p>具有监视功能，用来监视主、被叫的摘挂机，及设备忙闲</p>
+</li>
+<li>
+<p>路由信令</p>
+<p>具有选择功能，用来选择路由</p>
+</li>
+<li>
+<p>管理信令</p>
+<p>具有操作功能，用于电话网的管理和维护</p>
+</li>
+</ul>
+<ol start="2">
+<li>按照信令所工作的区域分类</li>
+</ol>
+<ul>
+<li>
+<p>用户信令：用户信令是用户和交换机之间的信令，在用户线上传送。</p>
+<p>模拟用户信令
+1. 状态信令：用户线的忙闲状态，如主被叫的拽摘挂机状态
+2. 地址信令：主叫所拨打的把欸叫号码，
+3. 铃流和信号音：交换机向用户发送的信号。振铃信号、信号音</p>
+</li>
+<li>
+<p>局间信令：是交换机之间（市&ndash;市、市&ndash;长、长&ndash;长）、交换机与网管中心、数据库（HLR、VLR）之间的信令。</p>
+</li>
+</ul>
+<ol start="3">
+<li>按照信令传送通路和用户信息传送通路的关系</li>
+</ol>
+<ul>
+<li>
+<p>随路信令
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-63.png"
+	width="862"
+	height="327"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-63_hu7625599058260515161.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-63_hu13586083846502702310.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="632px"
+	
+>
+呼叫接续过程中的各种信令均在该呼叫所占用的话路中传送(或信令通路与话路存在对应关系)</p>
+</li>
+<li>
+<p>公共信道信令
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-62.png"
+	width="815"
+	height="279"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-62_hu16799031349976901580.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-62_hu18215623073634353140.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="292"
+		data-flex-basis="701px"
+	
+></p>
+<p>信令通路与话音通路分开，且一条信令通路可以为多条话音通路服务<br>
+信令传送速度快、信号容量大、可靠性高；<br>
+不仅可以传送与电路接续有关的信号，还可以传送各种与电路接续无关的传令信息；<br>
+具有改变或增加信令的灵活性，便于开放新业务；</p>
+</li>
+</ul>
+<h3 id="no7-信令系统">No.7 信令系统
+</h3><p>技术特点：</p>
+<ul>
+<li>采用公共信道方式</li>
+<li>传送模式采用的是分组传送模式中的数据报方式，传送的最小单位是SU</li>
+<li>由于话路与信令通道是分开的，所以必须对话路进行单独的导通检验</li>
+<li>必须设置备用设备，保证可靠性</li>
+</ul>
+<h4 id="信令网组成">信令网组成
+</h4><p>信令点SP和信令转节点STP</p>
+<p>信令链路</p>
+<pre><code>连接各个信令点，传送信令的物理链路。通常就是通信链路的一部分。
+</code></pre>
+<p>我国的信令网的三级结构
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-78.png"
+	width="1112"
+	height="704"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-78_hu15103496384481845437.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-78_hu15133020497944480002.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="379px"
+	
+></p>
+<pre><code>第一级位高级信令转接点HSTP，负责转接它汇接的第二级LSTP和第三级SP的信令消息
+第二级位低级信令转接点LSTP,负责转接它所汇接的第三级SP的信令消息。LSTP可以采用独立型信令转接设备；也可以采用与交换局合设在一起的综合式信令转接点设备。
+第三级为信令点SP，它是信令网传递各种信令消息的源点或宿点，由各种交换局和特种服务中心，如业务控制点SCP、网管中心NMC等组成。
+</code></pre>
+<h4 id="功能结构">功能结构
+</h4><pre><code>由消息传递部分（MTP）和用户部分（UP）组成
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-64.png"
+	width="1031"
+	height="578"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-64_hu10610722038519187068.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-64_hu8596838646416408005.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+>
+画的时候只用画MTP 的三层以及一层总的UP</p>
+<h5 id="mtp消息传递部分">MTP消息传递部分：
+</h5><p>由信令数据链路功能（MTP1）、信令链路功能（MTP2）、信令网功能（MTP3）组成</p>
+<h6 id="mtp1信令数据链路功能级">MTP1信令数据链路功能级：
+</h6><pre><code>对应OSI七层协议的物理层
+用于传送信令业务的二进制比特流
+全双工的方式工作
+在数字的信令链路中，采用64kb/s、2Mb/s
+在模拟的信令链路中，采用4.8kb/s的速率
+
+占用时隙：
+在数字环境下，信令数据链路采用64kbit/s的数字通路，通常对应于PCM传输系统中的一个时隙
+</code></pre>
+<h6 id="mtp2信令链路功能">MTP2信令链路功能：
+</h6><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-65.png"
+	width="923"
+	height="484"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-65_hu8056105860156162846.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-65_hu14893928254649203603.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+<p>功能概述</p>
+<pre><code>与信令MTP1配合，共同保证在直联的两个信令点之间，提供可靠的传送信令消息的信令链路
+信令单元定界定位
+差错检测
+差错校正
+初始定位
+信令链路差错率监视
+流量控制
+处理机故障控制
+</code></pre>
+<p>SU信令单元</p>
+<ul>
+<li>
+<p>消息信令单元MSU</p>
+<p>运载高层(用户部分或信令网管理功能)产生的信令消息</p>
+</li>
+<li>
+<p>链路状态信令单元LSSU</p>
+<p>用来传送链路状态信息；</p>
+</li>
+<li>
+<p>插入信令单元FIISU</p>
+<p>在无MSU和LSSU可发时发送</p>
+</li>
+</ul>
+<p>SU 基本格式
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-66.png"
+	width="971"
+	height="637"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-66_hu3678451052973487065.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-66_hu9839619597270647150.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<ol>
+<li>
+<p>标识码 F</p>
+<p>表示信令单元的开始或结束</p>
+</li>
+<li>
+<p>长度表示语LI</p>
+<p>用于指示信令单元携带的净荷长度。从长度表示语之后，校验码之前的八位位组的数目，也就是字节数。
+该字段有6比特组成，编码范围为0~63
+LI=0        插入信令单元，不含有任何信息，只是为了同步
+LI=1、2     链路信令单元，用来传递链路状态
+LI&gt;2        消息信令单元</p>
+</li>
+<li>
+<p>序号与表示语比特（BSN、BIB、FSN、FIB）</p>
+<p>每个信令单元都有一个前向序号FSN、后向序号BSN、前向指示语比特FIB、后向指示语BIB
+前向序号FSN是发送侧的每个信令单元本身序号
+后向序号BSN用来证实对端发来的信令单元序号</p>
+</li>
+<li>
+<p>业务信息8位码组SIO</p>
+<p>SIO又可以分为业务表示语SI和子业务字段SSF两部分
+SI用于MTP3的信令消息处理功能完成消息分配，让MTP3知道要交给上层的哪个部分
+SSF中的低两位备用，高两位作为网络表示语，用来知道是国内还是国际网</p>
+</li>
+<li>
+<p>CRC校验</p>
+</li>
+<li>
+<p>信令消息字段</p>
+</li>
+<li>
+<p>状态字段SF</p>
+<p>该字段包含于链路状态信令单元中，通过它 本端和信令链路对端交换链路状态信息包</p>
+</li>
+</ol>
+<h6 id="mtp3信令网功能">MTP3信令网功能：
+</h6><pre><code>网络管理功能
+</code></pre>
+<p>网络功能级结构
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-67.png"
+	width="973"
+	height="566"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-67_hu7262690249356608985.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-67_hu10854730351501368856.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="412px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-68.png"
+	width="1046"
+	height="690"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-68_hu13874030995245077653.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-68_hu13165770801720945653.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-69.png"
+	width="962"
+	height="606"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-69_hu2110866833637332576.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-69_hu12392320135059110117.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="380px"
+	
+>
+用SLC来标识链路</p>
+<p>信令点编码
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-70.png"
+	width="977"
+	height="509"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-70_hu2925719955014471340.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-70_hu8680053585065137160.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="460px"
+	
+></p>
+<p>消息发送路由选择示意
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-71.png"
+	width="1094"
+	height="719"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-71_hu12959505563622822595.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-71_hu941020405767583040.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+>
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-72.png"
+	width="1058"
+	height="754"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-72_hu12916451228438080648.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-72_hu9971312108163266484.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="140"
+		data-flex-basis="336px"
+	
+></p>
+<h5 id="up用户部分">UP用户部分
+</h5><ol>
+<li>
+<p>电话用户部分TUP</p>
+<p>TUP主要规定了有关电话呼叫的建立和释放的信令程序及实现这些程序的消息和消息编码，并能支持部分用户补充业务</p>
+</li>
+<li>
+<p>信令连接控制部分SCCP</p>
+<p>为了满足新的用户部分对消息传递的进一步要求，CCITT补充了SCCP来弥补MTP在网络层功能的不足。SCCP提供了较强的路由和寻址功能，叠加在MTP上，与MTP中的第三级一起共同完成OSI中网络层的功能。
+至于那些满足MTP服务的用户部分（如TUP），则可以不经SCCP直接与MTP第三级连接</p>
+</li>
+<li>
+<p>TCAP 事务处理</p>
+</li>
+<li>
+<p>ISUP 综合业务数字网用户部分</p>
+<p>ISDN用户部分是在TUP的基础上扩展而成的。ISUP提供总户业务数字网中的信令功能，用来支持基本的承载业务和附加的承载业务。
+当ISUP传送与电路相关的信息时，只需要得到MTP的支持，
+而在传送端到端的信令消息时，可依靠SCCP来支持。</p>
+</li>
+<li>
+<p>DUP 数据用户部分</p>
+<p>不用怎么管</p>
+</li>
+</ol>
+<p>电话用户消息格式
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-73.png"
+	width="1084"
+	height="769"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-73_hu2436730864179113622.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-73_hu5242527714269668968.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="140"
+		data-flex-basis="338px"
+	
+></p>
+<pre><code>DPC对端地址
+OPC本端地址
+CIC电路识别码来标识电路
+SLS链路选择码
+</code></pre>
+<h5 id="信令程序">信令程序
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-74.png"
+	width="996"
+	height="654"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-74_hu13621965016984367389.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-74_hu11226946680407127563.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<pre><code>驱动程序检测摘挂机，振铃
+呼叫处理：号码分析，路由查找
+信令模块：跟其他电话通信时需要一个信令模块送出去
+
+信令模块收到之后，给呼叫处理模块进行来话分析，再发一个振铃
+呼叫和信令时紧密相关的
+呼叫处理和信令是松耦合的
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-75.png"
+	width="1029"
+	height="722"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-75_hu6382629127261511503.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-75_hu3421692391364014776.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="342px"
+	
+></p>
+<p>TUP消息类型：</p>
+<pre><code>前向地址消息FAM：
+    IAM：初始地址消息
+    IAI：带附加信息的初始地址消息
+    SAM：后续地址消息
+    SAO：织带一位号码的后续地址消息
+    GSM：一般建立消息
+
+后向建立消息BSM：
+    GRQ：一般请求消息
+
+成功的后向建立消息SBM：
+    ACM：地址全消息，表示被叫空闲，呼叫建立成功
+
+不成功后向建立消息UBM：
+    CGC电路群拥塞
+    SEC交换机拥塞
+    SLB、STB 市话忙、长话忙
+
+监视消息CCM：
+    正常呼叫结束时电路释放监护消息RLG
+
+呼叫监视消息CSM：
+    ANC被叫应答、计费消息
+    ANM应答、免费
+    CLF前向释放
+    CBK后向释放
+    CCL主叫挂机
+</code></pre>
+<p>信令消息传递</p>
+<ol>
+<li>信令消息直达
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-76.png"
+	width="823"
+	height="505"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-76_hu15324020606940366850.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-76_hu11114715034228665216.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="391px"
+	
+></li>
+<li>信令消息经STP转接
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-77.png"
+	width="833"
+	height="456"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-77_hu13572329007503741116.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-77_hu16951777672952949940.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="438px"
+	
+></li>
+</ol>
+<h3 id="voip技术">VoIp技术
+</h3><p>Voice over Internet Protocol语音通话技术</p>
+<ol>
+<li>
+<p>PC-PC</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-79.png"
+	width="877"
+	height="257"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-79_hu16263135792290393019.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-79_hu6193966854143196253.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="818px"
+	
+>
+IP网络内部的话音通信<br>
+多媒体计算机经电话线或LAN连到ISP<br>
+利用IP地址进行呼叫<br>
+话音压缩、编解码、打包 都在PC上完成<br></p>
+</li>
+<li>
+<p>PC-Phone</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-80.png"
+	width="926"
+	height="255"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-80_hu11463246495905364031.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-80_hu1761089290033608862.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="363"
+		data-flex-basis="871px"
+	
+>
+传统电话网与IP网络电话业务互通<br>
+IP网关完成IP地址与电话号码的翻译及话音编解码和打包</p>
+</li>
+<li>
+<p>Phone-Phone</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-81.png"
+	width="834"
+	height="246"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-81_hu15251556802296796146.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-81_hu1686507740792323980.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="339"
+		data-flex-basis="813px"
+	
+>
+普通电话经电话网连到IP电话网关，用电话号码呼叫<br>
+传统电话网讲IP网络视为其业务承载网<br>
+发端IP网关鉴别主叫用户，将被叫电话号码翻译成网关IP地址将呼叫连接到最靠近被叫的网关，完成话音编码和打包<br>
+收端IP网关完成拆包、解码以及反向地址翻译，将呼叫连到被叫终端用户</p>
+</li>
+</ol>
+<h4 id="ip媒体网关语音处理功能">IP媒体网关——语音处理功能
+</h4><ol>
+<li>语音信号的编解码功能</li>
+<li>回音消除</li>
+<li>静音压缩</li>
+<li>信号因检测</li>
+<li>输入缓冲</li>
+</ol>
+<h4 id="h323">H.323
+</h4><p>基本组件</p>
+<pre><code>终端    H.323终端是提供实时、双向通信的结点设备    
+网关    提供基于分组网的H.323终端与其他电路交换网的终端类型之间的翻译转换功能
+网守    地址翻译、带宽控制、接入许可控制和区域管理
+多点控制单元MCU     用于支持三个以上节点设备间的会议
+</code></pre>
+<p>信令信道</p>
+<pre><code>RAS信令信道
+H.225呼叫信令信道：使用H.225.0消息建立两个H.323端点之间的呼叫连接
+H.245媒体控制信道：传输端到端的控制消息以管理H.323实体的操作，包括主从判别、能力交换、打开和关闭逻辑信道、模式参数请求、流控消息和通用命令与指示
+</code></pre>
+<p>H.323基本呼叫建立方法
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-82.png"
+	width="911"
+	height="475"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-82_hu10330767167929750823.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-82_hu18350672126302089181.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="460px"
+	
+></p>
+<pre><code>依次建立三种信道：RAS信道、呼叫信令信道、H.245媒体控制信道
+</code></pre>
+<h4 id="mgcp">MGCP
+</h4><p>H.323和SIP的网关同时具有控制功能和承载功能，既要进行信令的转换、也要进行媒体的转换。网关功能复杂</p>
+<p>为了降低复杂性，提高可靠性，将网关功能分离</p>
+<pre><code>媒体网关MG只负责媒体格式的转换适配
+媒体网关控制器MGC负责呼叫控制、接入控制、资源控制
+媒体网关MG与媒体网关控制器MGC之间用标准的协议
+</code></pre>
+<p>MGCP网络结构
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-83.png"
+	width="1010"
+	height="498"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-83_hu1038024597288918666.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-83_hu8655468106092976661.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="486px"
+	
+></p>
+<pre><code>媒体网关 MG-Media Gateway
+    负责媒体变换以及PSTN和IP两侧通路连接
+    提供PSTN和IP网之间承载链路的联通
+信令网关SGW-Signalling Gateway
+    负责信令的转换，处于网络边缘，它发送和接收电路交换网络的信令
+呼叫代理 CA-Call Agent
+    根据收到的信令消息控制网关建立和释放连接
+    MGC是系统的总控制器，控制MG和SG
+</code></pre>
+<p>MGCP呼叫模型</p>
+<ol>
+<li>
+<p>端点</p>
+<p>物理端点<br>
+虚拟端点<br></p>
+</li>
+<li>
+<p>连接</p>
+<p>一个端点上可以绑定多个连接<br>
+一个连接建立之后，就可以在IP网上访问相应的端点<br>
+呼叫是一组连接</p>
+</li>
+<li>
+<p>事件</p>
+<p>事件是在端点上发生的事情</p>
+</li>
+<li>
+<p>信号</p>
+<p>事件对应于与其相联系的信号。</p>
+</li>
+</ol>
+<p>MGCP 消息</p>
+<pre><code>类型
+
+    1. 命令
+    2. 响应
+
+命令消息由命令行和若干参数行组成
+响应消息中带有3位数字的响应码
+MGCP采用UDP传送，有相应的重发机制
+</code></pre>
+<p>信令交互流程</p>
+<pre><code>网关注册
+控制驻地网关
+    MGCP协议单独负责用户终端接入的功能
+    MGCP协议不是一种呼叫发起协议，而是一种基于Master-Slave结构的网关控制协议，关注于MGC和MG之间的交互
+控制中继媒体网关
+</code></pre>
+<h3 id="sip">SIP
+</h3><p>Session Initiation Protocol 会话发起协议</p>
+<h4 id="sip协议的基本特点">SIP协议的基本特点
+</h4><ol>
+<li>应用层协议，独立于较低层次的传输协议</li>
+<li>基于文本的消息编码，使用UTF-8字符集，易于实现、调式方便，便于跟踪和手工操作</li>
+<li>具有多个层次的可实现性，最小的实现非常简单。最完全的实现相对复杂，但能够完成非常多的功能</li>
+<li>通过代理、重定向功能支持用户的移动性</li>
+<li>易实现性</li>
+<li>易扩展性</li>
+</ol>
+<h4 id="sip系统中各种设备的作用">SIP系统中各种设备的作用
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-84.png"
+	width="1107"
+	height="803"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-84_hu15532512873692418131.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-84_hu16622405036439849290.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
+>
+位置服务器</p>
+<pre><code>配合代理服务器和重定向服务器提供可能的被叫用户的地址
+</code></pre>
+<p>重定向服务器</p>
+<pre><code>允许SIP代理服务器将SIP会话邀请信息定向到外部域
+SIP重定向服务器可以与SIP注册服务器和SIP代理服务器同在一个硬件上
+</code></pre>
+<p>注册服务器</p>
+<pre><code>包含域中所有用户代理的位置的数据库。
+在SIP通信中，这些服务器会检索参与方的IP地址和其他相关信息，并将其发送到SIP代理服务器。
+</code></pre>
+<p>代理服务器</p>
+<pre><code>接收SIP UA的会话请求并查询SIP注册服务器，获取收件方UA的地址信息。
+然后，将会话邀请转发给收件方UA（如果它位于同一域中）或代理服务器（UA在另一域中）
+</code></pre>
+<p>用户代理</p>
+<pre><code>UA-终端用户设备，用于创建和管理SIP会话的移动电话、多媒体手持设备、PC、PDA等。
+用户代理客户机发出消息，代理服务器对消息进行响应。
+</code></pre>
+<h4 id="sip消息">SIP消息
+</h4><p>请求</p>
+<pre><code>呼叫控制请求 
+    INVITE 发起呼叫，并对会话进行描述
+    ACK 主叫确认收到被叫发送的对INVITE的确认响应
+    BYE 释放连接，可以由主叫方发出，也可以由被叫方发出
+    CANCEL 主叫取消呼叫，在连接建立起来之前发送
+
+注册请求
+    REGISTER在注册服务器上注册用户代理
+
+能力查询请求    
+
+    OPTIONS 查询服务器的能
+</code></pre>
+<p>响应</p>
+<pre><code>1xx：通知服务器或代理正在执行处理，终端应该等待响应
+    100：Trying
+    180：Ringing
+2xx：请求成功
+    200：OK
+3xx：重定向响应
+4xx：请求失败，终端的请求被拒绝
+5xx：服务器内部错误造成请求不能被响应
+6xx：全局错误，所有未来对该用户的请求都将失败
+</code></pre>
+<h4 id="消息体-sdp">消息体 SDP
+</h4><p>SIP协议头中的Content-Type字段可以定义为sdp类型的内容。</p>
+<p>SDP媒体协商的重点内容：媒体类型及编码、媒体地址与端口</p>
+<pre><code>  webrtc两个客户端 / 浏览器进行 1 对 1 通话时，首先要进行信令交互，而交互的一个重要信息就是 SDP 的交换。 交换 SDP 的目的是为了让对方知道彼此具有哪些能力，然后根据双方各自的能力进行协 商，协商出大家认可的音视频编解码器、编解码器相关的参数（如音频通道数，采样率 等）、传输协议等信息。
+
+  举个例子，A 与 B 进行通讯，它们先各自在 SDP 中记录自己支持的音频参数、视频参数、 传输协议等信息，然后再将自己的 SDP 信息通过信令服务器发送给对方。当一方收到对端 传来的 SDP 信息后，它会将接收到的 SDP 与自己的 SDP 进行比较，并取出它们之间的交 集，这个交集就是它们协商的结果，也就是它们最终使用的音视频参数及传输协议了。
+</code></pre>
+<p>消息体主要是SDP会话描述协议</p>
+<p>用于描述这次会话的媒体信息</p>
+<p>话音流使用RTP/RTCP传输</p>
+<p>SDP的Header
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-85.png"
+	width="924"
+	height="588"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-85_hu1548206789726310000.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-85_hu6670652487128330836.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="377px"
+	
+></p>
+<p>RTP</p>
+<pre><code>用于Internet上针对多媒体数据流的传输协议
+功能：
+    提供净荷类型指示
+    数据分组序号
+    数据发送时间戳
+    数据源标识
+通常用UDP来传送数据
+</code></pre>
+<p>RTCP</p>
+<pre><code>基本思想：
+采用和数据分组同样的配送机制向RTP会话中的所有与会者周期性地传送控制分组，从而提供数据传送Qos的检测手段，并获知与会者的信息
+功能：
+    提供数据传送质量的反馈信息
+</code></pre>
+<h4 id="sip基本消息流程">SIP基本消息流程
+</h4><p>在相同的域呼叫过程</p>
+<ol>
+<li>注册流程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-86.png"
+	width="723"
+	height="553"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-86_hu395237830122870049.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-86_hu8444204939113884081.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="130"
+		data-flex-basis="313px"
+	
+>
+UA先发送REGISTER给代理<br>
+代理服务器返回401，代表请求失败<br>
+代理服务器返回200OK，表示注册成功</li>
+<li>注销流程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-87.png"
+	width="732"
+	height="359"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-87_hu14268172126002534519.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-87_hu2284815787595874964.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="489px"
+	
+></li>
+<li>基本呼叫建立过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-88.png"
+	width="898"
+	height="583"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-88_hu6731018100661694538.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-88_hu12193377651815786496.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="369px"
+	
+>
+A发给代理服务器InviteB的消息
+代理服务器解析，将InviteB消息发给B
+代理服务器告诉A，它正在Trying
+B收到代理服务器的消息，返回Trying
+然后B返回回铃音
+代理服务器将回铃音转发给A
+B摘机，返回OK
+代理服务器给A发OK
+A发送ACK给B，建立完成</li>
+<li>正常呼叫释放过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-89.png"
+	width="935"
+	height="438"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-89_hu6871303383472671295.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-89_hu15964302401896216420.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+>
+先挂机的收到OK，呼叫释放</li>
+<li>被叫忙呼叫释放
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-90.png"
+	width="864"
+	height="460"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-90_hu5338095631649412583.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-90_hu7648432853687189726.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="450px"
+	
+></li>
+<li>被叫无应答流程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-91.png"
+	width="926"
+	height="665"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-91_hu281434483696628922.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-91_hu6590563819290953787.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="334px"
+	
+>
+主叫主动取消
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-92.png"
+	width="903"
+	height="586"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-92_hu4061288759233025212.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-92_hu15788797138844217384.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="369px"
+	
+>
+超时未回复</li>
+</ol>
+<p>在不同的域呼叫过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-93.png"
+	width="972"
+	height="610"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-93_hu1032710422771482683.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-93_hu17057882114064243252.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="159"
+		data-flex-basis="382px"
+	
+></p>
+<h4 id="sip消息与tup对应转换">SIP消息与TUP对应转换
+</h4><p>SIP网络域PSTN网络互通
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-94.png"
+	width="937"
+	height="613"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-94_hu1125705764642340052.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-94_hu12803831511124858015.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="366px"
+	
+>
+UA发送INVITE，<br>
+代理服务器收到请求，解析，并返回一个Trying<br>
+代理服务器发现是PSTN网络的目的端，就发送初始地址消息IAM<br>
+目的SPC收到IAM之后，返回ACM地址全消息，表示被叫空闲，呼叫建立成功，（相当于Ringing）<br>
+在代理服务器收到ACM之后，给UA发回铃音<br>
+在SPC同意邀请后，向代理服务器发送ANM，表示应答，免费。<br>
+在代理服务器接收到ANM之后，给UA发送200 OK<br>
+UA再返回一个ACK，这样通话建立完成</p>
+<h2 id="6-移动通信系统">6 移动通信系统
+</h2><h3 id="几个基本概念">几个基本概念
+</h3><ol>
+<li>
+<p>入网</p>
+<p>入网是指移动用户设备UE首次连接到移动网络并进行注册的过程,目标是将设备注册到网络中。<br>
+是用户设备首次或特定情况下的网络连接过程。</p>
+<p>过程：<br>
+开机<br>
+初始连接：设备选择一个基站进行连接，发送入网请求<br>
+身份验证和注册：网络进行身份验证，验证通过后，网络将设备的信息注册到数据库中，并分配相关资源</p>
+</li>
+<li>
+<p>鉴权</p>
+<p>验证用户身份是否合法的过程，以确保用户是被授权使用网络服务的<br></p>
+<p>过程：<br>
+鉴权请求：用户设备发送鉴权请求<br>
+鉴权向量生成：网络侧生成鉴权向量，包括随机数（RAND）、预期响应（XRES）、加密密钥（Kc）等。<br>
+响应验证：用户设备计算响应并发送给网络，网络将其发送给网络，网络将其与预期响应（XRES）进行比较<br>
+鉴权结果：如果响应匹配，则鉴权通过，用户被允许访问网络</p>
+</li>
+<li>
+<p>切换</p>
+<p>切换是指用户设备在移动过程中，从一个基站切换到另一个基站的过程，以保持通信的连续性。</p>
+<p><br>过程：<br>
+切换触发：当信号质量下降或用户移动到新的基站覆盖范围内时，触发切换。<br>
+资源分配：目标基站分配必要的资源，准备接收用户设备。<br>
+切换执行：用户设备切换到目标基站，释放源基站资源。<br>
+切换确认：完成切换后，网络确认切换成功。<br></p>
+</li>
+<li>
+<p>漫游</p>
+<p>漫游是指用户设备在其主运营商网络覆盖范围之外，使用其他运营商网络的过程。</p>
+<ol>
+<li>一种是正在通话的客户从一个小区移向另一个小区</li>
+<li>另一种是MS在两个小区覆盖重叠区进行通话，若当前占用的TCH所属小区业务特别忙，这时BSC通知MS测试其邻近小区的信号强度、信号质量，决定将它切换到另一个小区。这是业务平衡所需要的切换。</li>
+</ol>
+<p><br>过程：
+<br>漫游协议：用户主运营商与其他运营商之间签订漫游协议。
+<br>位置更新：用户设备进入漫游区，向新的运营商网络发送位置更新请求。
+<br>鉴权与注册：新的运营商网络进行鉴权，并向用户主运营商确认用户身份。
+<br>服务提供：漫游网络为用户提供通信服务，费用由主运营商结算。</p>
+</li>
+<li>
+<p>位置更新</p>
+<p>位置更新是指用户设备在移动过程中，向网络报告其当前位置的过程</p>
+</li>
+<li>
+<p>网络附着</p>
+<p>网络附着是指用户设备在开机或重新连接到网络时，向网络注册并请求接入服务的过程。目标是让设备能够使用网络服务。</p>
+<p>是用户设备日常连接网络的过程，确保设备能够随时使用网络服务。</p>
+</li>
+</ol>
+<h3 id="gsmgprs的基本网络结构和网元功能">GSM、GPRS的基本网络结构和网元功能
+</h3><h4 id="gsm移动通信">GSM移动通信
+</h4><h5 id="gsm网络结构">GSM网络结构
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-95.png"
+	width="943"
+	height="560"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-95_hu13679854153750772773.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-95_hu1189048883034168297.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="404px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-97.png"
+	width="1036"
+	height="534"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-97_hu10447820901734151837.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-97_hu7319915476467148944.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="465px"
+	
+></p>
+<pre><code>最左边为移动台子系统MS
+红色的为无线基站子系统BSS
+黄色的为操作维护子系统OSS
+蓝色的为交换网络子系统OSS
+棕色的为网关交换中心和PSTN网络
+</code></pre>
+<p>移动台子系统MS</p>
+<pre><code>是移动客户设备部分，分手持机和车载台。
+包括移动终端（ME）和手机客户识别卡（SIM）
+</code></pre>
+<p>无线基站子系统BSS</p>
+<pre><code>由MSC控制，与MS进行通信的系统设备。
+包括基站控制器BSC、基站收发信机BTS
+
+BTS基站收发信机的功能：
+    无线传输
+    完成无线与有线的转换
+    无线分集
+    无线信道加密
+既然叫收发信机，那就是接收用户信号，并发出的，在网络结构中要与客户终端相邻
+
+基站控制器BSC
+    是BTS和MSC之间的连接点，也为BTS和OMC（操作维护中心）之间交换信息提供接口
+</code></pre>
+<p>交换网络子系统NSS</p>
+<pre><code>主要完成交换功能和客户数据与移动性管理、安全性管理所需的数据库功能。
+包括
+1. 移动交换中心MSC
+2. 归属位置寄存器HLR
+3. 访问位置寄存器VLR
+4. 设备标识寄存器EIR
+5. 鉴权中心
+</code></pre>
+<ol>
+<li>
+<p>MSC移动交换中心</p>
+<p>蜂窝通信网络的核心，其主要功能是对位于本MSC控制区域内的移动用户进行通信控制和管理。
+<br>信道的管理和分配
+<br>呼叫的处理和控制
+<br>用户位置信息的登记与管理
+<br>越区切换和漫游的控制
+<br>用户号码和移动设备号码的登记和管理
+<br>服务类型的控制
+<br>对用户实施鉴权
+<br>为系统中连接别的MSC及为其它公用通信网络（PSTN、ISDN和PDN）提供链路接口，保证用户在转移或漫游的过程中实现无间隙的服务
+<br> 和固定网络的交换设备功能相似，但又有特殊的要求功能</p>
+</li>
+<li>
+<p>归属位置寄存器HLR</p>
+<p>用来存储本地用户位置信息的数据库。在蜂窝通信网中，通常设置若干个HLR，每个用户都必须在某个HLR（相当于该用户的原籍）中登记。
+<br>
+<br>登记了用户的永久性参数，以及暂时性的需要随时更新的参数，如用户所处位置
+<br>即使用户漫游到HLR所服务的区域外，HLR也要登记由该区传送来的位置信息
+<br>保证当呼叫一个移动用户时（不知它处于哪一个地区），均可由该移动用户的HLR获知它当前处于哪一个地区，进而建立起通信链路</p>
+</li>
+<li>
+<p>访问位置寄存器VLR</p>
+<p>存储来访用户位置信息的数据库。
+<br>一个VLR通常为一个MSC控制区服务，也可为几个相邻MSC控制区服务。</p>
+<p><br> 当移动用户漫游到新的MSC控制区，向该地区的VLR申请登记
+<br> VLR从该用户的HLR查询有关参数，给该用户分配一个新的漫游号码，并让HLR修改该用户的位置信息
+<br>如果从一个VLR移动到另一个VLR时，HLR不仅要更改该用户信息，还要通知原来的VLR，删除之前的位置信息。</p>
+</li>
+<li>
+<p>鉴权中心AUC</p>
+<p>可靠地识别用户的身份，只允许有权用户接入网络并获得服务。</p>
+</li>
+<li>
+<p>设备标识寄存器EIR</p>
+<p>通过对用户的国际移动设备识别码IMEI（International Mobile Equipment Identification Number）的识别，对移动设备进行鉴别和监视，并拒绝非法移动台入网。</p>
+</li>
+<li>
+<p>短信息业务中心 SMS-SC</p>
+</li>
+</ol>
+<p>操作和维护中心OMC</p>
+<pre><code>任务是对全网进行监控和操作
+
+系统的自检、报警
+备用设备的激活
+系统的故障诊断与处理
+话务量的统计和计费数据的记录与传递
+各种资料的收集、分析与显示等。
+</code></pre>
+<p>网关交换中心GMSC</p>
+<pre><code>负责移动交换网络与固话网络（PSTN）的互联互通。需要进行呼叫接续控制（信令控制）和话音转发。
+</code></pre>
+<h5 id="gsm-系统的信令过程">GSM 系统的信令过程
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-98.png"
+	width="1060"
+	height="272"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-98_hu2544958999456865027.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-98_hu1257301023449621388.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="389"
+		data-flex-basis="935px"
+	
+>
+MS至PSTN用户呼叫建立过程</p>
+<pre><code>1. MS要求系统分配信道，用户控制呼叫建立
+2. BSC收到请求后，将分配的信道号，送回MS
+3. MS在该信道上发呼叫信息，经BSS至MSC/VLR。之后，与建立呼叫有关的控制信息就在这个信道上传输
+4. 若一切正常，MSC/VLR令BSC分配一个空闲的TCH给该MS，TCH号由BSC通过BTS送到MS，并且被激活，同时，MSC-BSC-BTS的链路建立
+5. MSC/VLR将收到的被叫号码送到PSTN交换机，并建立至该交换机路由
+</code></pre>
+<p>PSTN用户至MS的呼叫建立过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-99.png"
+	width="1094"
+	height="704"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-99_hu12684446405874246329.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-99_hu4714695307341749203.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<p>位置更新与鉴权</p>
+<pre><code>MS从一个位置区移到另一个位置区时，必须进行登记，也就是说一旦MS发现其储存器中的位置区标识（LAI）与接收到的LAI发生了变化，便执行登记，这个过程就叫位置更新。
+    不同MSC业务区间的位置更新。
+    相同MSC不同位置区的位置更新
+MS使用网络之前，网络检查其合法性的过程为鉴权
+</code></pre>
+<p>HLR/AUC中的位置更新和鉴权过程
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-100.png"
+	width="1068"
+	height="680"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-100_hu14497261260984030295.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-100_hu11186936905348047967.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="376px"
+	
+></p>
+<p>切换</p>
+<ol>
+<li>同一BSC内小区间的切换
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-101.png"
+	width="1090"
+	height="732"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-101_hu11478269617917044300.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-101_hu12276774701212863702.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="357px"
+	
+></li>
+<li>同一MSC内不同BSC小区间切换
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-102.png"
+	width="1072"
+	height="693"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-102_hu5082689347815894285.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-102_hu795720566121638627.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
+></li>
+<li>越区切换
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-103.png"
+	width="1062"
+	height="611"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-103_hu5419722694939258369.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-103_hu929952499167460086.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="417px"
+	
+></li>
+</ol>
+<h4 id="gprs网络">GPRS网络
+</h4><h5 id="网络结构">网络结构
+</h5><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-104.png"
+	width="940"
+	height="611"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-104_hu13938622812905140673.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-104_hu13570526941114169462.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="153"
+		data-flex-basis="369px"
+	
+></p>
+<pre><code>在GSM基础上进行了扩充，由GSM升级得到，网络结构基本保持不变，新增加了分组交换域。在BSS中的BSC之上增加了分组控制单元PCU，用以提供分组交换通道。在NSS中增加了与MSC和GMSC并列的用以提供分组交换服务的SGSN和GGSN，功能相对应。
+
+不同业务会选择不同的交换技术，选用分组交换时，MS需要附着在GPRS网络中，由GGSN为其分配IP地址后，方可通过分组交换进行通信。
+</code></pre>
+<p>SGSN</p>
+<pre><code>Service GPRS Support Node
+功能类似于GSM中的MSC/VLR
+记录移动台的当前位置信息，对其进行鉴权、移动性管理和路由选择
+在MS和GGSN之间完成移动分组数据的发送和接收
+</code></pre>
+<p>GGSN</p>
+<pre><code>网关作用，功能类似GMSC，提供GPRS和多种不同的数据网络的互连
+GGSN把GPRS分组数据包进行协议转换，从而可以把这些分组数据包传送到远端的TCP/IP或X.25网络
+为MS动态分配IP地址,或接入DHCP服务器来实现动态分配IP地址
+由于分组业务没有明显的呼叫建立释放过程，因此，其协议流程更多的参照IP网络。唯一比较特别的是信道管理和IP管理部分
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-105.png"
+	width="1083"
+	height="742"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-105_hu8575582279590271909.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-105_hu18180270151038661473.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="350px"
+	
+></p>
+<h5 id="gprs信令过程">GPRS信令过程
+</h5><p>GPRS分组域数据通道
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-107.png"
+	width="959"
+	height="358"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-107_hu16931281557823914901.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-107_hu695977423813766068.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="642px"
+	
+></p>
+<p>BSSGP BSS GPRS Protocol</p>
+<pre><code>该协议用在SGSN与BSC之间
+在SGSN和PCU之间提供虚电路，透明地在SGSN和PCU之间传输信号和数据
+管理SGSN和PCU之间的包交换链路资源
+</code></pre>
+<p>GTP GPRS Tunnel Protocol</p>
+<pre><code>SGSN与GGSN之间
+采用隧道技术，允许多协议包在GPRS骨干网和GPRS支持节点GGSN 之间的传输
+</code></pre>
+<p>MS 的三种状态</p>
+<ol>
+<li>
+<p>IDLE</p>
+<p>没有附着在GPRS网络上，不能接收、传输数据</p>
+</li>
+<li>
+<p>STANDBY</p>
+<p>附着在GPRS网络上，可以接收GPRS的寻呼消息，但不能传输数据</p>
+</li>
+<li>
+<p>READY</p>
+<p>可以进行数据传输</p>
+</li>
+</ol>
+<br>
+<p>了解手机从开机到可以进行数据传输的过程</p>
+<ol>
+<li>
+<p>入网过程</p>
+<ol>
+<li>移动台发GPRS入网附着请求</li>
+<li>网络鉴权</li>
+<li>SGSN向HLR发位置更新请求</li>
+<li>HLR将用户签约信息传送给SGSN</li>
+<li>SGSN接收GPRS MS的入网请求</li>
+<li>移动台确认收到该消息
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-106.png"
+	width="725"
+	height="516"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-106_hu1666583980683228130.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-106_hu14049203629629979772.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="140"
+		data-flex-basis="337px"
+	
+></li>
+</ol>
+</li>
+<li>
+<p>PDP上下文激活</p>
+<p>PDP上下文保存了用户面进行隧道转发的所有信息
+<br>激活过程用于激活IP协议，保证数据能以IP包的形式进行传送。使移动台与GGSN建立一条逻辑通路，进行数据传输。
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-108.png"
+	width="699"
+	height="350"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-108_hu1688253235894943935.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-108_hu2061340308295972692.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="479px"
+	
+></p>
+<ol>
+<li>MS向SGSN发送激活PDP上下文的请求</li>
+<li>MS和SGSN进行安全性功能</li>
+<li>SGSN向GGSN建立PDP上下文请求</li>
+<li>GGSN向SGSN返回回应</li>
+<li>SGSN向MS发送激活请求接受的信息</li>
+</ol>
+</li>
+</ol>
+<h3 id="3g">3G
+</h3><p>了解3G网络结构演进过程</p>
+<pre><code>3G UMTS协议中，组网架构为4层：终端（UE），基站（NodeB），无线网络控制器（RNC），核心网（CN）。RNC位置的网元在2G中称为基站控制器（BSC），RNC直接由Iur接口，不仅仅是基站控制器，还是无线接入网络的控制器。UMTS 4层网络架构如图所示
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-122.png"
+	width="579"
+	height="217"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-122_hu16049501541393178654.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-122_hu12116488924551921066.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="640px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-109.png"
+	width="993"
+	height="652"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-109_hu735594445331611299.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-109_hu10649722615209194814.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-110.png"
+	width="1028"
+	height="743"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-110_hu8885423632311638982.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-110_hu3704992320101265303.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="138"
+		data-flex-basis="332px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-111.png"
+	width="1001"
+	height="716"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-111_hu17403817914506414959.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-111_hu13341858945030914627.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="335px"
+	
+></p>
+<h3 id="4g">4G
+</h3><p>LTE/SAE的无线接入网叫eUTRAN（Evolved UMTS Terrestrial Radio Access Network，演进的通用陆地无线接入网络，3G叫UTRAN），网络架构如下图</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-123.png"
+	width="538"
+	height="228"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-123_hu16745194521933208204.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-123_hu9098087107285059659.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="235"
+		data-flex-basis="566px"
+	
+></p>
+<p>eUTRAN和UTRAN比，去掉了RNC，减少了一层，减少了基站与核心网之间信息交互的多节点开销，更加扁平化。带来的好处是：</p>
+<pre><code>（1）节点数量减小，用户面时延大大缩短
+
+（2）简化了控制平面从睡眠状态到激活状态的过程，减少了状态迁移的时间
+
+（3）降低系统复杂性，减少了接口类型，系统内部相应的交互操作也随之减少。
+</code></pre>
+<h4 id="网络结构和网元功能">网络结构和网元功能
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-112.png"
+	width="975"
+	height="590"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-112_hu17919272009386146493.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-112_hu10239312360535743165.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="396px"
+	
+></p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-121.png"
+	width="1049"
+	height="710"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-121_hu9863589616703936643.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-121_hu11169272981490893840.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="147"
+		data-flex-basis="354px"
+	
+>
+基本网元eNodeB</p>
+<pre><code>eNodeB的功能主要是由3G阶段的NodeB、RNC、SGSN、GGSN四个网元的部分功能演化而来。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-113.png"
+	width="874"
+	height="458"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-113_hu17611643259371118028.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-113_hu11262008780524738834.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+<p>MME Mobility Management Entity 移动管理实体</p>
+<pre><code>MME属于控制面设备，负责信令传输；
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-114.png"
+	width="1052"
+	height="552"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-114_hu3251483330488529291.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-114_hu16637448715216166503.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+<p>SGW 服务网关</p>
+<pre><code>是EPC和eUTRAN的一个边界网关，不和其他系统网关如GGSN、PDG直接相连，主要功能是LTE系统内的分组数据路由及转发、合法监听、计费。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-115.png"
+	width="724"
+	height="371"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-115_hu11305291241904820627.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-115_hu8996946169856653336.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+></p>
+<p>PGW 公共数据网关、PDN网关、分组数据网关</p>
+<pre><code>SGW和PGW属于用户面设备，负责用户数据包的过滤、路由、转发。
+和运营商外部或内部的分组网络连接的网关，功能类似UMTS或EDGE中的GGSN，是所有3GPP系统或者非3GPP系统非组网络的统一出口。
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-116.png"
+	width="620"
+	height="302"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-116_hu1256676403427620320.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-116_hu10770418686873920987.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<p>HSS Home Subscriber Server，归属签约用户服务器
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-117.png"
+	width="644"
+	height="191"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-117_hu12975800067032868398.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-117_hu18268581299963756808.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="809px"
+	
+></p>
+<h4 id="交换方式全ip">交换方式——全IP
+</h4><p>从单纯的电路交换向分组交换过渡，并最终演变为基于分组交换的全网络；</p>
+<p>LTE的核心网是Evolved Packet Core EPC
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-124.png"
+	width="582"
+	height="235"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-124_hu12369747478960598650.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-124_hu17104996152407565938.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="247"
+		data-flex-basis="594px"
+	
+></p>
+<p>EPC的演进表现在：</p>
+<pre><code>取消了CS域（电路域），CS域业务承载在PS域，实现了核心网的IP化。语音业务（Voice）在以往无线制式中有CS承载，在LTE中则完全由PS域承载，即所谓的VoIP（Voice over IP）。
+</code></pre>
+<p>全网IP化，各网元节点之间的接口也都使用IP传输。LTE全网IP化的关键支撑就是端到端的QoS保障机制。</p>
+<p>LTE/SAE在核心网演进中实现了用户面和控制面的分离，即用户面和控制面功能分别由不同的网元实体完成。可降低系统时延，提升核心网处理效率。</p>
+<h4 id="控制平面与用户平面">控制平面与用户平面
+</h4><p>LTE空中接口协议栈
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-118.png"
+	width="1068"
+	height="358"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-118_hu474266868147154635.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-118_hu8272501285916961804.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="298"
+		data-flex-basis="715px"
+	
+></p>
+<pre><code>LTE协议栈的两个面：
+    用户面协议栈：用户数目传输
+        头压缩、加密、调度
+    控制面协议栈：系统信令传输
+        PDCP层完成加密和完整性保护
+        RRC层完成广播，寻呼，RRC连接管理...
+        NAS层完成核心网承载管理，鉴权及安全控制
+</code></pre>
+<p>用户面（接入网+核心网全程）</p>
+<pre><code>用户面基于IP，端到端（从UE到PGW），中间的eNodeB和SGW通过GTP隧道方式提供中继，eNB负责完成空中接口PDCP的数据包与GTP数据包的转换
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-119.png"
+	width="1049"
+	height="345"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-119_hu13223418405139726074.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-119_hu16759894767105419396.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="304"
+		data-flex-basis="729px"
+	
+></p>
+<p>控制面（接入网+核心网全程）</p>
+<pre><code>控制面协议包括UE到MME的端到端的接续控制，MME与HSS之间关于用户当前信息查询的协议，MME与SGW和SGW与PGW之间关于媒体通道控制的协议
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-120.png"
+	width="1011"
+	height="340"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-120_hu11586426460604216152.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-120_hu1491410690663959795.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="713px"
+	
+></p>
+<h4 id="lte中的数据传输过程">LTE中的数据传输过程
+</h4><ul>
+<li>
+<p>UE开机附着网络(Attach)</p>
+<p>先进行物理下行同步，搜索测量进行小区选择，选择到一个suitable或者acceptable小区后，驻留并进行附着过程。附着完成后，默认RRC承载建立成功，UE可获得PDN ddress信息</p>
+</li>
+<li>
+<p>UE发起的service request流程</p>
+<p>UE在IDLE模式下，需要发送业务数据时，发起service request过程。
+完成Initial context setup，在S1接口上建立S1承载，在U u接口上建立数据无线承载，打通UE到EPC之间的路由，为后面的数据传输做好准备</p>
+</li>
+</ul>
+<h3 id="5g">5G
+</h3><h4 id="网络架构特点">网络架构特点
+</h4><h5 id="控制面和用户名分离">控制面和用户名分离
+</h5><p>在5G核心网中，控制面与用户面的分离是一个重要的特征。控制面主要负责处理连接的建立和断开等任务，而用户面则专注于数据包的传输。这种分离架构不仅简化了网络管理，而且允许分别增强控制面和用户面的功能。更重要的是，用户面可以下沉到离用户更近的地方，从而大幅降低网络时延。</p>
+<p>5G网络架构主要由接入网、核心网和传输网三部分组成。接入网负责连接终端设备和基站，核心网负责处理网络逻辑，传输网则负责数据的传输和交换。</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-126.png"
+	width="1105"
+	height="479"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-126_hu7440471237816737035.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-126_hu12668595444586453415.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="553px"
+	
+></p>
+<h5 id="网元---微服务">网元 -&gt; 微服务
+</h5><p>在5G网络中，传统的单一网元（Network Element）架构逐渐被基于微服务的架构取代。微服务架构将网络功能分解为多个独立的服务，这些服务可以独立开发、部署和管理。</p>
+<p>微服务架构将网络功能分解为一系列独立的、可重复使用的小服务。每个微服务负责特定的功能，可以独立开发、测试、部署和扩展。这种架构更灵活、可扩展性更好，便于快速迭代和优化。</p>
+<h4 id="关键技术">关键技术
+</h4><ol>
+<li>
+<p>高频段高带宽传输</p>
+<p>毫米波通信实现极高速短距离通信
+<br>但是毫米波直线传输没定向性强，传输距离短，穿透和绕射能力差，容易受气候环境影响</p>
+</li>
+<li>
+<p>新型多天线传输</p>
+<p>手机中的毫米级多天线阵列与基站形成很多对的信道并行通信，每一对天线都独立传送一路信息，经汇集后可成倍提高速率
+<br>基站支持多用户波束智能赋型，减少用户间干扰
+<br>大规模MIMO：基站使用上百根天线，波束窄，指向性传输，高增益，抗干扰，提高频谱效率</p>
+</li>
+<li>
+<p>同时同频全双工</p>
+</li>
+<li>
+<p>多种多址接入方式</p>
+</li>
+<li>
+<p>Device to Device</p>
+<p>短距离直接通信，信道质量高，D2D能够实现较高的数据速率、较低的时延和较低的功耗；
+通过广泛分布的终端，能够改善覆盖，实现频谱资源的高效利用；
+支持更灵活的网络架构和连接方法，提升链路灵活性和网络可靠性</p>
+</li>
+<li>
+<p>微基站构建密集完了过</p>
+</li>
+<li>
+<p>新型网络架构</p>
+</li>
+</ol>
+<h2 id="7-新一代交换控制技术">7 新一代交换控制技术
+</h2><h3 id="软交换">软交换
+</h3><h4 id="软交换的系统结构四层结构">软交换的系统结构、四层结构
+</h4><p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-127.png"
+	width="1035"
+	height="520"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-127_hu12893149034215831410.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-127_hu917939570346170477.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="477px"
+	
+></p>
+<p>软交换既体现网络体系的概念，又是一个具体的设备</p>
+<p>它独立于传送网络，主要完成呼叫控制、资源分配、协议处理、路由、认证、计费等主要功能，同时可以向用户提供现有电路交换机所能提供的所有业务，并向第三方提供可编程能力。</p>
+<h5 id="软交换技术特征">软交换技术特征
+</h5><p>业务处理与呼叫控制相分离
+<br>呼叫控制与承载相分离
+<br>融合异构网络统一传输</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-130.png"
+	width="965"
+	height="453"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-130_hu3765130923451898034.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-130_hu4786620457309748957.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="511px"
+	
+></p>
+<ol>
+<li>分层体系架构</li>
+<li>业务驱动网络</li>
+<li>基于分组交换</li>
+<li>融合异构网络</li>
+</ol>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-131.png"
+	width="1056"
+	height="666"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-131_hu17682983753647235540.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-131_hu6487836896663645554.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="380px"
+	
+></p>
+<h5 id="四层体系结构各层典型设备">四层体系结构，各层典型设备
+</h5><p>软交换系统组成：
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-128.png"
+	width="1005"
+	height="611"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-128_hu17974525672982724761.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-128_hu13534652224764493786.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="394px"
+	
+></p>
+<ol>
+<li>SSC 软交换控制器：呼叫控制、资源管理、路由控制、地址解析/翻译</li>
+<li>MG 中继媒体网关：连接PSTN与IP网络，实现媒体传输格式转换，主要用户中继接入</li>
+<li>AG 接入网关：用于终端用户/PBX/无线基站的接入，完成媒体流转换和用户信令处理等功能</li>
+<li>MS 媒体服务器：提供特殊媒体资源，提供IVR功能</li>
+<li>SG 信令网关： 连接SS7和IP网络，实现SS7信令传输格式转换</li>
+<li>IAD 综合接入设备：用于传统用户终端设备的接入，完成用户端数据、语音等接入</li>
+<li>AS 应用服务器：提供也二五执行，管理，开发环境</li>
+<li>NMC 系统管理中心：提供系统挂你了功能，连接运行支持系统</li>
+</ol>
+<h3 id="ims-ip-multimedia-subsystem">IMS IP Multimedia Subsystem
+</h3><h4 id="ims-特点">IMS 特点
+</h4><pre><code>SIP——易与互联网互通      全SIP信令
+
+借鉴移动网络“归属/拜访原理”、设置HSS——支持移动性
+
+借鉴软交换控制承载分离思想、设置CSCF等实体——开放体系架构
+
+Parlay/OSA——业务开放
+
+呼叫控制与承载相分离
+
+业务处理与呼叫控制相分离
+</code></pre>
+<p>IMS具有开放的体系结构，支持电路交换和分组交换网络上的一系列基于IP的业务，支持无线和固定的接入</p>
+<p>IMS 能做什么</p>
+<pre><code>业务控制
+呼叫控制
+媒体控制
+接入网关
+</code></pre>
+<p>3GPP IMS 网络架构
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-132.png"
+	width="1029"
+	height="591"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-132_hu11437042012539641886.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-132_hu17566196104705547847.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="417px"
+	
+></p>
+<pre><code>1）IMS最大限度地重用了互联网技术和协议
+2）IMS继承了移动通信特有的网络技术
+3）IMS充分借鉴了软交换网络技术
+</code></pre>
+<p>软交换与IMS技术的比较</p>
+<ul>
+<li>软交换与IMS是两种下一代网络交换技术。</li>
+<li>软交换和IMS实现的目标一致：构建一个<b>基于分组的、层次分明的、控制和承载分离的、开放的</b>下一代交换网络。</li>
+<li>软交换技术提出得比较早，对电话语音业务、IP接入、非IP接入以及与PSTN、VoIP互通等方面考虑较多，但对<b>移动性管理、多媒体和增值业务的提供却考虑不多</b>，故缺乏比较整体的标准。因此，目前的软交换只是下一代交换网络的初级阶段技术。</li>
+<li>IMS是3GPP在R5版本核心网络结构上引入的一个多媒体子系统。其最初的出发点是为了在移动网上以最大的灵活性提供IP多媒体业务而设计的一个业务体系框架。后来，由于其<b>良好的开放性和全分布式架构，能做到控制与业务分离、与接入无关和支持移动性管理</b>，而得到了ETSI、ITU-T等NGN相关标准化组织的认可，并作为研究下一代网络的基础。</li>
+</ul>
+<h3 id="sdn-软件定义网络">SDN 软件定义网络
+</h3><h4 id="sdn-网络概述">SDN 网络概述
+</h4><p>设计理念是将网络的控制平面与数据转发平面进行分离，并实现可编程化的集中控制。</p>
+<p>传统网络设备紧耦合的网络架构被分拆成应用、控制、转发三层分离的架构。</p>
+<p>控制功能被转移到了服务器，上层应用、底层转发设施被抽象成多个逻辑实体。</p>
+<p>本质和核心特点</p>
+<pre><code>1. 控制和转发分离（设备开发者）
+2. 集中化的网络控制NOS（网络运维者）
+3. 开放的编程接口（应用提供者）
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-133.png"
+	width="1142"
+	height="570"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-133_hu464807817823013008.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-133_hu719224078944022987.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>SDN = 控制与转发分离 + 逻辑集中控制 + 网络资源能力状态开放</p>
+<p>架构示意图
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-134.png"
+	width="1005"
+	height="457"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-134_hu4041777666473676909.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-134_hu4634598408162611767.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="527px"
+	
+></p>
+<p>控制转发分离：</p>
+<pre><code>传统网络设备的CP（控制平面）与DP（转发平面）不分离，设备之间通过控制协议交互转发信息
+
+SDN的思路是将网络设备的控制平面集中上收至Controller
+网络设备上指保留转发平面
+通过Controller实现网络统一部署和网络自动化
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-135.png"
+	width="1117"
+	height="498"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-135_hu6107829083213330524.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-135_hu1803621509379040986.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
+	
+></p>
+<p>业务控制分离：</p>
+<pre><code>SDN可编程接口不是传统的网络管理，而是一种在应用与网元之间双向的、紧密联系的通信通道，可以实现传统网络不具备的网络快速优化能力
+
+应用开发人员使用控制器提供的API，实现网络自动化、网络编排和操作网络。
+</code></pre>
+<p>SDN的关键技术体系</p>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-136.png"
+	width="907"
+	height="448"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-136_hu10255581016237351666.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-136_hu9996306350973797432.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<ol>
+<li>
+<p>转发层关键技术</p>
+<p>对转发面进行抽象建模。OpenFlow 协议，在该协议中转发面设备被抽象为一个由多级流表Flow Table驱动的转发模型
+转发面的行为就是根据转发表和报文头决定下一跳以及新的报文格式。
+SDN控制器就是控制转发表，并把转发面模型和控制协议标准化</p>
+</li>
+<li>
+<p>SDN难想接口关键技术</p>
+<p>OpenFlow只是实现网络数据屏幕可编程的一种方式
+其他各种用于南向接口的技术/协议也在不同程度上可以实现类似功能</p>
+</li>
+<li>
+<p>SDN控制层的关键技术</p>
+<p>关键是SDN控制器，也可以称为网络操作系统NOS或网络控制器
+网络所有智能、核心均在SDN控制器中
+由SDN控制器对转发面进行转发策略的调度和管理</p>
+</li>
+<li>
+<p>SDN北向接口关键技术</p>
+<p>将网络能力封装为开放的REST API，供上层业务调用</p>
+</li>
+<li>
+<p>SDN应用层关键技术</p>
+<p>利用开放的北向API，调用网络能力</p>
+</li>
+</ol>
+<p>SDN 的特征</p>
+<pre><code>集中控制
+开放接口
+网络虚拟化
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-137.png"
+	width="1120"
+	height="451"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-137_hu14713672716631002807.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-137_hu4016869628747301161.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="248"
+		data-flex-basis="596px"
+	
+></p>
+<h4 id="sdn-南向接口">SDN 南向接口
+</h4><p>SDN南向接口的关键技术是转发面开放协议，该协议允许网络控制器控制交换机的配置以及相关转发行为。</p>
+<p>Openflow是ONF定义的一个转发面控制协议，它将转发面抽象为一个由多级流表组成的转发模型，网络控制器通过Openflow协议下发Openflow流表到具体交换机，从而定义和控制交换机的具体行为。</p>
+<h4 id="openflow流表概述">OpenFlow流表概述
+</h4><h5 id="openflow的基本原理">OpenFlow的基本原理
+</h5><p>流表（Flow Table）</p>
+<p>每个OpenFlow交换机都维护一个或多个流表，流表由多个流表项（flow entries）组成。每个流表项包括以下几个关键部分：</p>
+<ul>
+<li>匹配域（Match Fields）：定义流表项应用的条件，例如源IP地址、目标IP地址、源端口、目标端口、协议类型等。</li>
+<li>优先级（Priority）：用于在多个匹配项之间进行选择。优先级越高，匹配时优先级越高。</li>
+<li>指令（Instructions）：定义在匹配流表项后应该采取的动作，例如转发到特定端口、丢弃数据包、修改数据包头信息等。</li>
+<li>计数器（Counters）：用于记录流表项的匹配次数、数据包数和字节数等信息。</li>
+<li>时间信息：包括流表项的硬超时（Hard Timeout）和空闲超时（Idle Timeout），用于定义流表项的生存时间。</li>
+</ul>
+<p>OpenFlow的工作流程</p>
+<ol>
+<li>
+<p>数据包接收：</p>
+<p>交换机收到一个数据包，首先检查流表，尝试找到一个匹配项。</p>
+</li>
+<li>
+<p>流表匹配：</p>
+<p>交换机根据数据包头信息与流表项的匹配域进行比较，找到与数据包匹配的流表项。如果找到多个匹配项，则选择优先级最高的一个。</p>
+</li>
+<li>
+<p>执行指令：</p>
+<p>如果找到匹配的流表项，交换机按照该流表项的指令来处理数据包。例如，将数据包转发到指定端口、修改数据包头信息等。</p>
+</li>
+<li>
+<p>流表项不存在：</p>
+<p>如果没有匹配的流表项，交换机将数据包发送给控制器（通常称为Packet-In消息）。控制器根据自己的策略决定如何处理该数据包，例如：安装新的流表项、将数据包转发到特定端口、丢弃数据包等。</p>
+</li>
+<li>
+<p>控制器响应：</p>
+<p>控制器接收到Packet-In消息后，会基于全局网络视图和策略进行决策。它可以通过Packet-Out消息指示交换机如何处理该数据包，还可以通过Flow-Mod消息向交换机下发新的流表项，以便未来的类似数据包可以直接由交换机处理。</p>
+</li>
+<li>
+<p>流表项的老化：</p>
+<p>流表项可以有时间限制。硬超时（Hard Timeout）定义了流表项的生存时间，从流表项创建之时起计时；空闲超时（Idle Timeout）定义了流表项在没有匹配数据包的情况下的最大空闲时间。如果超时，流表项将被删除。</p>
+</li>
+</ol>
+<p>OpenFlow控制器与交换机的交互</p>
+<p>OpenFlow控制器是SDN网络的“大脑”，负责全局网络状态的管理和策略的制定。它与交换机之间的交互主要通过以下几种消息类型实现：</p>
+<ul>
+<li>Hello消息：用于交换机和控制器之间建立连接时的握手。</li>
+<li>Error消息：用于报告错误。</li>
+<li>Echo消息：用于维持连接的心跳检测。</li>
+<li>Features消息：交换机向控制器报告其能力。</li>
+<li>Flow-Mod消息：控制器向交换机下发流表项。</li>
+<li>Packet-In消息：交换机向控制器报告未匹配的数据包。</li>
+<li>Packet-Out消息：控制器指示交换机如何处理特定的数据包。</li>
+<li>Stats消息：交换机向控制器报告流表项的统计信息。</li>
+</ul>
+<h5 id="openflow-流表基本结构">OpenFlow 流表基本结构
+</h5><p>整个OpenFlow协议架构由控制器（Controller）、OpenFlow交换机（OpenFlow Switch）、以及安全通道（Secure Channel）组成。控制器对网络进行集中控制，实现控制层的功能；OpenFlow交换机负责数据层的转发，与控制器之间通过安全通道进行消息交互，实现表项下发、状态上报等功能。</p>
+<p>流表是OpenFlow对网络设备的数据转发功能的抽象, 表项包括了网络中各个层次的网络配置信息
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-138.png"
+	width="767"
+	height="325"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-138_hu1395167935089432172.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-138_hu12606350182280276443.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="236"
+		data-flex-basis="566px"
+	
+></p>
+<pre><code>包头域：用于对交换机接收到的数据包的包头内容进行匹配
+
+计数器：用于统计数据流量相关信息，可以针对交换机中的每张流表、每个数据流、每个设备端口、每个转发队列进行维护
+
+动作（action）：用于指示交换机在收到匹配数据包后如何对其进行处理。决定了OpenFlow对转发面行为的抽象能力，OpenFlow交换机缺少控制平面的能力，因此需要用动作来详细说明交换机将要对数据包所做的处理
+</code></pre>
+<p>OpenFlow 流表动作
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-139.png"
+	width="837"
+	height="563"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-139_hu3445948729601641885.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-139_hu18013348663333391242.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="356px"
+	
+></p>
+<p>Openflow端口</p>
+<pre><code>物理端口
+逻辑端口
+保留端口
+
+OpenFlow定义了八种端口
+</code></pre>
+<p><img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-140.png"
+	width="1104"
+	height="596"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-140_hu11082327006606928136.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-140_hu11289177899654837429.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="444px"
+	
+></p>
+<p>OpenFlow交换机
+<img src="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-141.png"
+	width="1009"
+	height="286"
+	srcset="/p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-141_hu9090301017180537108.png 480w, /p/%E7%8E%B0%E4%BB%A3%E4%BA%A4%E6%8D%A2%E5%8E%9F%E7%90%86/image-141_hu10458938261962528711.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="846px"
+	
+></p>
+<p>OpenFlow 安全通道</p>
+<pre><code>OpenFlow的集中控制架构对控制器与交换机之间信息传送通道提出了极高的要求
+采用TLS（Transport Layer Security）技术
+
+安全通道就是连接OpenFlow交换机与控制器的信道，负责在OpenFlow交换机和控制器之间建立安全链接。控制器通过这个通道来控制和管理交换机，同时接收来自交换机的反馈。
+</code></pre>
+<p>OpenFlow 协议主要交互过程</p>
+<ol>
+<li>
+<p>建立连接 Switch registration</p>
+<p><BR>OFPT_HELLO：协议协商，成功的话就建立连接
+<BR>OFPT_ECHO：查询连接状态，确保通信通常。没有其他数据包交换时，Controller会定期循环给sw发送EFPT_ECHO_REQUEST</p>
+</li>
+<li>
+<p>获取交换机特性信息</p>
+<p>OFPT_FEATURES：当sw跟controller完成连接之后，控制器会向交换机下发OFPT_FEATURES_REQUEST的数据包，目的是请求交换机的信息。
+在连接建立完成之后发送，目的是获取交换机的信息</p>
+</li>
+<li>
+<p>配置交换机</p>
+<p>通过SET_CONFIG消息来实现配置</p>
+<ol>
+<li>flags 用来只是交换机如何处理IP分片数据包</li>
+<li>miss_send_len 用来指示当一个交换机无法处理的数据包到达时，发给控制器的数据包的最大字节数</li>
+</ol>
+</li>
+<li>
+<p>网络topo检测</p>
+<p>通过LLDP数据包和广播包的混合使用来查询网络拓扑信息。</p>
+</li>
+<li>
+<p>Packet-in 事件</p>
+<p>OFPT_PACKET_IN</p>
+<ul>
+<li>当交换机收到一个数据包后，会查找流表，找出与数据包包头相匹配的条目。如果流表中有匹配条目，则交换机按照流表所指示的action列表处理数据包。如果流表中没有匹配条目，则交换机会将数据包封装在Packet‐in消息中发送给控制器处理。此时数据包会被缓存在交换机中等待处理。</li>
+<li>交换机流表所指示的action列表中包含转发给控制器的动作(Output=CONTROLLER)。</li>
+</ul>
+</li>
+<li>
+<p>控制器配置流表 Flow-Mod</p>
+<p>用来添加、删除、修改Openflow交换机的流表信息
+一共五种类型</p>
+<ul>
+<li>ADD类型的消息——添加一条新的流表项</li>
+<li>DELETE类型消息——删除所有符合一定条件的流表项</li>
+<li>DELETE‐STRICT类型消息——删除某一条指定的流表项</li>
+<li>MODIFY类型——修改所有符合一定条件的流表项</li>
+<li>MODIFY‐STRICT类型——修改某一条指定的流表项</li>
+</ul>
+</li>
+<li>
+<p>交换机转发Packet-out</p>
+</li>
+</ol>
+<h5 id="openflow流表与传统路由表的区别">OpenFlow流表与传统路由表的区别
+</h5><ol>
+<li>匹配粒度:
+<ul>
+<li>流表: 可以基于多种字段（不仅限于目标地址）进行匹配，支持复杂的流量工程。</li>
+<li>路由表: 基于目标网络地址进行匹配，主要解决路径选择问题。</li>
+</ul>
+</li>
+<li>控制方式:
+<ul>
+<li>流表: 由SDN控制器集中管理和下发，支持动态调整和编程。</li>
+<li>路由表: 分布式协议生成，各路由器独立决策。</li>
+</ul>
+</li>
+<li>操作灵活性:
+<ul>
+<li>流表: 支持多种操作，如转发、丢弃、修改等，提供细粒度控制。</li>
+<li>路由表: 主要用于选择下一跳和接口，操作相对单一。</li>
+</ul>
+</li>
+<li>适用场景:
+<ul>
+<li>流表: 适用于需要灵活控制和精细管理的SDN环境，如数据中心、企业网络等。</li>
+<li>路由表: 适用于传统IP网络，广泛应用于互联网和广域网。</li>
+</ul>
+</li>
+<li>管理和监控:
+<ul>
+<li>流表: 通过SDN控制器统一管理，支持实时监控和动态调整。</li>
+<li>路由表: 通过分布式协议和网管系统管理，监控手段相对分散。</li>
+</ul>
+</li>
+</ol>
+<h4 id="sdn-北向接口">SDN 北向接口
+</h4><p>SDN的核心是实现网络的可编程控制，推动网络业务的创新，而北向接口恰恰是这一趋势的最关键推动力，通过北向接口，网络业务开发者能以软件编程的形式调用各种网络资源，同时上层的网络资源管理系统可以通过北向接口全局把控整个网络的资源状态，并对资源进行统一调度。</p>
+<h4 id="sdn-技术应用">SDN 技术应用
+</h4><h4 id="sdn-产业现状">SDN 产业现状
+</h4><h4 id="sdn-研究方向">SDN 研究方向
+</h4>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

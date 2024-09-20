@@ -1,0 +1,3587 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Chapter 2 关系r在数据库中是有限集合\n属性元组是无序的\n多个属性可能会有同一个domain\n对于每一个domain来说，null都是其中一个member\n超键用来区分某一行，候选键是最小的超键。主键是其中一个候选键，主键上的属性是主属性。\nQuery Language 语言有两类：\n1. procedual，过程化的 2. non-procedual， 非过程化的（SQL） Pure language：\n1. relation algebra 关系代数 2. tuple relational calculus 元组关系演算 3. domain relational calculus 域关系演算 纯语言在实际使用中构成了查询语言的基本基础\n关系代数操作 是过程化的\n6个关系代数操作：\n1. 选择 σ 2. 投影 Π 3. 笛卡尔积 Cartesion product X 4. 并 ∪ 5. 集合差 - 6. 自然连接 找到所有 上过所有生物相关课 的学生：\n1. 首先得找到所有的 学生-课程 对应关系 —— (1) 2. 找到所有 生物 相关的课程 —— (2) 3. 找到所有 上过课的学生 —— (3) 4. 用 (2) X (3) 得到的是所有学生和所有生物课的对应关系表 —— (4) 5. (4) 和 (1) 的相同表项就是那些学生和某个生物课的 对应关系 6. 将 (4) - (1)，会使得所有真正的 某个学生-某个生物课 的关系被删掉。 (5) 7. 上过所有生物课的学生就不在 (5) 表中了，但是那些只上过一部分生物课的学生还会在(5) 中 8. 因为这个时候存的是学生和他们没上过的生物课的对应关系，将这些学生投影出来 9. 最后用所有的上过课的学生减掉这些学生，就得到所有的上过所有生物课的学生 ">
+<title>数据库系统原理</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="数据库系统原理">
+<meta property='og:description' content="Chapter 2 关系r在数据库中是有限集合\n属性元组是无序的\n多个属性可能会有同一个domain\n对于每一个domain来说，null都是其中一个member\n超键用来区分某一行，候选键是最小的超键。主键是其中一个候选键，主键上的属性是主属性。\nQuery Language 语言有两类：\n1. procedual，过程化的 2. non-procedual， 非过程化的（SQL） Pure language：\n1. relation algebra 关系代数 2. tuple relational calculus 元组关系演算 3. domain relational calculus 域关系演算 纯语言在实际使用中构成了查询语言的基本基础\n关系代数操作 是过程化的\n6个关系代数操作：\n1. 选择 σ 2. 投影 Π 3. 笛卡尔积 Cartesion product X 4. 并 ∪ 5. 集合差 - 6. 自然连接 找到所有 上过所有生物相关课 的学生：\n1. 首先得找到所有的 学生-课程 对应关系 —— (1) 2. 找到所有 生物 相关的课程 —— (2) 3. 找到所有 上过课的学生 —— (3) 4. 用 (2) X (3) 得到的是所有学生和所有生物课的对应关系表 —— (4) 5. (4) 和 (1) 的相同表项就是那些学生和某个生物课的 对应关系 6. 将 (4) - (1)，会使得所有真正的 某个学生-某个生物课 的关系被删掉。 (5) 7. 上过所有生物课的学生就不在 (5) 表中了，但是那些只上过一部分生物课的学生还会在(5) 中 8. 因为这个时候存的是学生和他们没上过的生物课的对应关系，将这些学生投影出来 9. 最后用所有的上过课的学生减掉这些学生，就得到所有的上过所有生物课的学生 ">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T09:20:26&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T09:20:26&#43;08:00'/>
+<meta name="twitter:title" content="数据库系统原理">
+<meta name="twitter:description" content="Chapter 2 关系r在数据库中是有限集合\n属性元组是无序的\n多个属性可能会有同一个domain\n对于每一个domain来说，null都是其中一个member\n超键用来区分某一行，候选键是最小的超键。主键是其中一个候选键，主键上的属性是主属性。\nQuery Language 语言有两类：\n1. procedual，过程化的 2. non-procedual， 非过程化的（SQL） Pure language：\n1. relation algebra 关系代数 2. tuple relational calculus 元组关系演算 3. domain relational calculus 域关系演算 纯语言在实际使用中构成了查询语言的基本基础\n关系代数操作 是过程化的\n6个关系代数操作：\n1. 选择 σ 2. 投影 Π 3. 笛卡尔积 Cartesion product X 4. 并 ∪ 5. 集合差 - 6. 自然连接 找到所有 上过所有生物相关课 的学生：\n1. 首先得找到所有的 学生-课程 对应关系 —— (1) 2. 找到所有 生物 相关的课程 —— (2) 3. 找到所有 上过课的学生 —— (3) 4. 用 (2) X (3) 得到的是所有学生和所有生物课的对应关系表 —— (4) 5. (4) 和 (1) 的相同表项就是那些学生和某个生物课的 对应关系 6. 将 (4) - (1)，会使得所有真正的 某个学生-某个生物课 的关系被删掉。 (5) 7. 上过所有生物课的学生就不在 (5) 表中了，但是那些只上过一部分生物课的学生还会在(5) 中 8. 因为这个时候存的是学生和他们没上过的生物课的对应关系，将这些学生投影出来 9. 最后用所有的上过课的学生减掉这些学生，就得到所有的上过所有生物课的学生 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#chapter-2">Chapter 2</a>
+      <ol>
+        <li><a href="#query-language">Query Language</a></li>
+        <li><a href="#关系代数操作">关系代数操作</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-3-sql">Chapter 3 SQL</a>
+      <ol>
+        <li><a href="#ddl">DDL</a>
+          <ol>
+            <li><a href="#模式定义">模式定义：</a></li>
+            <li><a href="#select-query">select query</a></li>
+            <li><a href="#modification">modification</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#chapter-4">Chapter 4</a>
+      <ol>
+        <li><a href="#41-join-expression">4.1 join expression</a></li>
+        <li><a href="#42-views">4.2 views</a></li>
+        <li><a href="#43-transactions">4.3 transactions</a></li>
+        <li><a href="#44-integrity-constraints">4.4 integrity constraints</a></li>
+        <li><a href="#45-sql-data-types-and-schemas">4.5 sql data types and schemas</a></li>
+        <li><a href="#46-authorization">4.6 authorization</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-5">Chapter 5</a>
+      <ol>
+        <li><a href="#从编程语言访问sql">从编程语言访问SQL</a></li>
+        <li><a href="#函数和过程构建">函数和过程构建</a></li>
+        <li><a href="#触发器">触发器</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-6-e-r-model">Chapter 6 E-R model</a>
+      <ol>
+        <li><a href="#设计过程">设计过程</a></li>
+        <li><a href="#建模-modeling">建模 modeling</a></li>
+        <li><a href="#attribute-属性">Attribute 属性</a></li>
+        <li><a href="#mapping-cardinalities-映射基数">Mapping cardinalities 映射基数</a></li>
+        <li><a href="#keys">keys</a></li>
+        <li><a href="#弱实体集-weak-entity-sets">弱实体集 weak entity sets</a></li>
+        <li><a href="#e-r-diagrams">E-R diagrams</a></li>
+        <li><a href="#e-r-设计事项-design-issues">E-R 设计事项 design issues</a></li>
+        <li><a href="#extended-e-r-model">extended E-R model</a></li>
+        <li><a href="#reduction-to-relation-schema">reduction to relation schema</a></li>
+        <li><a href="#symbols-conclusion">symbols conclusion</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-7-schema-normalization">Chapter 7 schema normalization</a>
+      <ol>
+        <li><a href="#71-一个好的关系设计的特点">7.1 一个好的关系设计的特点</a>
+          <ol>
+            <li><a href="#原则">原则</a></li>
+          </ol>
+        </li>
+        <li><a href="#72-atomic-domain-和-第一范式">7.2 atomic domain 和 第一范式</a></li>
+        <li><a href="#73-用函数依赖分解">7.3 用函数依赖分解</a>
+          <ol>
+            <li><a href="#bcnf">BCNF:</a></li>
+            <li><a href="#3nf">3NF</a></li>
+            <li><a href="#2nf">2NF</a></li>
+          </ol>
+        </li>
+        <li><a href="#74-函数依赖理论">7.4 函数依赖理论</a>
+          <ol>
+            <li><a href="#正则覆盖">正则覆盖</a></li>
+            <li><a href="#75-algorithm-for-decomposition">7.5 algorithm for decomposition</a></li>
+            <li><a href="#3nf-分解">3NF 分解</a></li>
+            <li><a href="#候选键查找">候选键查找</a></li>
+          </ol>
+        </li>
+        <li><a href="#习题类型">习题类型</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-13">Chapter 13</a>
+      <ol>
+        <li><a href="#文件记录的方式">文件记录的方式</a></li>
+        <li><a href="#文件中记录的组织方式">文件中记录的组织方式</a></li>
+        <li><a href="#数据-dictionary-storage">数据 dictionary storage</a></li>
+        <li><a href="#buffering">Buffering</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-14-index">Chapter 14 Index</a></li>
+    <li><a href="#chapter-15-query-processing">Chapter 15 query processing</a>
+      <ol>
+        <li><a href="#查询代价衡量-measures-of-query-costs">查询代价衡量 Measures of Query Costs</a></li>
+        <li><a href="#查询算法">查询算法</a></li>
+        <li><a href="#evaluation-of-express">evaluation of express</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-查询优化">Chapter 查询优化</a>
+      <ol>
+        <li><a href="#关系表达式转换规则">关系表达式转换规则</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-17-transaction">Chapter 17 transaction</a>
+      <ol>
+        <li><a href="#冲突可串行化">冲突可串行化</a></li>
+        <li><a href="#recoverability">recoverability</a></li>
+        <li><a href="#级联回归-cascading-rollback">级联回归 cascading rollback</a></li>
+        <li><a href="#事务隔离级别">事务隔离级别</a></li>
+      </ol>
+    </li>
+    <li><a href="#chapter-18-concurrency-control">Chapter 18 concurrency control</a>
+      <ol>
+        <li><a href="#两阶段锁协议-two-phase-locking-protocol--2pl">两阶段锁协议 Two Phase Locking protocol / 2PL</a></li>
+        <li><a href="#构造符合2pl的调度">构造符合2PL的调度</a></li>
+        <li><a href="#strict-2pl-严格2阶段锁协议">Strict 2PL 严格2阶段锁协议</a></li>
+        <li><a href="#rigorous-2pl-强2阶段锁协议">Rigorous 2PL 强2阶段锁协议</a></li>
+        <li><a href="#deadlock-handling">deadlock handling</a>
+          <ol>
+            <li><a href="#prevention-strategies">prevention strategies</a></li>
+            <li><a href="#deadlock-detection">deadlock detection</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#chapter-19-recovery">Chapter 19 Recovery</a>
+      <ol>
+        <li><a href="#undo和redo在立即修改的模式下">undo和redo在立即修改的模式下</a></li>
+        <li><a href="#checkpoints">checkpoints</a>
+          <ol>
+            <li><a href="#串行调度">串行调度</a></li>
+            <li><a href="#并发调度">并发调度</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">数据库系统原理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 14 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="chapter-2">Chapter 2
+</h2><p>关系r在数据库中是有限集合</p>
+<p>属性元组是无序的</p>
+<p>多个属性可能会有同一个domain</p>
+<p>对于每一个domain来说，null都是其中一个member</p>
+<p>超键用来区分某一行，候选键是最小的超键。主键是其中一个候选键，主键上的属性是主属性。</p>
+<h3 id="query-language">Query Language
+</h3><p>语言有两类：</p>
+<pre><code>1. procedual，过程化的
+2. non-procedual， 非过程化的（SQL）
+</code></pre>
+<p>Pure language：</p>
+<pre><code>1. relation algebra 关系代数
+2. tuple relational calculus 元组关系演算
+3. domain relational calculus 域关系演算
+</code></pre>
+<p>纯语言在实际使用中构成了查询语言的基本基础</p>
+<h3 id="关系代数操作">关系代数操作
+</h3><p>是过程化的</p>
+<p>6个关系代数操作：</p>
+<pre><code>1. 选择                         σ
+2. 投影                         Π
+3. 笛卡尔积 Cartesion product   X
+4. 并                           ∪
+5. 集合差                       -
+6. 自然连接                     
+</code></pre>
+<p>找到所有 上过所有生物相关课 的学生：</p>
+<pre><code>1. 首先得找到所有的 学生-课程 对应关系 —— (1)
+2. 找到所有 生物 相关的课程  —— (2)
+3. 找到所有 上过课的学生 —— (3)
+4. 用 (2) X (3) 得到的是所有学生和所有生物课的对应关系表 —— (4)
+5. (4) 和 (1) 的相同表项就是那些学生和某个生物课的 对应关系
+6. 将 (4) - (1)，会使得所有真正的 某个学生-某个生物课 的关系被删掉。 (5)
+7. 上过所有生物课的学生就不在 (5) 表中了，但是那些只上过一部分生物课的学生还会在(5) 中
+8. 因为这个时候存的是学生和他们没上过的生物课的对应关系，将这些学生投影出来
+9. 最后用所有的上过课的学生减掉这些学生，就得到所有的上过所有生物课的学生
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/713ec80c87c73609ff278dfd42cf3f4.png"
+	width="1033"
+	height="745"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/713ec80c87c73609ff278dfd42cf3f4_hu15277279976318078694.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/713ec80c87c73609ff278dfd42cf3f4_hu8595531406298797610.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="138"
+		data-flex-basis="332px"
+	
+></p>
+<h2 id="chapter-3-sql">Chapter 3 SQL
+</h2><p>SQL的三种用途：</p>
+<pre><code>1. data definition DDL，定义
+2. query 查询
+3. manipulation、modification，更改数据库
+</code></pre>
+<p>history</p>
+<pre><code>sql 是基于relationla algebra关系代数和tuple relational calculus元组关系演算的
+</code></pre>
+<p>parts in SQL</p>
+<pre><code>1. DDL：define、delete、modify on schemas、views、index；views definition
+2. DML：query、insert、delete、update on tuples
+3. integrity：integrity constraints
+4. transaction management
+5. authorization
+6. embedded and dynamic SQL
+</code></pre>
+<h3 id="ddl">DDL
+</h3><ol>
+<li>create table/view：the schema for each relation or view</li>
+<li>the domain of values associated with each attribute，定义作用域</li>
+<li>integrity constrains 定义一致性约束</li>
+<li>index    定义索引</li>
+<li>security，autorization   安全性和权限</li>
+<li>physical storage structure of each relation on disk 物理存储结构</li>
+</ol>
+<h4 id="模式定义">模式定义：
+</h4><p>建表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">instructor</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ID</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">salary</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">ID</span><span class="p">),</span><span class="w">    </span><span class="c1">-- 主键一定非空
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">dept_name</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">department</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">check</span><span class="p">(</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>insert into &rsquo;tablename&rsquo; values (&hellip;)</p>
+<p>delete from &rsquo;tablename&rsquo; &lsquo;筛选条件&rsquo;<br>
+如果是delete from &rsquo;tablename&rsquo; 那就会将里面所有的元组都保留，只剩一个表结构</p>
+<p>drop table：删除整个表里的所有元组，还有表本身<br>
+和delete from table 区分开来。drop更为彻底</p>
+<p>alter table r add A D : 用来添加属性列，A是属性名，D是A的domain<br>
+alter table r drop A : 用来删掉某一列，A是属性名</p>
+<p>总结：delete用来删某些元组（行），drop用来删表，alter用来修改表的结构</p>
+<h4 id="select-query">select query
+</h4><p>distinct：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">dept_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以在select子句中加入算数运算</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">salary</span><span class="o">/</span><span class="mi">12</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以给查询到的结果属性改名</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">salary</span><span class="o">/</span><span class="mi">12</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">monthly_salary</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>from 语句连接表时，一定要在where子句中加入连接条件，不然多表笛卡尔积操作耗时费力</p>
+<p>查询中临时修改表名</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">instructor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">S</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Comp.Sci&#39;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>字符串匹配</p>
+<pre><code>% 匹配任意子串
+_ 匹配任意一个字符
+用escape 来声明转移符号
+</code></pre>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">name</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%100\%&#39;</span><span class="w"> </span><span class="c1">-- 匹配后缀为100%的字符串 
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>排列</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="c1">-- 默认升序 asc，先按name排列，相同name的按dept_name排
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">desc</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>连接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">table1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">table2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="k">C</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">D</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>集合操作</p>
+<ol>
+<li>并 union</li>
+<li>交 intersect</li>
+<li>差 except</li>
+</ol>
+<p>找到最大的salary of all instructors</p>
+<ol>
+<li>找不是最小的</li>
+<li>找到所有的薪水</li>
+<li>2 - 1</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">salary</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">except</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">salary</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">instructor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">S</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">salary</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>聚集函数</p>
+<p>聚集函数一般忽略空值<br>
+但是count(*)也会把含有空值的元组计算进去</p>
+<ol>
+<li>avg</li>
+<li>min</li>
+<li>max</li>
+<li>sum</li>
+<li>count</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="err">{</span><span class="n">A1</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">...</span><span class="n">Ai</span><span class="err">}</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ag_fun</span><span class="p">(</span><span class="n">Ai</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">ag_fun</span><span class="p">(</span><span class="n">Ai</span><span class="o">+</span><span class="n">k</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">,</span><span class="n">rm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">P1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">A1</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">,...,</span><span class="w"> </span><span class="n">Ai</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">having</span><span class="w"> </span><span class="n">P2</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">D</span><span class="p">.</span><span class="n">deptID</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="n">E</span><span class="p">.</span><span class="n">employeeID</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">totalEmployees</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SUM</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">E</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">4000</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">END</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employeesAbove4000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="n">Department</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">deptID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">E</span><span class="p">.</span><span class="n">deptID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">deptID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">E</span><span class="p">.</span><span class="n">employeeID</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">deptID</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>select 中 聚合函数之外的属性必须按组显示，不能单独查一个不在group by 中的属性和一个聚合函数
+错误例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">avg</span><span class="p">(</span><span class="n">salary</span><span class="p">)</span><span class="w"> </span><span class="c1">-- 错误，id不能查
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">dept_name</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>删掉id才能查询成功，因为只能查询同组的信息</p>
+<p>嵌套 nested subqueries</p>
+<p>subqueries o经常 nested 在 where子句 或 having子句 或 from子句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">course_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">section</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">semester</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Fall&#39;</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="k">year</span><span class="o">=</span><span class="mi">2009</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">course_id</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">in</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="n">course_id</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">section</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">semestor</span><span class="o">=</span><span class="s1">&#39;Sqring&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">year</span><span class="o">=</span><span class="mi">2010</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>嵌套查询会导致嵌套的子句被执行多次，实际使用中，应尽量避免</p>
+<p>some 修饰符</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">some</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>查询的结果要求大于嵌套中的某一个值就行</p>
+<p>all 修饰符<br>
+同理，跟some差不多</p>
+<p>exists，not exists and except<br>
+对于一个关系r来说，这三个修饰符代表的含义如下：</p>
+<pre><code>exists r  &lt;==&gt; r 不为空
+not exists r &lt;==&gt; r为空
+X except Y  &lt;==&gt; X - Y
+
+如果 X - Y = 空  &lt;==&gt;  Y 包含 X，X是Y的子集 
+</code></pre>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">course_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">S</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">semester</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Fall&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2009</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="k">exists</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">T</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">semester</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Sqring&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2010</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">and</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">course_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">course_id</span><span class="w"> </span><span class="c1">-- 这里的S是在外部查询语句中声明的，是代表这个是对应于某个特定的S，当前查到的S
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>找到所有 上过所有生物相关课 的学生</p>
+<ol>
+<li>找到生物部门开的所有课</li>
+<li>将某一个学生上过的所有课都列出来</li>
+<li>两个集合，X - Y 如果为空集，说明 X 是 Y 的子集。所以如果1-2为空，那么说明这个学生上过所有的生物部门开的课</li>
+<li>检查1-2是否为空</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">S</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="n">course_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">course</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Biology&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">except</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">course_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">takes</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">T</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">.</span><span class="n">ID</span><span class="w">   </span><span class="c1">-- S.ID 是当前外部查询语句查询到的这个学生
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>unique 如果作为参数的子查询结果中无重读元组，则unique返回true</p>
+<p>在from子句中也可以嵌套查询</p>
+<p>with 子句，用来定义一个临时的关系<br>
+找到所有薪水最高的部门<br>
+先找到最高的薪水，然后再找到薪水等于这个的部门</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">with</span><span class="w"> </span><span class="n">max_budget</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">department</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">department</span><span class="p">.</span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">department</span><span class="p">,</span><span class="w"> </span><span class="n">max_budget</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">department</span><span class="p">.</span><span class="n">budget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_budget</span><span class="p">.</span><span class="n">value</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>一个with子句可以构建多个临时表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">    </span><span class="k">with</span><span class="w"> </span><span class="n">view1</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span><span class="w"> </span><span class="n">A2</span><span class="p">...)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">),</span><span class="w"> </span><span class="n">view2</span><span class="p">(</span><span class="n">B1</span><span class="p">,</span><span class="w"> </span><span class="n">B2</span><span class="p">...)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="modification">modification
+</h4><p>delete: 用来删除某些特定行<br>
+注意：删除中若是使用聚集函数，比如avg等，会使让avg在删除时改变<br>
+解决办法：提前计算出聚集函数的值，然后再删除</p>
+<p>insert：添加元组</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 添加所有instructor到学生表，并把最后一项置零
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">student</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">dept_name</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 添加某行特定元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">course</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;CS-437&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DBS&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Comp.Sci&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>update，可以使用case when 的语句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">update</span><span class="w"> </span><span class="n">instructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">set</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">=</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">case</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">when</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10000</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">05</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="n">salart</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">03</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">end</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>update中的标量子查询</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 更新所有学生的学分
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">update</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="n">S</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">set</span><span class="w"> </span><span class="n">tot_cred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">credits</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">takes</span><span class="p">,</span><span class="w"> </span><span class="n">course</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">takes</span><span class="p">.</span><span class="n">course_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">course</span><span class="p">.</span><span class="n">course_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">S</span><span class="p">.</span><span class="n">ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">takes</span><span class="p">.</span><span class="n">ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">takes</span><span class="p">.</span><span class="n">grade</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">&#39;F&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">and</span><span class="w"> </span><span class="n">takes</span><span class="p">.</span><span class="n">grade</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>update中的多表操作</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">update</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">A</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">set</span><span class="w"> </span><span class="n">grade</span><span class="o">=</span><span class="n">B</span><span class="p">.</span><span class="n">grade</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Sgrade</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">B</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">S</span><span class="o">##</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">S</span><span class="o">##</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="k">C</span><span class="o">#=</span><span class="n">B</span><span class="p">.</span><span class="k">C</span><span class="o">#</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="chapter-4">Chapter 4
+</h2><h3 id="41-join-expression">4.1 join expression
+</h3><p>首先要区分：外连接和内连接</p>
+<p>外连接：如果指明了两个Table的A和B属性相等才能连接，那么最终连接结果会少掉一列B。</p>
+<p>内连接：加入两个Table的A和B属性相等才能连接，最终结果会同时保留A和B</p>
+<p>之后再搞懂左外连接、右外连接、全连接</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image.png"
+	width="706"
+	height="908"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image_hu9634117402781377809.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image_hu13117382500873529596.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="77"
+		data-flex-basis="186px"
+	
+></p>
+<p>对于上图，上左下右，用id连接</p>
+<p>外连接：左外连接，右外连接<br>
+左外连接：</p>
+<pre><code>1 语文 null null
+2 数学 70   2
+3 英语 80   3
+</code></pre>
+<p>右外连接：</p>
+<pre><code>2 数学  70  2
+3 英语  80  3
+4 null  90  null
+</code></pre>
+<p>内连接<br>
+内连接可以用不同名称的两个属性相连。</p>
+<pre><code>2 数学 70 2
+3 英语 80 3
+</code></pre>
+<p>自然连接<br>
+基本和内连接一样，但是要求连接的列名称一样</p>
+<h3 id="42-views">4.2 views
+</h3><p>views 是一个虚拟表，可以用多个表来建立。<br>
+只有views的定义存在DBS中，里面的元组都是存在相应的数据表中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="n">faculty</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">dept_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">instructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">faculty</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;CS&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>view的定义可以用其他的views。它还支持递归recursive，就是用自己来定义自己<br>
+view1 depend on view2 表示view2 间接或直接的决定了view1<br>
+view1 depend directly on view2 表示view2 直接的决定了view1</p>
+<p>view也可以更新数据行，</p>
+<pre><code>（1）使用INSERT语句向数据表中插入数据时，用户必须有插入数据的权利。
+（2）由于视图只引用表中的部分字段，所以通过视图插入数据时只能明确指定视图中引用的字段的取值。而那些表中并未引用的字段，必须知道在没有指定取值的情况下如何填充数据，因此视图中未引用的字段必须具备下列条件之一。
+     该字段允许空值。
+     该字段设有默认值。
+     该字段是标识字段，可根据标识种子和标识增量自动填充数据。
+     该字段的数据类型为timestamp或uniqueidentifier。
+（3）视图中不能包含多个字段值的组合，或者包含使用统计函数的结果。
+（4）视图中不能包含DISTINCT或GROUP BY子句。
+（5）如果视图中使用了WITH CHECK OPTION，那么该子句将检查插入的数据是否符合视图定义中SELECT语句所设置的条件。如果插入的数据不符合该条件，SQL Server会拒绝插入数据。
+（6）不能在一个语句中对多个基础表使用数据修改语句。因此，如果要向一个引用了多个数据表的视图添加数据时，必须使用多个INSERT语句进行添加。
+</code></pre>
+<h3 id="43-transactions">4.3 transactions
+</h3><h3 id="44-integrity-constraints">4.4 integrity constraints
+</h3><ol>
+<li>primary key</li>
+<li>not null</li>
+<li>unique</li>
+<li>check(p)</li>
+</ol>
+<p>check (semester in (&lsquo;Fall&rsquo;,&lsquo;Winter&rsquo;,&lsquo;Spring&rsquo;,&lsquo;Summer&rsquo;))</p>
+<p>参照完整性约束<br>
+添加级联操作</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">course</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">dept_name</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">department</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">on</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">cascade</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">on</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">cascade</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="45-sql-data-types-and-schemas">4.5 sql data types and schemas
+</h3><p>date &lsquo;2017-7-27&rsquo;</p>
+<p>time &lsquo;09:00:30.75&rsquo;</p>
+<p>timestamp : date + time<br>
+&lsquo;2017-7-27 09:00:30.75&rsquo;</p>
+<p>interval period of time<br>
+intercal &lsquo;1&rsquo; day = &lsquo;2017-7-27&rsquo;-&lsquo;2017-7-28&rsquo;</p>
+<p>cast e as t: 将一个字符串e转换成type t<br>
+cast &lsquo;2017-07-20&rsquo; as date</p>
+<p>extract : 对于一个day 或 time 的值d，里面的某个范围可以被提取出来<br>
+extract(year from 2017-09-20) = 2017</p>
+<p>大对象类型</p>
+<ol>
+<li>blob 二进制大型对象</li>
+<li>clob 字符大集合</li>
+</ol>
+<p>注意：当一个query返回一个大对象时，是返回的指针而不是对象本身</p>
+<p>用户自定义数据类型<br>
+create type T as &hellip;</p>
+<p>用户自定义domains<br>
+create domain D char(20) not null</p>
+<p>可以在创建表时给某一属性添加default values</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">table1</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>索引创建:<br>
+create index idx on table(A)</p>
+<h3 id="46-authorization">4.6 authorization
+</h3><p>添加权限<br>
+grant &lt; privilege list &gt; <br>
+on &lt; relation name or view name &gt; <br>
+to &lt; user list &gt;</p>
+<p>privileges:</p>
+<ol>
+<li>select</li>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+<li>all privileges</li>
+</ol>
+<p>撤销权限<br>
+revoke &lt; privilege list &gt;<br>
+on &lt;relation name or view name&gt;<br>
+from &lt; user list &gt;</p>
+<p>create role</p>
+<h2 id="chapter-5">Chapter 5
+</h2><h3 id="从编程语言访问sql">从编程语言访问SQL
+</h3><p>User &ndash; DBMS &ndash; DB file<br>
+User 和 DBMS之间，通过API，比如ODBC、JDBC、embedded SQL，通过SQL语句</p>
+<p>JDBC ：java<br>
+ODBC : c , c++, c## , viual basic<br>
+ADO.NET sit on top of ODBC</p>
+<p>JDBC 还可以查看元数据metadata，查看某个数据的名字、类型等等\</p>
+<ol>
+<li>打开连接</li>
+<li>创建SQL 对象</li>
+<li>通过2的对象发送语句，获取信息</li>
+<li>错误处理</li>
+</ol>
+<p>ODBC通过driver来适应不同厂家数据库的物理结构，每个厂家有一个driver</p>
+<p>Embedded SQL<br>
+优点：交互式只能进行DB访问，不能对DB访问结果进一步的数据处理，而Embedded sql 将SQL的数据库访问功能与C语言等宿主语言的数据处理能力相结合，提高了数据应用系统的能力</p>
+<h3 id="函数和过程构建">函数和过程构建
+</h3><p>函数、存储过程 预先生成对应的查询执行计划（类似于目标代码），存储在DBMS中，应用程序直接调用，不需再进行查询处理和优化</p>
+<h3 id="触发器">触发器
+</h3><h2 id="chapter-6-e-r-model">Chapter 6 E-R model
+</h2><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-1.png"
+	width="1158"
+	height="1076"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-1_hu15897237647870226070.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-1_hu15317956374622008046.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="107"
+		data-flex-basis="258px"
+	
+></p>
+<h3 id="设计过程">设计过程
+</h3><p>两阶段：</p>
+<ol>
+<li>明确需求</li>
+<li>设计DB 模式， 三层数据抽象
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-2.png"
+	width="1389"
+	height="1166"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-2_hu15364905383030155008.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-2_hu15528334887483967551.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="119"
+		data-flex-basis="285px"
+	
+></li>
+</ol>
+<ul>
+<li>
+<p>考试常考的：</p>
+<ol>
+<li>需求分析，需求分析说明书，设计数据字典，包括元数据</li>
+<li>conceptual 概念设计， 通过E-R图</li>
+<li>逻辑设计， 初始化关系模式，关系模式规范化——转成relationnal table</li>
+<li>物理数据库设计</li>
+</ol>
+<p><a class="link" href="https://blog.csdn.net/qq_41956139/article/details/104302355"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/qq_41956139/article/details/104302355</a></p>
+</li>
+</ul>
+<h3 id="建模-modeling">建模 modeling
+</h3><p>E-R model：</p>
+<pre><code>entity sets         实体集
+relationship sets   联系集
+attributes          属性
+</code></pre>
+<p>实体 entity 是实体集entity set 中的一个对象<br>
+放到数据库中就是，某个数据行，和数据库之间的关系</p>
+<p>联系集：两个实体集之间的联系关系<br>
+二元联系binary relationship 关联了两个实体集<br>
+ternary relationship 三元联系&hellip;&hellip;</p>
+<h3 id="attribute-属性">Attribute 属性
+</h3><p>比关系数据库更为自由。<br>
+简单属性和复合属性, 复合属性比如一个名字由姓和名组成<br>
+单值和多值属性<br>
+derived 属性:比如通过生日算年龄</p>
+<h3 id="mapping-cardinalities-映射基数">Mapping cardinalities 映射基数
+</h3><p>对于二元联系集<br>
+from A to B</p>
+<pre><code>one to one
+one to many
+many to one
+mane to many
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-3.png"
+	width="1243"
+	height="690"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-3_hu13242210881663454295.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-3_hu12999189237616015270.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
+	
+>
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-4.png"
+	width="1242"
+	height="719"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-4_hu9044924666317677071.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-4_hu17044446765125840276.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
+>
+note：有一些A或B中的元素可能没有mapped to 其他实体集中的元素</p>
+<p>Cardinality constraints基数限制</p>
+<p>画图中，箭头指向的是one，无向线段连接的是many
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-5.png"
+	width="1039"
+	height="284"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-5_hu5823061405641657804.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-5_hu1881099635118708079.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="365"
+		data-flex-basis="878px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-6.png"
+	width="1065"
+	height="283"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-6_hu15777879204231828728.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-6_hu14612568372304593926.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="903px"
+	
+>
+如果是两条线段，表示连接的实体集上所有实体都参与</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-8.png"
+	width="1210"
+	height="371"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-8_hu4667230907586252724.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-8_hu4612195319551747063.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="782px"
+	
+></p>
+<p>Participate Constraints</p>
+<ol>
+<li>partial</li>
+<li>total</li>
+</ol>
+<p>cardinality limits for participation<br>
+参与的基数界限
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-9.png"
+	width="1342"
+	height="416"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-9_hu9142544247945244534.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-9_hu11590640585898477700.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="322"
+		data-flex-basis="774px"
+	
+>
+从instructor往student看：对于一个instructor，他最少有0个student，最多有所有student<br>
+从student往instructor看：对于一个student，他最少有1个instructor，最多也是1个instructor</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-10.png"
+	width="1357"
+	height="799"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-10_hu7962309671350445124.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-10_hu15604372777497472121.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="407px"
+	
+>
+对于A，从A往B看，里面的元素最少有1个b，最多有3个，所以 la=1，ha=3<br>
+对于B，从B往A看，里面的元素最少有0个a(bn)，最多有2个a(bj)，所以lb=0，hb=2</p>
+<p>la 为 0 时，A是部分参与<br>
+la 大于 0 时，A是全部参与</p>
+<p>&lt;hb, ha&gt;描述了从A到B的映射基约束</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-11.png"
+	width="1528"
+	height="1017"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-11_hu3348727236769194904.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-11_hu1982571182863439536.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-12.png"
+	width="1556"
+	height="1163"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-12_hu5987146666793061673.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-12_hu17809419347785038812.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="321px"
+	
+></p>
+<h3 id="keys">keys
+</h3><p>构造关系表时，如果有多个候选键，最好选取数值型候选键作为关系表主键，便于提高基于主键的查询速度</p>
+<p>联系集上的keys：<br>
+super key 就是把联系起来的实体集 的主键合并</p>
+<p>candidate key / primary key：</p>
+<pre><code>对于在A和B实体集上的 binary relationship set R 
+如果R是many to many，那么primary key 就是A和B的主键合并
+如果R是many to one，那么 主键就是many那一边的主键
+如果是一对一的， 那么随便选择一个实体集的主键当主键
+</code></pre>
+<h3 id="弱实体集-weak-entity-sets">弱实体集 weak entity sets
+</h3><p>弱实体集无主键<br>
+弱实体集只能通过某个关系连接到的实体集来唯一保证<br>
+弱实体集的主键是它所依附的强实体集的主键+弱实体集的discriminator，<br>
+discriminator要用虚线下划</p>
+<h3 id="e-r-diagrams">E-R diagrams
+</h3><ol>
+<li>矩形&ndash;实体集</li>
+<li>菱形&ndash;关系集</li>
+<li>椭圆&ndash;属性<br>
+双椭圆表示多值属性<br>
+虚线椭圆表示派生属性</li>
+<li>下划线标明了主键属性</li>
+<li>双矩形表示弱实体集</li>
+</ol>
+<p>标注规则：</p>
+<pre><code>由联系发出的有向箭头指向one所对应的实体，无向线段指向many端所对应的实体
+只有在many to many的情况下，E-R图中联系与实体间的线段全部是无向线段，其他三种情况下一定会有有向线段
+全参与的要用双线段连接联系
+弱实体集里的属性用虚线下划，表示部分键
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-13.png"
+	width="1101"
+	height="1012"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-13_hu355032641898092431.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-13_hu4167392824043447635.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="261px"
+	
+>
+name是复合属性<br>
+address是复合属性<br>
+street是复合属性<br>
+phone_number是多值属性<br>
+age()是派生属性</p>
+<h3 id="e-r-设计事项-design-issues">E-R 设计事项 design issues
+</h3><p>对于一个多值属性，可以建立一个新的实体集，通过关系集来和原本的实体集联系</p>
+<p>规则：</p>
+<pre><code>1. 不要将主键设置为其他实体集中的属性，最好是通过联系集来关联
+2. 如果实体集E 参与了联系集R，则不将E的主键作为R的属性
+3. 用联系集来表示实体集之间的联系
+4. 最好是使用二元联系集
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-14.png"
+	width="1540"
+	height="916"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-14_hu10945489010385837718.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-14_hu17165665782041260902.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="403px"
+	
+></p>
+<p>关系R的属性可以与其参与的实体集之一相关联</p>
+<pre><code>一对一的联系中，联系集上的属性可以分配给其中一个实体集
+一对多的联系中，联系集上的属性只能分配给多的那一边，比如instructor 和 student之间通过advisor联系，一个instructor可以有多个students，advisor有一个属性是date，date应该放在学生实体集里
+对于多对多的联系中，联系集上的属性只能放在联系集中
+</code></pre>
+<h3 id="extended-e-r-model">extended E-R model
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-15.png"
+	width="1362"
+	height="1134"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-15_hu16475226038044067221.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-15_hu1598987236455964474.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="120"
+		data-flex-basis="288px"
+	
+>
+overlaping 重叠  disjoint 分解<br>
+generalization：将共享相同特性的实体集组合到更高层次的实体集中<br>
+specialization：将实体集中实体的差异，将实体集分成多个分组，每个分组与实体集中的其他实体不同</p>
+<p>低层实体集会继承高层实体集的属性和relationship</p>
+<p>disjoint 表示高层的一个实体只能被划分到一个低层实体集中<br>
+overlaping 表示高层的一个实体可以被划分到多个低层实体集中
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-17.png"
+	width="1467"
+	height="533"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-17_hu16554910802479591858.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-17_hu16701873804601888791.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="660px"
+	
+></p>
+<p>total 表示高层的一个实体必须属于一个较低级的实体集<br>
+partial 表示一个高层的实体不一定要属于一个低级的实体集
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-16.png"
+	width="1398"
+	height="559"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-16_hu2610168088669881855.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-16_hu15159148396008867358.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="250"
+		data-flex-basis="600px"
+	
+></p>
+<h3 id="reduction-to-relation-schema">reduction to relation schema
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-18.png"
+	width="1493"
+	height="869"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-18_hu12901369623928887954.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-18_hu8925667450437453153.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="412px"
+	
+></p>
+<p>复合属性要多建一张表，<br>
+或者将复合属性中的值提取出来，放在原表中。</p>
+<p>多值属性要建立一张表，同时要包含原实体集中的主键</p>
+<p>将联系集变为关系数据库模型，要基于映射基数</p>
+<p>对于一对一的关系中，如果A是全参与，那么就将R中的主键和discriminator给A</p>
+<p>对于Specialization 和 Generalization的reduction</p>
+<pre><code>1. 对于overlapping或者partial的：为高级实体集形成模式，为每个低级实体集形成模式，包括高级实体集的主键和本地属性。缺点：冗余信息多
+2. 对于disjoint 和 complete的：为每个具有所有本体和继承属性的实体集形成一个模式。缺点：冗余信息多
+</code></pre>
+<p>Method1：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-19.png"
+	width="1449"
+	height="788"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-19_hu18358574181882191659.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-19_hu11148521281436868838.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="183"
+		data-flex-basis="441px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-20.png"
+	width="1300"
+	height="559"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-20_hu4538636634502688708.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-20_hu10416943034674506184.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="232"
+		data-flex-basis="558px"
+	
+>
+c属性是主属性，同时是T2、T3的外键</p>
+<p>Method2：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-21.png"
+	width="1418"
+	height="628"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-21_hu3178928728249763455.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-21_hu4834280574622793979.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="541px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-22.png"
+	width="1360"
+	height="613"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-22_hu12127399374473350892.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-22_hu9655199508855184846.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="532px"
+	
+>
+只有低层级表，每个表都包含高层表的所有属性。没有高层集表了。</p>
+<h3 id="symbols-conclusion">symbols conclusion
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-23.png"
+	width="1395"
+	height="836"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-23_hu1196122930778825206.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-23_hu1757549044051571688.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="400px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-24.png"
+	width="1331"
+	height="886"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-24_hu7128710778495812564.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-24_hu15125048203582087734.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-25.png"
+	width="1266"
+	height="445"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-25_hu3876169814207670137.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-25_hu1642020428896523086.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="284"
+		data-flex-basis="682px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-26.png"
+	width="1484"
+	height="173"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-26_hu1481971112707948255.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-26_hu1697189988913309057.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="857"
+		data-flex-basis="2058px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-27.png"
+	width="1362"
+	height="746"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-27_hu6262641695760829222.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-27_hu14746054769514999146.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="438px"
+	
+></p>
+<h2 id="chapter-7-schema-normalization">Chapter 7 schema normalization
+</h2><h3 id="71-一个好的关系设计的特点">7.1 一个好的关系设计的特点
+</h3><h4 id="原则">原则
+</h4><p>对初始关系模式集，需要根据关系规范化理论，在保证</p>
+<ol>
+<li>函数无损连接性 lossless join</li>
+<li>函数依赖保持 dependency preservation</li>
+</ol>
+<p>约束的前提下，对关系模式集进行规范化处理——等价变换 / 模式分解</p>
+<pre><code>函数依赖是特殊的多值依赖
+多值依赖又是连接依赖的特例
+</code></pre>
+<h3 id="72-atomic-domain-和-第一范式">7.2 atomic domain 和 第一范式
+</h3><p>对于一个关系模式R，每个属性的域都是atomic的，就说它符合第一范式</p>
+<h3 id="73-用函数依赖分解">7.3 用函数依赖分解
+</h3><p>函数依赖：某一组属性的值唯一地决定另一组属性的值</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-28.png"
+	width="1159"
+	height="280"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-28_hu9185297803633366092.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-28_hu3606940278859898752.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="413"
+		data-flex-basis="993px"
+	
+>
+x值相等时，函数值相等；一个x只对应一个y<br>
+对于一个关系（名字， 年龄）来说：同一个名字只有一个年龄。才能说这是有函数依赖（f : 名字-&gt;年龄）的</p>
+<p>C对，ABD错
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-29.png"
+	width="1311"
+	height="681"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-29_hu14861433043253656794.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-29_hu3865390441824844900.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+>
+解析：</p>
+<pre><code>A相同值t2、t3得出的B不一样
+AC相同值t2、t3得出的B不一样
+BC相同值——无相同的
+B相同值t1、t3得出的C不一样
+</code></pre>
+<p>E-R图描述了对象以及它们之间的关联，FD说明了对象的特征之间的关系</p>
+<p>区分FD holds on R 和 FD is satisfied by r(R)</p>
+<pre><code>前者是定义在R的属性间的语义约束，R应满足约束
+后者是根据R构造的实际数据r(R)是否满足语义约束FD
+
+前者说明：如果FD定义在R上，那么R上的所有实例都满足函数依赖FD
+</code></pre>
+<p>平凡函数依赖：一个函数依赖被所有关系实例满足，那么就是平凡的</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-30.png"
+	width="799"
+	height="78"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-30_hu14698116378794783275.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-30_hu14824616285182750852.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1024"
+		data-flex-basis="2458px"
+	
+></p>
+<p>传递函数依赖    transitive
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-31.png"
+	width="972"
+	height="307"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-31_hu4069707486827945248.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-31_hu5149427282672603708.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="316"
+		data-flex-basis="759px"
+	
+></p>
+<p>部分函数依赖    partial：非最小化冗余
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-32.png"
+	width="1245"
+	height="371"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-32_hu8951136766343764998.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-32_hu1929307210764227191.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="335"
+		data-flex-basis="805px"
+	
+></p>
+<p>函数依赖闭包：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-33.png"
+	width="1287"
+	height="141"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-33_hu15337679127551677741.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-33_hu12084522141511741907.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="912"
+		data-flex-basis="2190px"
+	
+></p>
+<h4 id="bcnf">BCNF:
+</h4><pre><code>一个关系上的函数依赖闭包里的任意一个函数依赖：
+1. 要么是平凡的
+2. 要么α -&gt; β 这个FD中α是R的superkey
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-34.png"
+	width="1314"
+	height="442"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-34_hu10171890858406224801.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-34_hu18445439795895632392.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="713px"
+	
+></p>
+<p>将某个不符合BCNF的关系R分解成BCNF:<br>
+α -&gt; β 不是平凡的函数依赖，α也不是超键。R就会变成下面两个部分：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35.png"
+	width="1177"
+	height="308"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35_hu3988198520792673215.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35_hu1358237390032040075.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="382"
+		data-flex-basis="917px"
+	
+>
+这样α∪β中，对于 α-&gt;β， α做超键，满足BCNF</p>
+<h4 id="3nf">3NF
+</h4><p>定义如下：比BCNF宽松一些。如果α不是超键的话，那么β-α中的每个属性A都得在候选键中。<br>
+可以在不同的候选键中
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-36.png"
+	width="1326"
+	height="314"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-36_hu5272362907111339966.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-36_hu8438102189071716922.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="422"
+		data-flex-basis="1013px"
+	
+></p>
+<h4 id="2nf">2NF
+</h4><p>参考带有主键的关系数据库模型
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-37.png"
+	width="1222"
+	height="492"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-37_hu17415368865225150672.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-37_hu10423599026980455259.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="248"
+		data-flex-basis="596px"
+	
+></p>
+<p>不存在非主属性对候选键的部分依赖<br>
+每一个非主属性都完全依赖于R的候选键<br>
+但是可以有非主属性依赖于非主属性</p>
+<p>反例：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-38.png"
+	width="794"
+	height="270"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-38_hu10119106749946011541.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-38_hu13434066250404425531.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="705px"
+	
+>
+对于非主属性SD, SD依赖于S#, S#是主键的一部分，SD对(S#, C#)部份依赖</p>
+<p>分解后：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-39.png"
+	width="864"
+	height="328"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-39_hu9104042021529226172.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-39_hu12815740469344698750.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="632px"
+	
+></p>
+<p>规范化的目标如下：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-40.png"
+	width="1083"
+	height="274"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-40_hu15153660325626048115.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-40_hu10634730070947521468.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="395"
+		data-flex-basis="948px"
+	
+></p>
+<h3 id="74-函数依赖理论">7.4 函数依赖理论
+</h3><p>逻辑蕴涵 logically implied</p>
+<p>三条公理：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-41.png"
+	width="1225"
+	height="287"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-41_hu13391616256051933029.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-41_hu17724345378810324137.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="426"
+		data-flex-basis="1024px"
+	
+></p>
+<p>推广：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-42.png"
+	width="1157"
+	height="575"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-42_hu13411087592638849558.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-42_hu11685331659907392140.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="482px"
+	
+></p>
+<p>属性闭包<br>
+计算方式如下：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-43.png"
+	width="1062"
+	height="686"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-43_hu6101648715785169326.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-43_hu18032092482665390929.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
+></p>
+<p>如果一些属性闭包是所有属性的话，那么这些属性是关系的超键</p>
+<p>检查AG是否是R的候选键？
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-44.png"
+	width="874"
+	height="546"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-44_hu17311569828856358287.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-44_hu14013527557639177648.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="384px"
+	
+></p>
+<ol>
+<li>先检查AG是否是超键</li>
+<li>看AG的子集能否构成超键</li>
+</ol>
+<p>属性闭包的三种用途：</p>
+<ol>
+<li>查看某些属性是否构成超键</li>
+<li>查看某个函数依赖是否满足：比如α -&gt; β是否满足就要看β是不是在α的属性闭包里</li>
+<li>用来计算函数闭包</li>
+</ol>
+<p>如果两个函数依赖集的函数依赖闭包是一样的，那么就说这两个函数依赖集是equivalent</p>
+<h4 id="正则覆盖">正则覆盖
+</h4><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-45.png"
+	width="1286"
+	height="256"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-45_hu1447367847027098905.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-45_hu15368919315131843778.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="502"
+		data-flex-basis="1205px"
+	
+></p>
+<p>extraneous attribute</p>
+<pre><code>attribute A is extraneous in α：
+    F implies/is equivalent to (F – {α → β}) ∪ {(α – A) → β}
+    F将 α-&gt;β 修改成 α-A -&gt; β， 不改变函数闭包
+
+attribute A is extraneous in β:
+    the set of functional dependencies
+    (F – {α → β}) ∪ {α →(β – A)} implies F
+    将 α-&gt;β 修改成 α -&gt; β-A，不改变函数闭包
+</code></pre>
+<hr>
+<p>to test if attribute A ∈ α is extraneous
+(α –A) → β under F ?
+步骤如下：</p>
+<ol>
+<li>通过F，计算(α-A)的属性闭包</li>
+<li>检查β在不在(α-A)的属性闭包中，如果在，则说明A是extraneous</li>
+</ol>
+<p>to test if attribute A ∈ β is extraneous in β<br>
+即看 α→A 是否 under F’<br>
+步骤如下：</p>
+<ol>
+<li>compute α+ using only the dependencies in<br>
+F’= (F – {α → β}) ∪ {α →(β – A)}</li>
+<li>check A ∈ α+ ? if it does, α→A holds, A is extraneous</li>
+</ol>
+<hr>
+<p>正则覆盖要求：</p>
+<ol>
+<li>No functional dependency in Fc contains an extraneous attribute,</li>
+<li>Each left side of functional dependency in Fc is unique, that is, there are no two dependencies α1 → β1 , α2→ β2 in Fc , such that α1 = α2</li>
+</ol>
+<p>正则覆盖算法：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-46.png"
+	width="1196"
+	height="454"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-46_hu17609027696383994477.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-46_hu4459565020997271444.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="632px"
+	
+>
+重复：使用合并律，合并相同左值的函数；减掉无关属性；直到不变</p>
+<p>对于单推单的，可以不检查，但是单推多，多推单的，一定要检查！！！不然容易漏掉</p>
+<p>无损连接分解：lossless join decomposition<br>
+A decomposition of R into R1 and R2 is lossless join if at least one of the following dependencies is in F+ :<br>
+◼ R1 ∩ R2 → R1<br>
+◼ R1 ∩ R2 → R2</p>
+<p>无损连接分解中，R所对应的r被分成若干垂直片段ΠRi(r) , 各垂直片段通过自然连接可恢复r中的数据，保证了数据的完整性/分解可恢复性</p>
+<p>有损连接：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-47.png"
+	width="1210"
+	height="208"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-47_hu10657382961176811820.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-47_hu7542834065947920142.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="581"
+		data-flex-basis="1396px"
+	
+></p>
+<p>依赖保持
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-48.png"
+	width="1112"
+	height="151"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-48_hu6809387939335907599.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-48_hu12899060071245042016.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="736"
+		data-flex-basis="1767px"
+	
+>
+测试函数依赖保持的算法：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-49.png"
+	width="1366"
+	height="714"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-49_hu14617293673595348046.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-49_hu995066979825484796.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="459px"
+	
+>
+我看不懂</p>
+<h4 id="75-algorithm-for-decomposition">7.5 algorithm for decomposition
+</h4><p>分解成BCNF：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-50.png"
+	width="1421"
+	height="1047"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-50_hu4219405860579104808.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-50_hu2009336435275453857.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="135"
+		data-flex-basis="325px"
+	
+>
+to determine whether or not Ri is in BCNF, the restriction of F to Ri and the candidate keys of Ri should be computed !!!<br>
+要先算出Ri的候选键</p>
+<p>其实就是循环这个过程：<br>
+将某个不符合BCNF的关系R分解成BCNF:<br>
+α -&gt; β 不是平凡的函数依赖，α也不是超键。R就会变成下面两个部分：
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35.png"
+	width="1177"
+	height="308"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35_hu3988198520792673215.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-35_hu1358237390032040075.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="382"
+		data-flex-basis="917px"
+	
+>
+这样α∪β中，对于 α-&gt;β， α做超键，满足BCNF<br>
+然后再对R-(β-α)来分解</p>
+<p>分解时出现无论如何都没法函数依赖保持的例子
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-51.png"
+	width="1275"
+	height="665"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-51_hu14155482408727749545.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-51_hu11963954084671955753.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="460px"
+	
+></p>
+<p>分解的范例如下：
+第一步，找到候选键，并分解
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-52.png"
+	width="1427"
+	height="768"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-52_hu12229108309404686136.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-52_hu15440598355199788996.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+>
+找到新的候选键
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-53.png"
+	width="1291"
+	height="540"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-53_hu10539351313365139891.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-53_hu693238583740830479.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="239"
+		data-flex-basis="573px"
+	
+>
+每分解一步都要算出相应关系集的函数依赖闭包
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-54.png"
+	width="1349"
+	height="750"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-54_hu2024871965061393587.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-54_hu531661400694006633.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="431px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-55.png"
+	width="1290"
+	height="157"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-55_hu6208224699460788311.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-55_hu5310599554890982388.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="821"
+		data-flex-basis="1971px"
+	
+></p>
+<h4 id="3nf-分解">3NF 分解
+</h4><p>因为BCNF有可能函数依赖不保持<br>
+分解成3NF一定可以函数依赖保持！！！</p>
+<p>测试是否是3NF时也要先算出candidate key</p>
+<p>分解成3NF的步骤如下：</p>
+<ol start="0">
+<li>找到候选键</li>
+<li>求出F的正则覆盖Fc</li>
+<li>如果对于某个F：α -&gt; β，已有的子模式Rj都没有同时包含α和β，那么就构造一个Rj</li>
+<li>如果没有一个子模式包含了原来R的候选键，那么就为每个候选键构造一个Rj</li>
+</ol>
+<h4 id="候选键查找">候选键查找
+</h4><ol>
+<li>分类，令X = L ∪ N，Y代表LR类<br>
+L：只出现在左边<br>
+R：只出现在右边<br>
+LR：两边都有<br>
+N：两边都没有</li>
+<li>求X的属性闭包，若X包含了所有属性，那么就X就是唯一候选键</li>
+<li>X闭包没有包含所有属性，那么就从Y取出一个属性A，若(X∪A)的闭包包含R的所有属性，就说明找到候选键了。这一步中要多次调换，找出所有候选键</li>
+<li>若只拿一个还不够找候选键，就要拿两个循环一遍&hellip;拿三个&hellip;直到找到候选键</li>
+</ol>
+<h3 id="习题类型">习题类型
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-56.png"
+	width="1289"
+	height="830"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-56_hu12109248211130668391.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-56_hu8651182843488387107.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-57.png"
+	width="1321"
+	height="737"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-57_hu15878750459426717779.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-57_hu15727342236158757281.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="430px"
+	
+></p>
+<h2 id="chapter-13">Chapter 13
+</h2><h3 id="文件记录的方式">文件记录的方式
+</h3><p>Each file is a sequence of records, and a relational table is a set of tuples</p>
+<p>元组为单位的DB逻辑文件在以记录为单位的OS物理文件中的实现方式：</p>
+<ol>
+<li>定长 Fixed-length records</li>
+<li>变长 Variable-length records</li>
+</ol>
+<p>定长：</p>
+<pre><code>一条记录不能跨块存储。
+每条记录定长。
+删除一条记录的三种操作：
+    1. 被删除的记录后面的依次前移
+    2. 将最后一条移到被删除的位置上，覆盖
+    3. 维护一个free list
+</code></pre>
+<p>变长：</p>
+<pre><code>在一个文件中存储多种类型的记录
+可以存储变长的变量，varchar
+允许重复字段的记录类型，record里还有record
+属性要先存定长，再放变长
+变长的属性被定长的offset和length标明,如下：
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-58.png"
+	width="1447"
+	height="680"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-58_hu18131749883808217084.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-58_hu509182865173730812.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="510px"
+	
+></p>
+<pre><code>还可以存储为slotted page
+Slotted page header contains头部包括：
+◼ number of record entries          record的数量
+◼ end of free space in the block    free space的末尾 
+◼ location and size of each record  record的位置和大小
+删除了某条记录就要改变头部
+记录都是连续存储的
+</code></pre>
+<h3 id="文件中记录的组织方式">文件中记录的组织方式
+</h3><p>逻辑组织方式有以下四种：</p>
+<ol>
+<li>heap</li>
+<li>sequential</li>
+<li>hash</li>
+<li>clustering</li>
+</ol>
+<p>区别如下：</p>
+<pre><code>heap：记录可以放在文件中的任意位置
+sequential：记录通过各自的search key来连续组织
+hash：通过某些属性的哈希函数
+clustering：每个关系的记录可以存储在单个文件中；在多表集群的记录组织中，几种不同的关系记录可以存在一个文件里
+</code></pre>
+<p>heap：</p>
+<pre><code>一般以记录输入的顺序存储
+</code></pre>
+<p>sequential：</p>
+<pre><code>以search key的顺序存储，最好物理结构上也要按顺序来
+删除：通过指针链
+添加：往空位插入，没有空位则用overflow block
+要实时维护顺序
+</code></pre>
+<p>clustering</p>
+<pre><code>一个DB文件可以存储来自多个关系的记录。不同关系中有联系的记录存放在同一block，以提高查找和I/O速度
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-59.png"
+	width="1276"
+	height="679"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-59_hu9227224406938016978.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-59_hu14266834392806886994.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="451px"
+	
+></p>
+<p>hash</p>
+<pre><code>{search key} → {physical address of the records}
+</code></pre>
+<h3 id="数据-dictionary-storage">数据 dictionary storage
+</h3><p>存储元数据metadata</p>
+<h3 id="buffering">Buffering
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-60.png"
+	width="1302"
+	height="631"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-60_hu16610703237663298978.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-60_hu16243355723558330687.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<ol>
+<li>有些固定不会被换出</li>
+<li>执行完立马换出</li>
+<li>执行时或还没执行的不能被换出</li>
+</ol>
+<h2 id="chapter-14-index">Chapter 14 Index
+</h2><p>聚集索引：索引文件的search key所规定的顺序与被索引的顺序文件中的记录顺序一致<br>
+主索引：建立在主属性上的索引<br>
+主索引一定是聚集索引，反过来不是<br>
+一个表上只能建立一个聚集索引，也只能有一个主索引。因为数据文件只能有一种排列顺序</p>
+<p>辅助索引 / 非聚集索引 ：secondary index<br>
+索引顺序和文件顺序不一致<br>
+have to be dense indices 一定是稠密索引，否则可能找不到记录</p>
+<p>dense index 稠密索引</p>
+<pre><code>文件中的每个搜索码值有一个索引记录
+相同搜索码的排列在这个记录的后面
+</code></pre>
+<p>sparse index 稀疏索引</p>
+<pre><code>只为搜索码的某些值建立索引记录，有些值没有出现
+主索引可以不是稠密索引
+可以按块来组织稀疏索引，不会影响查询
+对于没有索引的记录来说，想要查询它，得找到比它小的前一个记录，再一个一个往后查
+</code></pre>
+<p>多级索引 multi-level indices</p>
+<pre><code>B+树和B树
+为索引建立索引
+</code></pre>
+<p>indices on multiple keys<br>
+复合搜索键 <br>
+左前缀原则<br>
+举例：</p>
+<pre><code>当使用(dept_name, salary)时，对于下述查询语句，分析：
+1. where dept_name='Finance' and salary = 8000
+    可以很快的查询匹配上述语句的结果。因为先查dept_name，再筛选
+2. where dept_name='Finance' and salary &lt; 8000
+    也可以很快的查询到
+3. where dept_name = 'Finance' 
+    可以很快查询
+4. where dept_name &lt; 'Finance' and balance = 8000
+    由dept_name &lt; 'Finance' 会查出很多结果，再做筛选就慢了
+5. where balance = 8000
+    没用到索引
+因为数据会是先通过dept_name进行排序的，相同的dept_name再通过salary排序。
+</code></pre>
+<h2 id="chapter-15-query-processing">Chapter 15 query processing
+</h2><p>查询所需步骤：</p>
+<pre><code>1. 用户通过查询语句query
+2. 语法语义检查  parser and translator
+3. 经过2的编译和翻译后变成关系代数表达式
+4. 优化，依靠存储在data dictionary 里的 metadata
+5. 执行计划
+6. 经过evaluation engine，从DB file中取出数据
+7. 查询结果输出
+
+上述步骤中，
+step1 sparsing and translation：1 2 3
+step2 optimization：这一步是选择关系代数表达式，选择索引 3，4
+step3 evaluation plan execution：5，6，7
+</code></pre>
+<h3 id="查询代价衡量-measures-of-query-costs">查询代价衡量 Measures of Query Costs
+</h3><p>大致有 disk access，CPU， network communication<br>
+CPU 忽略，network communication 管不了，一般只看disk access</p>
+<p>tT: 传输一个block的时间<br>
+tS：寻道时间——<br>
+传输b个block加上S个寻道的平均时间：b * tT + S * tS</p>
+<h3 id="查询算法">查询算法
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-63.png"
+	width="826"
+	height="1007"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-63_hu12845991909203297971.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-63_hu12298775408772172358.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="82"
+		data-flex-basis="196px"
+	
+></p>
+<p>A1 File scan by linear search 线性搜索</p>
+<pre><code>必须扫描全部的blocks，才能找到全部满足查询条件的数据
+把数据读到内存，一条一条扫描。
+因为数据存储连续在一起，只需要一次寻道
+br 是包含records的总块数
+cost = (br/2) * tT + tS
+
+一般二分查找是没有意义的，除非数据严格按照查询的顺序来
+[]：取上界
+[log2 (br)] * (tT + tS),如果是等值查询，结果不唯一，还得加上后面满足块的开销
+</code></pre>
+<p>Index scan</p>
+<p>A2 主索引，值相等查询</p>
+<pre><code>必须是在search key上的index
+检索满足相应等式条件的单条记录，使用B+树作为聚类/主索引
+cost = (hi + 1) * (tT + tS)
+其中，hi是树深度
+hi*(tT + tS)    表示读取索引的时间
+1 * (tT + tS)   表示读取叶节点索引指向的记录所花时间。读数据的时间
+</code></pre>
+<p>A3 主索引，非等值查询</p>
+<pre><code>b是要找的总块数，包含了所有匹配到的记录的总块数
+cost = hi*(tT + tS) + tS + tT * b
+同样，hi * (tT + tS) 表示找索引的时间
+tS是找数据的寻道时间，只需找一次
+后面是依次传输的时间
+</code></pre>
+<p>A4 辅助索引，等值查询</p>
+<pre><code>获取一条记录：
+cost = (hi + 1) * (tT + tS)
+获取多条记录：比如在instructor里找某个下面这个值是700的记录
+cost = (hi + n) * (tT + tS)
+因为不同记录不是连续的，所以需要多个寻道时间。
+这里n为3：hi*(tT+tS)是找到700的索引在哪。3*(tT + tS)是获取700这三个索引指向的数据
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-102.png"
+	width="1157"
+	height="535"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-102_hu10379653417340236894.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-102_hu13024168389464967719.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="519px"
+	
+></p>
+<p>范围查询</p>
+<p>A5 主索引，比较查询
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-61.png"
+	width="1519"
+	height="366"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-61_hu10713249210397691333.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-61_hu1428354270594768846.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="415"
+		data-flex-basis="996px"
+	
+></p>
+<p>A6 辅助索引，比较查询<br>
+查索引值，比较
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-62.png"
+	width="1327"
+	height="479"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-62_hu1420276159041230332.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-62_hu5561896365680454256.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="664px"
+	
+></p>
+<p>复合查询 —— 并（conjunction）</p>
+<p>A7 conjunctive selection using one index</p>
+<pre><code>先用一个索引
+选择 A1~A7 开销最低的算法来查找
+将元组提取到内存缓冲区后，测试它上的其他条件
+</code></pre>
+<p>A8 conjunctive selection using composite index</p>
+<pre><code>使用合适的组合
+</code></pre>
+<p>A9 conjunctive select by 标识符的交集来进行连接选择</p>
+<pre><code>需要具有记录指针的索引
+对每个条件使用相应的索引，获得记录指针集进行交集
+从文件中获取记录
+如果有些条件没有适当索引，就在内存中测试
+</code></pre>
+<p>A10 disjunctive selection by union of identifier</p>
+<pre><code>只要有一个不能优化，就只能线性扫描
+对每个条件使用索引，并对索引获得的记录取并集
+然后从文件中获取记录
+</code></pre>
+<h3 id="evaluation-of-express">evaluation of express
+</h3><p>评估包含多个计算原语的表达式，比如说投影+选择+比较</p>
+<ol>
+<li>materialization  实体化</li>
+<li>pipeline         管道化、流水线</li>
+</ol>
+<p>实体化：将中间结果写入磁盘<br>
+作出语法树，从底向上评估<br>
+所有的cost 大约是：单个操作的成本之和+中间结果写入磁盘的成本</p>
+<p>流水线<br>
+同时评估管道的多个操作，并将一个操作的结果传递给下一个操作，而不需要在磁盘中存储临时关系<br>
+可以并行评估</p>
+<h2 id="chapter-查询优化">Chapter 查询优化
+</h2><p>关系表达式等价</p>
+<h3 id="关系表达式转换规则">关系表达式转换规则
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-64.png"
+	width="1343"
+	height="383"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-64_hu2216263741328064154.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-64_hu17354364814439399912.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="350"
+		data-flex-basis="841px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-65.png"
+	width="1289"
+	height="216"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-65_hu8880191825646050476.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-65_hu752588190237693057.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="596"
+		data-flex-basis="1432px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-66.png"
+	width="1307"
+	height="560"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-66_hu13189606706086962412.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-66_hu15833254700912668601.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-67.png"
+	width="1389"
+	height="767"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-67_hu13760742450098996281.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-67_hu18440033094330739844.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="434px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-68.png"
+	width="1328"
+	height="314"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-68_hu13891636661593764871.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-68_hu1478666049453189663.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="422"
+		data-flex-basis="1015px"
+	
+>
+运算中尺寸小的操作排在左边</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-69.png"
+	width="1135"
+	height="494"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-69_hu17699323778150002788.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-69_hu890173585968624855.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="551px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-70.png"
+	width="1077"
+	height="817"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-70_hu17972842037087141133.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-70_hu10898983314184550197.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="316px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-71.png"
+	width="1266"
+	height="593"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-71_hu17147320061632126200.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-71_hu4805438289633600401.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-72.png"
+	width="1394"
+	height="775"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-72_hu15810900734200116801.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-72_hu4464009473467485742.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="431px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-73.png"
+	width="1365"
+	height="401"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-73_hu17544518549679956727.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-73_hu3311514322683706744.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="340"
+		data-flex-basis="816px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-74.png"
+	width="1107"
+	height="334"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-74_hu15352170459848521552.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-74_hu12711469740862627762.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="331"
+		data-flex-basis="795px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-75.png"
+	width="1313"
+	height="191"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-75_hu8591095876742502712.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-75_hu4981468289248574875.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="687"
+		data-flex-basis="1649px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-76.png"
+	width="1186"
+	height="397"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-76_hu15771238087468370407.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-76_hu5705423963843669256.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="298"
+		data-flex-basis="716px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-77.png"
+	width="1247"
+	height="223"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-77_hu1410438308057672003.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-77_hu14091306556294987026.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="559"
+		data-flex-basis="1342px"
+	
+></p>
+<p>选择尽早执行</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-78.png"
+	width="1346"
+	height="530"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-78_hu7426701986432575778.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-78_hu10109430749185134888.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="253"
+		data-flex-basis="609px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-79.png"
+	width="1351"
+	height="455"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-79_hu12981987418568330929.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-79_hu9461618243624215566.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="296"
+		data-flex-basis="712px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-80.png"
+	width="1070"
+	height="425"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-80_hu5491259140046403688.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-80_hu13336580579476768672.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="604px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-81.png"
+	width="1393"
+	height="1050"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-81_hu572083069464936753.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-81_hu9836547242626066826.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="318px"
+	
+>
+优化后是branch和loan先连，因为这两个连接的结果会少于和borrower连接的结果</p>
+<h2 id="chapter-17-transaction">Chapter 17 transaction
+</h2><p>事务是DBS中应用程序/数据库应用系统的基本逻辑单位，也是DBMS管理DBS运行的基本单位</p>
+<p>DBS中，从DBMS的角度，用户对DB的访问体现为DBS中1个或多个事务的执行</p>
+<p>多用户DBS中，多个用户对DB的并发访问体现为DBS中多个数据库事务的并发执行</p>
+<p>事务的四个特性：ACID</p>
+<ol>
+<li>
+<p>atomic 原子性</p>
+</li>
+<li>
+<p>consistency 一致性</p>
+</li>
+<li>
+<p>isolation 独立性 / 隔离性：每个事务不能知道其他事务的中间结果</p>
+</li>
+<li>
+<p>durability 持久性：事务提交之后数据永久生效</p>
+<p>concurrency-control component保障独立性isolation
+recovery-management component保障永久性durability</p>
+</li>
+</ol>
+<p>事务的定义</p>
+<pre><code>a collection of operations that form a single logic unit of application works, delimited by the statements of the form begin transaction and end transaction
+是操作的集合组合成的逻辑单元
+</code></pre>
+<p>ACID在DBS 中的机制</p>
+<pre><code>A：通过事务管理，恢复管理系统
+C：通过程序、事务设计，一致性约束测试
+I：并发控制
+D：恢复管理
+</code></pre>
+<p>事务的状态
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-82.png"
+	width="1230"
+	height="868"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-82_hu10486918327899454556.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-82_hu2964476432495958585.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="340px"
+	
+></p>
+<p>在Active中，事务对数据修改，可能只是修改在本地缓冲区中，并没有真正被修改到磁盘上的DB file中</p>
+<p>可串行化 serializability</p>
+<pre><code>某个并发调度is equivalent to串行调度，那么它是可串行化的
+n个事务，就有 n! 种串行调度方式，只要并发调度能和其中某个等价就ok
+</code></pre>
+<p>不同形式的调度等价性产生了以下概念：</p>
+<ol>
+<li>conflict serializability 冲突可串行化</li>
+<li>view serializability</li>
+</ol>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-83.png"
+	width="1276"
+	height="628"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-83_hu1705555265602912657.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-83_hu5375404159668144642.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+>
+对同一个数据来说，读写、写写冲突</p>
+<h3 id="冲突可串行化">冲突可串行化
+</h3><p>conflict equivalent：</p>
+<pre><code>S and S’ are conflict equivalent
+if the schedule S can be transformed into S’ by a series of swaps of non-conflicting instructions
+S 可以通过一系列不冲突的顺序交换得到 S’
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-84.png"
+	width="1166"
+	height="538"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-84_hu16525821781967597136.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-84_hu7441973894716379045.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="520px"
+	
+>
+read(A) read(B)调换顺序后不冲突，调换<br>
+write(A) write(B)调换顺序后也不冲突，调换。<br>
+这样就变成了S6这样的穿行调度</p>
+<p>只能交换不同事务的两个指令顺序<br>
+交换后事务内的指令执行顺序不会被改变<br>
+交换不能改变冲突指令的顺序</p>
+<p>如果并发事务S和串行事务S’等价，那么就说S是冲突可串行化conflict serializable</p>
+<p>下例就不是冲突可串行化的，因为不管怎么调换T3 、T4中指令的执行顺序，都会使冲突不等价</p>
+<pre><code>   T3          T4
+read(Q)
+             write(Q)
+write(Q)
+</code></pre>
+<p>判读某个并发调度S是否是冲突可串行化：</p>
+<pre><code>precedence-graph 前驱图
+Ti 某条指令执行完 Tj有冲突操作，不管几个冲突都画一条边
+i -&gt; j
+如果得到一个有向无环图，则说明是冲突可串行化的。
+用拓扑排序，依次消掉没有入度的边。
+如果有多少个拓扑排序法，就有多少种串行调度方法
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-85.png"
+	width="1256"
+	height="527"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-85_hu10987700160498943864.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-85_hu1388994939052663802.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="238"
+		data-flex-basis="571px"
+	
+></p>
+<pre><code>T3 -&gt; T2、T4
+T3 -&gt; T1、T4
+T4 -&gt; T1
+通过
+先做T3，再作T2，再做T4，在做T1
+</code></pre>
+<h3 id="recoverability">recoverability
+</h3><p>事务Ti失败的时候，任何依赖于Ti的事务Tj也应该终止</p>
+<p>看谁读了谁写的数据，就要在谁后面提交
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-86.png"
+	width="1374"
+	height="466"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-86_hu7549793662121380242.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-86_hu9522557165257205064.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="707px"
+	
+></p>
+<p>如果Ti 读了Tj 写的数据，Ti先提交了，Tj可能在之后执行中中断回滚，导致Ti读了错误的数据</p>
+<h3 id="级联回归-cascading-rollback">级联回归 cascading rollback
+</h3><p>会导致大量的开销</p>
+<p>需要的是cascadeless schedule 无级联调度</p>
+<p>对于任意的Ti Tj，Tj读取Ti写入的数据项Q，要求Ti先commit，Tj再读取<br>
+即Tj只能读取Ti提交过的数据</p>
+<p>Every cascadeless schedule is also recoverable！！</p>
+<h3 id="事务隔离级别">事务隔离级别
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-87.png"
+	width="1282"
+	height="786"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-87_hu14365477226680509843.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-87_hu9734478752020427944.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="391px"
+	
+></p>
+<h2 id="chapter-18-concurrency-control">Chapter 18 concurrency control
+</h2><p>使用数据的两种模式：</p>
+<ol>
+<li>exclusive (X) mode —— 互斥、排他</li>
+<li>shared (S) mode —— 共享</li>
+</ol>
+<p>lock compatibility matrix
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-88.png"
+	width="808"
+	height="302"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-88_hu16928763596323383462.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-88_hu4052205270139105940.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="642px"
+	
+>
+只有S-S是相容的</p>
+<p>处理数据的步骤
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-89.png"
+	width="1324"
+	height="653"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-89_hu18446525189616722015.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-89_hu9568029816745309715.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="486px"
+	
+></p>
+<ol>
+<li>用lock-S(Q) 或者lock-X(Q)获取锁</li>
+<li>等待权限，执行</li>
+<li>unlock-S(Q) 或unlock-X(Q)将锁释放</li>
+</ol>
+<h3 id="两阶段锁协议-two-phase-locking-protocol--2pl">两阶段锁协议 Two Phase Locking protocol / 2PL
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-90.png"
+	width="1389"
+	height="535"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-90_hu17749822018154750812.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-90_hu8973153620761688213.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="259"
+		data-flex-basis="623px"
+	
+></p>
+<p>事务可以按照锁点(lock points)的顺序串行化<br>
+lock points是单个事务获得最后一个锁的时间点</p>
+<p>2PL保证了冲突可串行化调度<br>
+但是不能保证从死锁中摆脱<br>
+也不能避免级联回滚</p>
+<h3 id="构造符合2pl的调度">构造符合2PL的调度
+</h3><p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-91.png"
+	width="1263"
+	height="511"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-91_hu6018143184871988071.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-91_hu13240727718513573657.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="247"
+		data-flex-basis="593px"
+	
+></p>
+<ol>
+<li>先给每个事务进行加锁解锁</li>
+<li>根据锁相容性矩阵安排并发</li>
+<li>两个阶段应尽可能错开，不允许访问 冲突事务 同时处于growing phase</li>
+</ol>
+<p>因为对A的操作最高是write,所以一开始就要用lock-X
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-92.png"
+	width="1335"
+	height="611"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-92_hu7481383376950367602.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-92_hu11869370672465150119.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p>第二步要通过锁点的前后关系来确定顺序
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-93.png"
+	width="1287"
+	height="983"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-93_hu9631814734163273885.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-93_hu5244570841794004179.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="130"
+		data-flex-basis="314px"
+	
+>
+要注意，由于T7对B只有一个操作，而T8也要用B，所以T7要尽快释放B</p>
+<h3 id="strict-2pl-严格2阶段锁协议">Strict 2PL 严格2阶段锁协议
+</h3><p>所有的互斥锁都得在事务提交之后才能释放<br>
+这样避免了级联回滚</p>
+<h3 id="rigorous-2pl-强2阶段锁协议">Rigorous 2PL 强2阶段锁协议
+</h3><p>所有的锁都要在事务提交后才能释放<br>
+能让事务按照它们提交的顺序串行化</p>
+<h3 id="deadlock-handling">deadlock handling
+</h3><h4 id="prevention-strategies">prevention strategies
+</h4><ol>
+<li>在事务开始前获取所有需要的锁</li>
+<li>对所有数据项进行partial ordering，并要求事务只能按照partial ordering指定的顺序</li>
+<li>基于超时的模式：事务只等待指定时间内的锁，之后等待超时，事务回滚</li>
+</ol>
+<p>wait-die scheme</p>
+<pre><code>TS是事务开始的时间戳timestamp
+如果TS(Ti) &lt; TS(Tj), 那么Ti等待。Ti更早开始，Ti等待 ———&gt; 年老等待
+否则的话，就让Ti回滚，重新开始Ti，但是Ti的时间戳不变。
+意思就是年老等待，年轻的重做
+年轻的回滚
+这意味着，年轻的做的速度更快，但是遇到年老的总是要重做，年轻的可能会一次又一次的赶上年老的
+</code></pre>
+<p>wound-wait scheme 伤停等待</p>
+<pre><code>如果TS(Ti) &gt; TS(Tj) 那么久让Ti等待 Ti更年轻
+否则的话，就让Tj回滚，但是Tj的时间戳不变
+年老的回滚。但是由于时间戳总是增加的，所以被卷回的进程将具有较小的时间戳
+伤害有锁的事务，正常进行的事务回滚
+可能rollback的次数比wait-die少
+意味着年老的做的慢，所以比较不可能赶上年轻的，回滚次数会少一些
+</code></pre>
+<h4 id="deadlock-detection">deadlock detection
+</h4><p>死锁可以被描述成 wait-for 图
+Ti 等待 Tj 锁释放：i &ndash;&gt; j 的有向箭头
+也是，用拓扑排序来看有没有死锁</p>
+<h2 id="chapter-19-recovery">Chapter 19 Recovery
+</h2><p>在修改数据库本身前， 将日志信息输出到稳定的存储介质中<br>
+日志数据比 执行本身 先完成</p>
+<pre><code>&lt;Ti start&gt;
+&lt;Ti X V1 V2&gt;    Ti事务，某个数据X，写前是V1, 修改后变成V2
+&lt;Ti commit&gt;     在 partial committed状态写入
+&lt;Ti, X, V1&gt;     补偿日志记录 compensate records 或者 叫redo-only record
+&lt;Ti, abort&gt;
+</code></pre>
+<p>Deferred database modification (延时更新)</p>
+<pre><code>直到committed之后才会修改数据库
+</code></pre>
+<p>Immediate database modification (及时/立即更新)</p>
+<pre><code>在active状态的时候就会修改数据库
+</code></pre>
+<p>undo通过log record来将数据库数据设置为旧值<br>
+redo通过log record来将数据库数据设置为新值</p>
+<p>Recovery scheme 要求在Ti修改数据项Q后，在Ti提交之前，没有其他事务Tj去修改这个数据项<br>
+这个通过strict 2PL来保证</p>
+<pre><code>undo：从最后一条日志记录向后回溯\
+redo：从第一条日志记录向前查找，每更新一个值，就重写一个值
+
+undo: 事务主动回滚     事务被动回滚
+redo:                 事务被动回滚
+</code></pre>
+<p>情形1：事务主动回滚</p>
+<pre><code>主动回滚中，日志记录本身就会有&lt;Ti, abort&gt;记录
+从最后一条记录往前scan，
+每找到一条表示修改的日志&lt;Ti, X, V1, V2&gt;，就撤销到原值
+并写补偿记录 &lt;Ti, X, V1&gt;
+直到找到&lt;Ti, start&gt;
+最后写一个&lt;Ti, abort&gt;记录
+</code></pre>
+<p>情形2：事务被动回滚</p>
+<ol>
+<li>事务日志记录中没有事务结束标志&lt; Ti, commit &gt;或者&lt; Ti, abort &gt;，需要undo</li>
+<li>发生failure时，事务逻辑上结束了，日志中有上述两种标志了。需要redo</li>
+</ol>
+<p>2-1 undo
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-94.png"
+	width="1443"
+	height="455"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-94_hu15835970696241730135.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-94_hu3851586228252075867.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="317"
+		data-flex-basis="761px"
+	
+></p>
+<p>2-2 redo
+<img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-95.png"
+	width="1441"
+	height="404"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-95_hu2563662769687774303.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-95_hu6263828907240020918.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="356"
+		data-flex-basis="856px"
+	
+></p>
+<h3 id="undo和redo在立即修改的模式下">undo和redo在立即修改的模式下
+</h3><p>情形1和情形2-1 在日志上和 稍后修改 的一样，也是通过对日志的回溯，恢复原来的记录</p>
+<p>如果是情形2-2 partial committed，就需要先undo一遍，再redo</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-96.png"
+	width="1357"
+	height="942"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-96_hu17026857143151078881.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-96_hu14394740321601606146.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="345px"
+	
+>
+这种效率太低，要查找整个log，因此引入checkpoints</p>
+<h3 id="checkpoints">checkpoints
+</h3><h4 id="串行调度">串行调度
+</h4><p>checkpoint的record是：&lt; cpk &gt;</p>
+<p>找到最近的检查点和该检查点最近的事务Ti<br>
+方法：回溯，首先找到最近的checkpoint，然后继续找到最近的&lt;Ti, start&gt;</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-97.png"
+	width="1400"
+	height="385"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-97_hu17624020604354972734.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-97_hu2591478664087840974.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="363"
+		data-flex-basis="872px"
+	
+>
+比如找到的是这个T4</p>
+<p>在立即修改的模式下：</p>
+<p>在最近检查点的时候，T4还没committed，但是在出现错误的时候，T4已经committed了，所以要redo T4。T4之前的就不用管了。<br>
+而在T4之后直到failure的地方，里面所有没有committed的事务都要undo。上图中，undo的是T5<br>
+redo的是检查点committed的；undo的是没有committed的</p>
+<p>在延迟修改的模式下，undo就不需要了</p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-98.png"
+	width="1373"
+	height="644"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-98_hu9621493802938979426.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-98_hu11120965463235868231.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="511px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-99.png"
+	width="1372"
+	height="610"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-99_hu9637468358256498036.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-99_hu6689366126774928379.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="539px"
+	
+></p>
+<h4 id="并发调度">并发调度
+</h4><p>首先要满足严格2PL</p>
+<p>并发中，checkpoint的标志是&lt; checkpoint L &gt; L是当前还active的事务list</p>
+<p>对于正常执行的，且是以&lt; Ti abort &gt;结束的调度，将会从后往前回溯</p>
+<p>对于不正常进行的，crash掉的调度来说 ( 没有&lt;Ti, abort&gt; ) ：<br>
+redo的情况：</p>
+<pre><code>Step1. Find last &lt;checkpoint L&gt; record, and set the undo-list to L 
+    找到当时还没执行完的事务，加入到undo-list中
+Step2. Scan forward from above &lt;checkpoint L&gt; record
+    从检查点记录开始向前看，就是往时间正方向 ——&gt; ，redo每一条log。
+    如果发现一个&lt;Ti start&gt;的记录，就把Ti加入到undo-list
+    如果看到一个&lt;Ti commit&gt;或者&lt;Ti abort&gt;记录，就把Ti从undo-list移走
+step3. Scan log backwards from end, to roll back all transactions in undo-list
+    往后回溯，对于每一个undo-list中的事务Ti，只要有Ti的log record就undo一次，并记录到redo-only的记录中
+    比如遇到 &lt;Ti, X, V1, V2&gt;，那么就把X恢复成V1，并且写一个&lt;Ti, X, V1&gt;到redo-only的record上。
+    如果遇到&lt;Ti, start&gt;, Ti又是undo-list中的，那么就写一个&lt;Ti, abort&gt;的记录，并且将Ti从undo-list移除
+step4. 一直到undo-list为空
+</code></pre>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-100.png"
+	width="1449"
+	height="913"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-100_hu561319970555232916.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-100_hu18434979459494514798.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="380px"
+	
+></p>
+<p><img src="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-101.png"
+	width="1436"
+	height="1077"
+	srcset="/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-101_hu11227203204959417282.png 480w, /p/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/image-101_hu8643407046144949694.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="320px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

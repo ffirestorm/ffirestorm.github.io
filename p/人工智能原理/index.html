@@ -1,0 +1,3687 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="1 概述 人工智能及发展 研究基础内容 研究领域 不同定义\n人工智能是指由计算机实现的人造智能。人工智能就是用人工的方法在机器（计算机）上实现的智能。作为一门学科，人工智能可定义为：人工智能是一门研究如何构造智能机器（智能计算机）或智能系统，使它能模拟、延伸、扩展人类智能的学科。（能力） 人工智能是一门交叉边缘学科，与人工智能有关的学科有：计算机科学、数学、哲学、语言学、神经生理学、神经心理学、脑科学、认知科学、逻辑学、控制论等.（学科） 人工智能是一种使计算机能够思维，使机器具有智力的激动人心的新尝试（Haugeland,1985） 人工智能是那些与人的思维、决策、问题求解和学习等有关活动的自动化（Bellman,1978） 人工智能是用计算模型研究智力行为（Charniak和McDermott,1985） 人工智能是研究那些使理解、推理和行为成为可能的计算（Winston,1992） 人工智能是一种能够执行需要人的智能的创造性机器的技术（Kurzwell,1990） 人工智能研究如何使计算机做事让人过得更好（Rick和Knight,1991） 人工智能是一门通过计算过程力图理解和模仿智能行为的学科（Schalkoff,1990） 人工智能是计算机科学中与智能行为的自动化有关的一个分支（Luger和Stubblefield,1993） 为什么要研究人工智能\n1、现有计算机系统智能的局限性。 2、人类智能的局限性。学习能力因人而异、学习速度慢、效率低。 3、信息化社会的迫切要求。 目标\n近期：用机器来模拟和实现人的部分/某些智力功能； 远期：全部甚至可以延伸人的智慧。 智能\n有效获取、传递、处理、再生和利用信息，从而在任意给定的环境下达到预定目的的能力。 智能特征\n具有感知能力。通过视觉、听觉、触觉、味觉和嗅觉感知外部世界。 具有记忆与思维能力。记忆能存储由感知器官感知到的外部信息以及有思维所产生的知识。思维用于对记忆的信息进行处理。思维可分为逻辑思维和形象思维。 具有学习能力及自适应能力。 具有行为能力。 分类\n计算智能（能存会算）：快速计算、记忆和储存能力 感知智能（能听会说、能看会认）：视觉、听觉、触觉等感知能力，人脸识别、语音识别等 认知智能（能理解会思考）：分析、思考、理解、判断的能力 相关学说\n思维理论/认知科学： 研究人们认识世界规律和方法的一门学科，在于揭开大脑思维功能的奥秘； 知识域值理论： 智能行为取决于知识数量及一般化的程度； 人工智能研究方法\n结构派：（神经计算、生理学派、连接主义）\n网络连接为主的联结主义；\n主要观点：\n智能活动的基元是神经细胞；\n智能活动过程是神经网络的状态演化过程；\n智能活动的基础是神经细胞的突触联结机制；\n智能系统的工作模式是模仿人脑模式。\n主要特征：\n1、通过神经元之间的并行协同作用实现信息处理，具有并行性、动态性、全局性。\n2、通过神经元间分布式的物理联接存储信息。联想记忆、容错性。\n3、通过神经元间连接强度的动态调整实现自学习和自适应功能。\n4、善于模拟人类的形象思维过程。\n（符号主义、心理学派、逻辑学派）\n符号处理为核心的方法；\n主要观点:\n">
+<title>人工智能原理</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="人工智能原理">
+<meta property='og:description' content="1 概述 人工智能及发展 研究基础内容 研究领域 不同定义\n人工智能是指由计算机实现的人造智能。人工智能就是用人工的方法在机器（计算机）上实现的智能。作为一门学科，人工智能可定义为：人工智能是一门研究如何构造智能机器（智能计算机）或智能系统，使它能模拟、延伸、扩展人类智能的学科。（能力） 人工智能是一门交叉边缘学科，与人工智能有关的学科有：计算机科学、数学、哲学、语言学、神经生理学、神经心理学、脑科学、认知科学、逻辑学、控制论等.（学科） 人工智能是一种使计算机能够思维，使机器具有智力的激动人心的新尝试（Haugeland,1985） 人工智能是那些与人的思维、决策、问题求解和学习等有关活动的自动化（Bellman,1978） 人工智能是用计算模型研究智力行为（Charniak和McDermott,1985） 人工智能是研究那些使理解、推理和行为成为可能的计算（Winston,1992） 人工智能是一种能够执行需要人的智能的创造性机器的技术（Kurzwell,1990） 人工智能研究如何使计算机做事让人过得更好（Rick和Knight,1991） 人工智能是一门通过计算过程力图理解和模仿智能行为的学科（Schalkoff,1990） 人工智能是计算机科学中与智能行为的自动化有关的一个分支（Luger和Stubblefield,1993） 为什么要研究人工智能\n1、现有计算机系统智能的局限性。 2、人类智能的局限性。学习能力因人而异、学习速度慢、效率低。 3、信息化社会的迫切要求。 目标\n近期：用机器来模拟和实现人的部分/某些智力功能； 远期：全部甚至可以延伸人的智慧。 智能\n有效获取、传递、处理、再生和利用信息，从而在任意给定的环境下达到预定目的的能力。 智能特征\n具有感知能力。通过视觉、听觉、触觉、味觉和嗅觉感知外部世界。 具有记忆与思维能力。记忆能存储由感知器官感知到的外部信息以及有思维所产生的知识。思维用于对记忆的信息进行处理。思维可分为逻辑思维和形象思维。 具有学习能力及自适应能力。 具有行为能力。 分类\n计算智能（能存会算）：快速计算、记忆和储存能力 感知智能（能听会说、能看会认）：视觉、听觉、触觉等感知能力，人脸识别、语音识别等 认知智能（能理解会思考）：分析、思考、理解、判断的能力 相关学说\n思维理论/认知科学： 研究人们认识世界规律和方法的一门学科，在于揭开大脑思维功能的奥秘； 知识域值理论： 智能行为取决于知识数量及一般化的程度； 人工智能研究方法\n结构派：（神经计算、生理学派、连接主义）\n网络连接为主的联结主义；\n主要观点：\n智能活动的基元是神经细胞；\n智能活动过程是神经网络的状态演化过程；\n智能活动的基础是神经细胞的突触联结机制；\n智能系统的工作模式是模仿人脑模式。\n主要特征：\n1、通过神经元之间的并行协同作用实现信息处理，具有并行性、动态性、全局性。\n2、通过神经元间分布式的物理联接存储信息。联想记忆、容错性。\n3、通过神经元间连接强度的动态调整实现自学习和自适应功能。\n4、善于模拟人类的形象思维过程。\n（符号主义、心理学派、逻辑学派）\n符号处理为核心的方法；\n主要观点:\n">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T09:15:22&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T09:15:22&#43;08:00'/>
+<meta name="twitter:title" content="人工智能原理">
+<meta name="twitter:description" content="1 概述 人工智能及发展 研究基础内容 研究领域 不同定义\n人工智能是指由计算机实现的人造智能。人工智能就是用人工的方法在机器（计算机）上实现的智能。作为一门学科，人工智能可定义为：人工智能是一门研究如何构造智能机器（智能计算机）或智能系统，使它能模拟、延伸、扩展人类智能的学科。（能力） 人工智能是一门交叉边缘学科，与人工智能有关的学科有：计算机科学、数学、哲学、语言学、神经生理学、神经心理学、脑科学、认知科学、逻辑学、控制论等.（学科） 人工智能是一种使计算机能够思维，使机器具有智力的激动人心的新尝试（Haugeland,1985） 人工智能是那些与人的思维、决策、问题求解和学习等有关活动的自动化（Bellman,1978） 人工智能是用计算模型研究智力行为（Charniak和McDermott,1985） 人工智能是研究那些使理解、推理和行为成为可能的计算（Winston,1992） 人工智能是一种能够执行需要人的智能的创造性机器的技术（Kurzwell,1990） 人工智能研究如何使计算机做事让人过得更好（Rick和Knight,1991） 人工智能是一门通过计算过程力图理解和模仿智能行为的学科（Schalkoff,1990） 人工智能是计算机科学中与智能行为的自动化有关的一个分支（Luger和Stubblefield,1993） 为什么要研究人工智能\n1、现有计算机系统智能的局限性。 2、人类智能的局限性。学习能力因人而异、学习速度慢、效率低。 3、信息化社会的迫切要求。 目标\n近期：用机器来模拟和实现人的部分/某些智力功能； 远期：全部甚至可以延伸人的智慧。 智能\n有效获取、传递、处理、再生和利用信息，从而在任意给定的环境下达到预定目的的能力。 智能特征\n具有感知能力。通过视觉、听觉、触觉、味觉和嗅觉感知外部世界。 具有记忆与思维能力。记忆能存储由感知器官感知到的外部信息以及有思维所产生的知识。思维用于对记忆的信息进行处理。思维可分为逻辑思维和形象思维。 具有学习能力及自适应能力。 具有行为能力。 分类\n计算智能（能存会算）：快速计算、记忆和储存能力 感知智能（能听会说、能看会认）：视觉、听觉、触觉等感知能力，人脸识别、语音识别等 认知智能（能理解会思考）：分析、思考、理解、判断的能力 相关学说\n思维理论/认知科学： 研究人们认识世界规律和方法的一门学科，在于揭开大脑思维功能的奥秘； 知识域值理论： 智能行为取决于知识数量及一般化的程度； 人工智能研究方法\n结构派：（神经计算、生理学派、连接主义）\n网络连接为主的联结主义；\n主要观点：\n智能活动的基元是神经细胞；\n智能活动过程是神经网络的状态演化过程；\n智能活动的基础是神经细胞的突触联结机制；\n智能系统的工作模式是模仿人脑模式。\n主要特征：\n1、通过神经元之间的并行协同作用实现信息处理，具有并行性、动态性、全局性。\n2、通过神经元间分布式的物理联接存储信息。联想记忆、容错性。\n3、通过神经元间连接强度的动态调整实现自学习和自适应功能。\n4、善于模拟人类的形象思维过程。\n（符号主义、心理学派、逻辑学派）\n符号处理为核心的方法；\n主要观点:\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1-概述">1 概述</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#人工智能的发展">人工智能的发展</a></li>
+            <li><a href="#人工智能研究基础内容">人工智能研究基础内容</a></li>
+            <li><a href="#主要人物">主要人物</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#2-问题和知识表示">2 问题和知识表示</a>
+      <ol>
+        <li><a href="#21-知识及其特性">2.1 知识及其特性</a></li>
+        <li><a href="#22-状态空间表示">2.2 状态空间表示</a></li>
+        <li><a href="#23-与或树表示">2.3 与或树表示</a></li>
+        <li><a href="#24-产生式规则表示法">2.4 产生式规则表示法</a></li>
+        <li><a href="#25-谓词表示法">2.5 谓词表示法</a></li>
+        <li><a href="#26-语义网络法">2.6 语义网络法</a></li>
+        <li><a href="#27-知识图谱">2.7 知识图谱</a></li>
+        <li><a href="#28-框架表示法">2.8 框架表示法</a></li>
+        <li><a href="#29-剧本表示法">2.9 剧本表示法</a></li>
+        <li><a href="#210-面向对象的表示法">2.10 面向对象的表示法</a></li>
+      </ol>
+    </li>
+    <li><a href="#3-推理及搜索">3 推理及搜索</a>
+      <ol>
+        <li><a href="#31-一般搜索原理">3.1 一般搜索原理</a></li>
+        <li><a href="#32-启发式搜索">3.2 启发式搜索</a></li>
+        <li><a href="#33-与或树搜索策略">3.3 与或树搜索策略</a></li>
+        <li><a href="#34-归结消解演绎推理">3.4 归结/消解演绎推理</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/">人工智能原理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="1-概述">1 概述
+</h2><pre><code>人工智能及发展
+研究基础内容
+研究领域
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image.png"
+	width="1155"
+	height="477"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image_hu6927036048204063912.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image_hu14541459672361672405.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
+	
+></p>
+<p>不同定义</p>
+<pre><code>人工智能是指由计算机实现的人造智能。人工智能就是用人工的方法在机器（计算机）上实现的智能。作为一门学科，人工智能可定义为：人工智能是一门研究如何构造智能机器（智能计算机）或智能系统，使它能模拟、延伸、扩展人类智能的学科。（能力）
+
+人工智能是一门交叉边缘学科，与人工智能有关的学科有：计算机科学、数学、哲学、语言学、神经生理学、神经心理学、脑科学、认知科学、逻辑学、控制论等.（学科）
+
+人工智能是一种使计算机能够思维，使机器具有智力的激动人心的新尝试（Haugeland,1985）
+
+人工智能是那些与人的思维、决策、问题求解和学习等有关活动的自动化（Bellman,1978）
+
+人工智能是用计算模型研究智力行为（Charniak和McDermott,1985）
+
+人工智能是研究那些使理解、推理和行为成为可能的计算（Winston,1992）
+
+人工智能是一种能够执行需要人的智能的创造性机器的技术（Kurzwell,1990）
+
+人工智能研究如何使计算机做事让人过得更好（Rick和Knight,1991）
+
+人工智能是一门通过计算过程力图理解和模仿智能行为的学科（Schalkoff,1990）
+
+人工智能是计算机科学中与智能行为的自动化有关的一个分支（Luger和Stubblefield,1993）
+</code></pre>
+<p>为什么要研究人工智能</p>
+<pre><code>1、现有计算机系统智能的局限性。
+2、人类智能的局限性。学习能力因人而异、学习速度慢、效率低。
+3、信息化社会的迫切要求。
+</code></pre>
+<p>目标</p>
+<pre><code>近期：用机器来模拟和实现人的部分/某些智力功能；
+远期：全部甚至可以延伸人的智慧。
+</code></pre>
+<p>智能</p>
+<pre><code>有效获取、传递、处理、再生和利用信息，从而在任意给定的环境下达到预定目的的能力。
+</code></pre>
+<p>智能特征</p>
+<pre><code>具有感知能力。通过视觉、听觉、触觉、味觉和嗅觉感知外部世界。
+具有记忆与思维能力。记忆能存储由感知器官感知到的外部信息以及有思维所产生的知识。思维用于对记忆的信息进行处理。思维可分为逻辑思维和形象思维。
+具有学习能力及自适应能力。
+具有行为能力。
+</code></pre>
+<p>分类</p>
+<pre><code>计算智能（能存会算）：快速计算、记忆和储存能力
+感知智能（能听会说、能看会认）：视觉、听觉、触觉等感知能力，人脸识别、语音识别等
+认知智能（能理解会思考）：分析、思考、理解、判断的能力
+</code></pre>
+<p>相关学说</p>
+<pre><code>思维理论/认知科学：
+    研究人们认识世界规律和方法的一门学科，在于揭开大脑思维功能的奥秘；
+
+知识域值理论：
+    智能行为取决于知识数量及一般化的程度；
+</code></pre>
+<p>人工智能研究方法</p>
+<ol>
+<li>
+<p>结构派：（神经计算、生理学派、连接主义）<br>
+网络连接为主的联结主义；</p>
+<p>主要观点：<br>
+智能活动的基元是神经细胞；<br>
+智能活动过程是神经网络的状态演化过程；<br>
+智能活动的基础是神经细胞的突触联结机制；<br>
+智能系统的工作模式是模仿人脑模式。</p>
+<p>主要特征：<br>
+1、通过神经元之间的并行协同作用实现信息处理，具有并行性、动态性、全局性。<br>
+2、通过神经元间分布式的物理联接存储信息。联想记忆、容错性。<br>
+3、通过神经元间连接强度的动态调整实现自学习和自适应功能。<br>
+4、善于模拟人类的形象思维过程。</p>
+</li>
+<li>
+<p>（符号主义、心理学派、逻辑学派）<br>
+符号处理为核心的方法；</p>
+<p>主要观点:</p>
+<pre><code> 思维的基元是符号；
+ 思维的过程是符号运算；
+ 智能的核心是知识，利用知识推理进行问题求解；
+ 智能活动的基础是物理符号系统，人脑电脑都是物理符号系统；
+ 知识可用符号表示，可建立基于符号逻辑的智能理论体系。
+</code></pre>
+<p>主要特征：</p>
+<pre><code> 1、立足于逻辑运算和符号操作，适合于模拟人的逻辑思维过程。
+ 2、知识用显式的符号表示，容易表达人的心理模型。
+ 3、现有的数字计算机可以方便地实现高速的符号处理。
+ 4、能与传统的符号数据库进行链接，易于模块化。
+ 5、以知识为基础。
+</code></pre>
+</li>
+<li>
+<p>行为模拟派（行为主义、进化主义、控制论学派）<br>
+基于感知-行为模型的研究途径和方法。</p>
+<p>主要观点：</p>
+<pre><code> 智能行为的基础是感知－行动的反应机制；
+ 智能系统的智能行为需要在真实世界的复杂境遇中进行学习和训练，在与周围环境的信息交互与适应过程中不断进化和体现;、
+ 强调智能系统与环境的交互，认为智能取决于感知和行动；
+ 智能行为可以不要知识。
+</code></pre>
+</li>
+</ol>
+<h4 id="人工智能的发展">人工智能的发展
+</h4><p>history</p>
+<pre><code>Years              Description
+1950–1956       The Birth of AI           AI的诞生
+1956–1974       The Golden Years          黄金之年
+1974–1980       The First AI Winter       第一个AI之冬
+1980–1987       The Boom of AI            AI的繁荣期
+1987–1993       The Second AI Winter      第二个AI之冬
+1993–Present    The Breakthrough         突破
+</code></pre>
+<p>孕育期（1956年以前）</p>
+<pre><code>古希腊的Aristotle（亚里士多德）（前384-322），给出了形式逻辑的基本规律。 
+英国的哲学家、自然科学家Bacon（培根）（1561-1626），系统地给出了归纳法。“知识就是力量” 
+
+德国数学家、哲学家Leibnitz（莱布尼茨）（1646-1716）。提出了关于数理逻辑的思想，把形式逻辑符号化，从而能对人的思维进行运算和推理。做出了能做四则运算的手摇计算机 
+
+英国数学家、逻辑学家Boole（布尔）（1815-1864）实现了布莱尼茨的思维符号化和数学化的思想，提出了一种崭新的代数系统——布尔代数。
+
+美籍奥地利数理逻辑学家Godel（哥德尔）（1906-1978），证明了一阶谓词的完备性定；
+
+英国数学家Turing(图灵)（1912-1954）,1936年提出了一种理想计算机的数学模型（图灵机），1950年提出了图灵试验，发表了“计算机与智能”的论文。图灵奖。
+
+美国数学家Mauchly，1946发明了电子数字计算机ENIAC
+
+美国神经生理学家McCulloch，建立了第一个神经网络数学模型。
+
+美国数学家Shannon（香农）,1948年发表了《通讯的数学理论》，代表了“信息论”的诞生。 
+</code></pre>
+<p>形成期（1956&ndash;1969）</p>
+<pre><code>起源于美国1956年的一次夏季讨论会（达特茅斯会议）（确立性事件）
+
+1956年提出了“Artificial Intelligence（人工智能）” 
+
+创始人中有：McCarthy, Minsky, Rochester, Shannon, Moore, Samuel, Selfridge, Solomonff, Simon, Newell等数学家、信息学家、心理学家、神经生理学家、计算机科学家。
+
+McCarthy（麦卡锡）——人工智能之父 。
+
+50年代初开始有了符号处理。（搜索法）。机器翻译、机器定理证明、跳棋程序等。 
+
+60年代Simon由试验得到结论：人类问题的求解是一个搜索的过程，效果与启发式函数有关。叙述了智能系统的特点：智能表示、智能推理、智能搜索。
+
+Nilson发表了A*算法（搜索方法）
+
+McCarthy建立了人工智能程序设计语言Lisp
+
+1965年Robinson提出了归结原理，（于传统的自然演绎法完全不同的消解法）（第一个AI语言）
+
+1968年Quillian提出了语义网络的知识表示方法
+
+1969年Minsky出了一本书“感知机”，给当时的神经网络研究结果判了死刑
+
+70年代，开始从理论走向实践，解决一些实际问题。同时很快就发现问题：归结法费时、下棋赢不了全国冠军、机器翻译一团糟。 
+
+1966年，机器翻译失败了。
+
+1970年，连接主义遭到遗弃。
+
+1971年至75年，美国DARPA对卡内基梅隆大学的语音理解研究项目感到沮丧。
+
+1973年，受莱特希尔的“人工智能：综合调查”报告的影响，英国大幅度缩减AI的研究。
+
+1973-74，美国DARPA削减了一般性AI学术研究经费。
+</code></pre>
+<p>发展期（1970&mdash;80年代）知识工程时代</p>
+<pre><code>1970 年，知识工程的提出。	
+    以Feigenbaum为首的一批年轻科学家改变了战略思想，1977年提出了知识工程的概念，以知识为基础的专家咨询系统开始广泛的应用。（第一次推向应用）
+    - 专家系统
+    - 知识工程
+    - 知识工程席卷全球
+    - 各国发展计划：
+        美国星球大战计划
+        英国ALVEY计划
+        法国UNIKA 计划
+        日本五代机计划
+        中国“863”计划
+</code></pre>
+<p>第四阶段（80年代中～90年代初）        新的神经元网络时代</p>
+<pre><code>BP网（算法），解决了多层网的学习问题
+Hopfield网
+存在问题：
+    理论依据
+    解决大规模问题的能力
+
+1980年，美国人工智能学会（AAAI）在斯坦福大学召开了第一届全国大会。
+
+1982年，日本启动了第五代计算机系统（FGCS）项目，用于知识处理。
+
+1980年代中期，机器学习出现了，当时发明了决策树模型并且以软件形式推出。该模型具有可视化、易说明的特点。
+
+1980年代中期，还发明了多层人工神经元网络（ANN）。具有足够多的隐藏层，一个ANN可以表达任意的功能，因此突破了感知的局限性。
+
+1987年，Lisp机的市场崩溃。
+
+1988年，美国政府的战略计算促进会取消了新的AI经费。
+
+1993年，专家系统缓慢滑向低谷。
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-1.png"
+	width="396"
+	height="168"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-1_hu15396372224456872628.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-1_hu799198695005247338.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="235"
+		data-flex-basis="565px"
+	
+></p>
+<pre><code>1990年代，日本第五代计算机项目未能达到其初始目标，悄然退场。
+</code></pre>
+<p>第五阶段（90年代初～现在）                数据与网络时代</p>
+<pre><code>网络给AI带来无限的机会
+知识发现与数据挖掘
+机器学习，深度学习
+AI走向实用化
+</code></pre>
+<p>IBM 深蓝</p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-2.png"
+	width="1037"
+	height="694"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-2_hu517237882053348569.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-2_hu14154697709583316617.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="358px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-3.png"
+	width="840"
+	height="413"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-3_hu6207971319344881478.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-3_hu5302196743594469187.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="488px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-4.png"
+	width="1027"
+	height="492"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-4_hu2384733902237687085.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-4_hu2816283656230279450.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<pre><code>IBM的研发团队计划研发一种能够理解人类语言，并能利用已知信息给出最佳答案的电脑，这种计算机系统不仅要能听懂不同口音的发音，还需要能理解包括俚语和双关语等语言在内的复杂表述，并剔除一些错误信息，而最后IBM制造出了现在这台以创办人沃森名字命名的超级电脑。
+
+“沃森”数据库中包括辞海和《世界图书百科全书》等数百万份资料，而构成“沃森”的是90台Power 7服务器，占地面积接近一个房间，每台服务器中拥有4个8核Power 7处理器，使得其能在3秒钟之内检索数亿页的材料并给出答案。
+
+17秒，Watson可以阅读3469本医学专著，248000篇论文、69种治疗方案、61540次实验数据、106000份临床报告，最终提出三个最优选的治疗方案；
+
+129天，Watson大脑让机器人Pepper识别出货架上绝大多数商品，售卖咖啡与手机，洞察消费者，感知细微的情绪变化
+</code></pre>
+<p>Alphago</p>
+<pre><code>阿尔法围棋（AlphaGo）是由谷歌（Google）旗下DeepMind公司团队开发。其主要工作原理是“深度学习”。
+
+2016年3月，该程序与职业九段选手李世石进行人机大战，并以4:1的总比分获胜；
+
+2016年末2017年初，该程序在中国棋类网站上以Master为注册帐号与中日韩数十位围棋高手进行快棋对决，连续60局无一败绩。不少职业围棋手认为，阿尔法围棋的棋力已经达到甚至超过围棋职业九段水平。
+</code></pre>
+<p>ChatGPT</p>
+<pre><code>GPT是Generative Pre-trained Transformer（生成型预训练变换模型）的缩写。一种基于自然语言处理的人工智能模型，是美国OpenAI“开放人工智能研究中心”研发的聊天机器人程序。
+
+2018年起，OpenAI开始发布生成式预训练语言模型GPT，可用于生成文章、代码、机器翻译、问答等各类内容。ChatGPT 是基于GPT-3.5架构开发的对话AI模型。
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-5.png"
+	width="970"
+	height="587"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-5_hu14948768280185187158.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-5_hu5815911170602756752.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="396px"
+	
+></p>
+<p>ChatGPT的主要特点：</p>
+<pre><code>（1）敢于质疑；
+（2）承认无知；
+（3）支持连续多轮对话；
+（4）主动承认错误；
+（5）大幅提升准确度；
+（6）支持上下文理解；
+（7）提升对用户意图的理解。
+</code></pre>
+<p>其他历史</p>
+<pre><code>2005年，斯坦福的自主机器人车辆Stanley，赢得了DARPA无人驾驶汽车挑战赛。
+2006年，在杰弗里·辛顿和鲁斯兰· 萨拉赫丁诺夫在科学杂志上发表了有关“深度学习”的论文之后，该术语成了热门。
+
+2011，谷歌启动了深度学习项目，谷歌大脑，作为Google X项目之一。谷歌大脑是由1万6千台计算机连成的一个集群，致力于模仿人类大脑活动的某些方面。
+通过1千万张数字图片的学习，已成功地学会识别一只猫。
+
+2012年，苹果公司引进了Siri，从iPhone 4S上运行的iOS5开始，已作为iOS的一个组成部分。使用自然语言用户接口来回答问题、做出建议和执行动作。支持英语、法语、德语、日语、中文、韩文、意大利语、西班牙语
+
+2012年,瑞克·拉希德，微软首席研究官，演示了一款实时的英语-中文通用翻译系统，可以保持声音和口音。
+
+2014年6月，微软中国推出了聊天机器人小冰。
+
+2014年6月，聊天机器人尤金·古斯特曼，在纪念图灵逝世60周年的一个比赛上，被该活动33%的评委认为古斯特曼是人类，因此组织者认为它已经通过了图灵测试。
+
+2015年9月8日，百度在2015百度世界大会上推出了一款机器人助理—度秘，可以为用户提供秘书化搜索服务。
+
+2016年   AlphaGo  新一轮人工智能的标志性成果；
+
+2019 年 3 月 27 日，深度学习 Yoshua Bengio（约书亚本希奥）、Yann LeCun（杨勒丘恩）、Geoffrey Hinton（杰弗里辛顿） 因“在概念和工程方面使深度神经网络成为计算的关键组成部分的突破”获得了 2018 年的图灵奖。 
+
+2020+：自动驾驶    脑机接口    VR    元宇宙    文心一言、讯飞星火
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-7.png"
+	width="1109"
+	height="362"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-7_hu8904095249736326204.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-7_hu8779770448898072963.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="306"
+		data-flex-basis="735px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-8.png"
+	width="1137"
+	height="508"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-8_hu7610038720252626500.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-8_hu3813338724213586057.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="537px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-9.png"
+	width="1242"
+	height="643"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-9_hu12673857450719949605.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-9_hu8424939162479477088.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="463px"
+	
+></p>
+<pre><code>1.人机物互联互通成趋势，数据量呈现爆炸性增长
+2 、数据处理技术加速演进，运算能力实现大幅提升
+3、深度学习研究成果卓著，带动算法模型持续优化
+4 、资本与技术深度耦合，助推行业应用快速兴起
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-10.png"
+	width="1225"
+	height="526"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-10_hu530160557930137349.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-10_hu13288514711227554738.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="232"
+		data-flex-basis="558px"
+	
+></p>
+<h4 id="人工智能研究基础内容">人工智能研究基础内容
+</h4><p>研究角度分：</p>
+<pre><code>符号智能：运用知识解决问题；
+计算智能：神经计算、模糊系统、遗传算法、进化程序设计；
+人工生命：生成或构造表现自然生命系统行为特点的仿真系统或模型系统 
+</code></pre>
+<p>功能分：</p>
+<pre><code>机器感知/知识获取：机器听觉、视觉
+机器思维/知识处理：知识推理、问题求解、学习、理解
+机器行为/知识运用：智能机器系统
+</code></pre>
+<p>研究领域</p>
+<pre><code>传统领域：		
+    专家系统；
+    决策支持；
+    机器学习；
+    模式识别；
+    自然语言理解；
+    智能软件工具/平台；
+    博弈
+    智能体/主体理论
+</code></pre>
+<p>当前人工智能的研究热点</p>
+<pre><code>深度学习
+分布式处理
+智能Agent
+数据挖掘（Data Mining）知识发现
+知识图谱
+与各应用领域的结合
+语音、图像识别
+</code></pre>
+<p>技术层面的问题：</p>
+<pre><code>1 数据瓶颈：基于小数据样本的智能；
+2 泛化问题：样本表现好；迁移学习；
+3 能耗：降低能耗；
+4 语义鸿沟：缺乏真正的语言语义理解能力；
+5 可解释性：知其然而不知其所以然；获取可解释性和结果重现性；
+6 可靠性：自动驾驶等。。。
+</code></pre>
+<p>可信人工智能：</p>
+<pre><code>稳定性：指人工智能系统抵抗恶意攻击或者环境噪声的能力；
+可解释性：人工智能系统能够对决策过程以及相关数据给出正确的、可以让人理解的解释；
+隐私保护：是希望人工智能系统能够保护用户的个人隐私信息不被泄露；
+公平性：是希望人工智能系统能够不因人种、性别、年龄等特定特征对用户产生系统性的歧视或者偏差。 
+</code></pre>
+<p>人工智能是把双刃剑：</p>
+<pre><code>霍金：“人工智能的短期影响取决于由谁来控制它，而长期影响则取决于它是否能够被控制。”
+“人工智能技术发展到极致程度时，我们将面临着人类历史上的最好或者最坏的事情。”
+马斯克：“人工智能对人类的威胁，比核武器还要大”。
+比尔盖茨： “人工智能可以成为我们人类的朋友。”
+</code></pre>
+<h4 id="主要人物">主要人物
+</h4><p>阿伦·图灵（Alan Turing）</p>
+<pre><code>1912年出生于英国伦敦，1954年去世
+1936年发表论文“论可计算数及其在判定问题中的应用”，提出图灵机理论
+1950年发表论文“计算机与智能”，阐述了计算机可以具有智能的想法，提出图灵测试
+1966年为纪念图灵的杰出贡献，ACM设立图灵奖
+</code></pre>
+<p>马文•明斯基（Marniv Lee Minsky）</p>
+<pre><code>人工智能之父
+框架理论的创立者
+首位获得图灵奖的人工智能学者
+
+1927年出生于美国纽约
+1951年提出思维如何萌发并形成的基本理论
+1956年达特茅斯会议的发起人之一
+1958年在MIT创建世界上第一个AI实验室
+1969年获得图灵奖
+1975年首创框架理论
+</code></pre>
+<p>约翰•麦卡锡 John McCarthy</p>
+<pre><code>人工智能之父
+LISP语言的发明人
+首次提出AI的概念
+
+1927年出生于美国波士顿
+1956年发起达特茅斯会议，并提出“人工智能”的概念
+1958年与明斯基一起创建世界上第一个人工智能实验室
+发明α－β剪枝算法
+1959年开发LISP语言
+开创逻辑程序研究，用于程序验证和自动程序设计
+1971年获得图灵奖
+</code></pre>
+<p>爱德华•费根鲍姆（Edward A. Feigenbaum）</p>
+<pre><code>知识工程的提出者
+大型人工智能系统的开拓者
+
+1936年出生于美国的新泽西州
+通过实验和研究，证明了实现智能行为的主要手段是知识
+1977年提出知识工程，使人工智能从理论转向应用
+名言：知识蕴藏着力量
+1994年和劳伊•雷迪共同获得图灵奖
+1963年主编了《计算机与思想》一书，被认为是世界上第一本有关人工智能的经典性专著
+1965年开发出世界上第一个专家系统
+开发出著名的专家系统MYCIN
+80年代合著了四卷本的《人工智能手册》
+开设Teknowledge和IntelliGenetics两个公司，是世界上第一家以开发和将专家系统商品化的公司
+</code></pre>
+<h2 id="2-问题和知识表示">2 问题和知识表示
+</h2><pre><code>知识基本内容
+知识表达方法
+知识的组织与管理
+</code></pre>
+<h3 id="21-知识及其特性">2.1 知识及其特性
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-11.png"
+	width="997"
+	height="490"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-11_hu7219259613877221195.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-11_hu18357115085323544932.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="488px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-12.png"
+	width="961"
+	height="591"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-12_hu18406256098008392493.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-12_hu7364088663829590194.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="390px"
+	
+>
+知识的特性</p>
+<pre><code>    客观性；
+    相对正确性：
+        一定条件、时间、环境；
+    进化性；
+    依附性：离开载体的知识是没有的；
+    不确定性：
+        信息和关联的随机性、模糊性、不完全性、		经验性；
+    可表示性；
+    可利用性；
+    可重用性；
+    共享性。
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-13.png"
+	width="894"
+	height="460"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-13_hu1271822379613025689.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-13_hu15498696103336583755.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-14.png"
+	width="937"
+	height="458"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-14_hu16226767945870300490.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-14_hu8681623477121487301.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-15.png"
+	width="915"
+	height="587"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-15_hu15646733344064916408.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-15_hu15890554839475530439.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="374px"
+	
+></p>
+<p>总之：</p>
+<pre><code>知识表示是如何将已获得的有关知识以计算机易于接受的形式加以合理地描述、存储、有效地利用。 
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-16.png"
+	width="911"
+	height="448"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-16_hu18325790453186560884.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-16_hu15081480635197606617.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="488px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-17.png"
+	width="817"
+	height="162"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-17_hu11805310995719923044.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-17_hu7896894336259789178.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="504"
+		data-flex-basis="1210px"
+	
+></p>
+<p>基于逻辑的知识的表达：</p>
+<pre><code>一阶谓词，非经典逻辑（模态逻辑、模糊逻辑、时序逻辑、非单调逻辑）；
+</code></pre>
+<p>面向对象的知识表示：</p>
+<pre><code>对象、框架、语义网；Agent;
+</code></pre>
+<p>基于规则的知识表达：</p>
+<pre><code>产生式系统；
+</code></pre>
+<p>基于模型的知识表示：</p>
+<h3 id="22-状态空间表示">2.2 状态空间表示
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-18.png"
+	width="965"
+	height="479"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-18_hu10981001539854173680.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-18_hu3301262812744313689.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-19.png"
+	width="974"
+	height="637"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-19_hu14505872962451789914.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-19_hu15006223186159882013.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="366px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-20.png"
+	width="886"
+	height="441"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-20_hu3802002595250338309.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-20_hu258693396788719982.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="482px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-21.png"
+	width="909"
+	height="624"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-21_hu8570344099548327001.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-21_hu40362169409792311.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="349px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-22.png"
+	width="917"
+	height="584"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-22_hu4634485151348233215.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-22_hu13209932022895609813.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="376px"
+	
+></p>
+<p>在状态描述中应用变量</p>
+<pre><code>猴子、香蕉问题
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-23.png"
+	width="911"
+	height="486"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-23_hu15354784965046093103.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-23_hu12582948770467356185.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="449px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-24.png"
+	width="838"
+	height="255"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-24_hu3367888414563910677.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-24_hu13863381268483241332.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="328"
+		data-flex-basis="788px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-25.png"
+	width="754"
+	height="290"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-25_hu15115403284513571030.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-25_hu13558212394759848674.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="260"
+		data-flex-basis="624px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-26.png"
+	width="928"
+	height="661"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-26_hu2556619626412317626.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-26_hu14897731672083431904.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="140"
+		data-flex-basis="336px"
+	
+></p>
+<h3 id="23-与或树表示">2.3 与或树表示
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-27.png"
+	width="933"
+	height="442"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-27_hu7395992493307215344.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-27_hu17116132313356148805.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="506px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-28.png"
+	width="917"
+	height="525"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-28_hu9636887540513110791.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-28_hu1151783198179476735.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-29.png"
+	width="950"
+	height="249"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-29_hu5277986992997455084.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-29_hu11621581532382427259.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="381"
+		data-flex-basis="915px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-40.png"
+	width="875"
+	height="272"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-40_hu11669203542310262189.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-40_hu11364276744552389004.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="321"
+		data-flex-basis="772px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-31.png"
+	width="902"
+	height="235"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-31_hu9986200221360768788.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-31_hu15580529135299833699.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="383"
+		data-flex-basis="921px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-32.png"
+	width="913"
+	height="399"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-32_hu4595043718985101143.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-32_hu16583517914704613689.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-33.png"
+	width="1006"
+	height="529"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-33_hu5080629744186460880.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-33_hu11566919398549013953.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="456px"
+	
+></p>
+<h3 id="24-产生式规则表示法">2.4 产生式规则表示法
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-34.png"
+	width="915"
+	height="528"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-34_hu9350013404148273299.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-34_hu16813384893485878623.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="415px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-35.png"
+	width="929"
+	height="611"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-35_hu16127378351516317516.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-35_hu17227370951989776394.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="364px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-36.png"
+	width="879"
+	height="492"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-36_hu13524967337093712555.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-36_hu2501155498233154842.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+></p>
+<h3 id="25-谓词表示法">2.5 谓词表示法
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-37.png"
+	width="872"
+	height="451"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-37_hu10747176320028458866.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-37_hu8070848543389201502.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="464px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-38.png"
+	width="877"
+	height="386"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-38_hu13110030976649087735.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-38_hu2043665771808539720.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="545px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-39.png"
+	width="880"
+	height="527"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-39_hu5581001758042971084.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-39_hu14562525574279962783.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="400px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-41.png"
+	width="947"
+	height="271"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-41_hu17776921414727005154.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-41_hu1436476367794526303.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="349"
+		data-flex-basis="838px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-42.png"
+	width="934"
+	height="369"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-42_hu14569590781733845664.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-42_hu13317424027368777957.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="253"
+		data-flex-basis="607px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-43.png"
+	width="979"
+	height="474"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-43_hu13892386792670076108.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-43_hu15521426439368506112.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<h3 id="26-语义网络法">2.6 语义网络法
+</h3><p>一 概念</p>
+<pre><code>语义网络是用图来表示知识，表示事物概念及语义关系。
+
+    节点：表示概念、实体、事物、事件等；
+    弧线或链线：表示关系。
+</code></pre>
+<p>二 表示</p>
+<pre><code>1. 基本单元： &lt;节点&gt;&lt;语义关系&gt;&lt;节点&gt;
+        网络：&lt;基本单元&gt;组合
+2.表示基本事物和概念：
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-44.png"
+	width="829"
+	height="235"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-44_hu16452022914287695767.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-44_hu11274915712820959046.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="846px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-45.png"
+	width="939"
+	height="639"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-45_hu8709833303164895277.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-45_hu1646765882559612726.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="352px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-46.png"
+	width="952"
+	height="639"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-46_hu15488242502017282853.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-46_hu10781460412092940819.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="357px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-47.png"
+	width="918"
+	height="484"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-47_hu12713260116129570586.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-47_hu8541334351482042804.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-48.png"
+	width="902"
+	height="526"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-48_hu16757400084829522085.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-48_hu9849274827249135052.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="411px"
+	
+></p>
+<p>三 求解</p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-49.png"
+	width="1010"
+	height="547"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-49_hu3167798452095834793.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-49_hu8861903487004054206.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="443px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-50.png"
+	width="969"
+	height="627"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-50_hu10800311637973868696.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-50_hu11198033376675278369.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="370px"
+	
+></p>
+<p>四 特点</p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-51.png"
+	width="1020"
+	height="474"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-51_hu10058544494076333731.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-51_hu10852812367594107645.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="215"
+		data-flex-basis="516px"
+	
+></p>
+<h3 id="27-知识图谱">2.7 知识图谱
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-52.png"
+	width="901"
+	height="557"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-52_hu4665175999139025914.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-52_hu14853508446798407848.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-53.png"
+	width="1007"
+	height="263"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-53_hu6092360921866478846.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-53_hu13884515263368100052.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="382"
+		data-flex-basis="918px"
+	
+></p>
+<pre><code>知识图谱是一种揭示实体之间关系的语义网络，可以对现实世界的事物及其相互关系进行形式化地描述。现在的知识图谱已被用来泛指各种大规模的知识库。
+
+知识图谱专注于如何以工程的方式，从文本中自动抽取或依靠众包的方式获取并组件广泛的、具有平铺结构的知识实例，最后再要求使用它的方式具有容错、模糊匹配等机制。
+
+知识图谱是由一些相互连接的实体和它们的属性构成的，用于描述物理世界中的概念及其相互关系。
+
+三元组是知识图谱的一种通用表示方式，即G=(E,R,S)。其中：
+E={e1,e2,...,e|E|}是知识库中的实体集合，共包含|E|种不同实体; 
+R={r1,r2,...,r|E|} 是知识库中的关系集合，共包含 | R | 种不同关系;
+S 属于 E X R X E 代表知识库中的三元组集合。
+
+三元组的基本形式主要包括实体、关系、概念、属性、属性值等：
+
+实体是知识图谱中的最基本元素，不同的实体间存在不同的关系。
+
+关系用来连接两个实体，刻画它们之间的关联。
+
+概念主要指集合、 类别、对象类型、事物的种类，例如人物、地理等; 
+
+属性主要指对象可能具有的属性、特征、特点以及参数，例如国籍、生日等;
+
+属性值主要指对象指定属性的值，例如中国、1988-09-08等。
+
+每个实体(概念的外延)可用一个全局唯一确定的ID来标识，每个属性-属性值对(attribute-value pair，AVP)可用来刻画实体的内在特性。
+</code></pre>
+<p>知识图谱示例：中国是一个实体，北京是一个实体，中国-首都-北京 是一个（实体-关系-实体）的三元组样例北京是一个实体 ，人口是一种属性2069.3万是属性值。北京-人口-2069.3万构成一个（实体-属性-属性值）的三元组样例；国家是概念。
+<img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-54.png"
+	width="996"
+	height="567"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-54_hu10238289659721936943.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-54_hu8656516544359685158.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="421px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-55.png"
+	width="877"
+	height="570"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-55_hu10007243178178846261.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-55_hu7935352933863235019.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="153"
+		data-flex-basis="369px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-56.png"
+	width="935"
+	height="553"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-56_hu1948633583135488101.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-56_hu5092355294064657931.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="405px"
+	
+></p>
+<p>知识图谱构建：</p>
+<pre><code>从最原始的数据（包括结构化、半结构化、非结构化数据）出发，采用一系列自动或者半自动的技术手段，从原始数据库和第三方数据库中提取知识事实，并将其存入知识库的数据层和模式层，这一过程包含：
+
+    知识抽取
+    知识表示
+    知识融合
+    知识推理
+    每一次更新迭代均包含这四个阶段。
+</code></pre>
+<p>知识抽取：</p>
+<pre><code>主要是面向结构化、半结构化、非结构化数据中转为三元组表示的标准知识形态。
+
+通过知识抽取技术抽取出可用的知识单元，知识单元主要包括实体(概念的外延)、关系以及属性3个知识要素，并以此为基础，形成一系列高质量的事实表达，为上层模式层的构建奠定基础：
+
+实体抽取：
+识别文本中指定类别的实体，主要包括人 名、 地名、 机构名、 专有名词等的任务。
+基于规则与词典的方法、基于统计机器学习的方法以及面向开放域的抽取方法。
+
+关系抽取：实体关系、事件关系等
+面向开放域的信息抽取、基于马尔可夫逻辑网、基于本体推理的深层隐含关系抽取方法
+
+属性抽取：
+基于规则与启发式算法、从开放域数据集上抽取。。
+</code></pre>
+<p>知识图谱的表示及存储</p>
+<pre><code>涉及知识表示及知识存储方式。
+
+知识表示：知识图谱逻辑表示，即数据模型。从人的角度对知识图谱数据进行理解和描述。
+属性图模型、RDF三元组、基于向量空间学习的分布式知识表示等。
+
+物理存储：从计算机的角度对数据进行组织，两者密切相关。
+关系数据库存储、图数据库、分布式存储等。
+</code></pre>
+<p>属性图：</p>
+<pre><code>目前被图数据库业界采纳最广的一种图数据模型。
+属性图模型要素：
+- 节点(Nodes)：是图中的实体，用表示其类型的0到多个文本标签进行标记，相当于实体。
+- 边(Edges)：是节点之间的定向链接，每条边连接一个“from node”和一个“to node” 。边是定向的且每条边都有一个标签，它们可以在任何方向上导航和查询。相当于实体之间的关系。
+- 属性(Properties)：是一个键值对，顶点和边都可以包含属性。
+
+满足如下性质：
+1）每个节点具有唯一的id
+2）每个节点具有一组属性，每个属性是一个键值对；
+3）每条边具有唯一的id
+4）每条边具有一个标签，表示联系
+5）每条边具有一组属性，每个属性是一个键值对
+</code></pre>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-57.png"
+	width="852"
+	height="501"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-57_hu11564563929862749261.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-57_hu3844235894663525890.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="408px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-58.png"
+	width="866"
+	height="439"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-58_hu10432350332378540090.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-58_hu10538177618826957486.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="473px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-59.png"
+	width="918"
+	height="637"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-59_hu12752798300965974675.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-59_hu4929160441698355805.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="345px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-60.png"
+	width="846"
+	height="525"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-60_hu11592160236572669956.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-60_hu3166706854534134458.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="386px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-61.png"
+	width="895"
+	height="567"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-61_hu3210466335178683109.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-61_hu18142839297834441434.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="157"
+		data-flex-basis="378px"
+	
+></p>
+<p>知识融合</p>
+<pre><code>是高层次的知识组织，使来自不同知识源的知识在同一框架规范下进行异构数据整合、消歧、加工、推理验证、更新等步骤，达到数据、信息、方法、经验以及人的思想的融合，形成高质量的知识库。
+
+实体对齐：用于消除异构数据中实体冲突、指向不明等不一致性问题，可以从顶层创建一个大规模的统一知识库。
+
+知识加工：本体构建、质量评估等。
+</code></pre>
+<p>知识推理</p>
+<pre><code>通过算法对海量知识图谱数据进行学习与挖掘，从而推理出新的知识，服务于具体行业应用。
+
+- 基于描述逻辑的推理：DL，是一种用于知识表示的逻辑语言，和知识推理的形式化工具。曼彻斯特大学研发的FaCT++、美国Franz公司研发的Racer、马里兰大学研发的Pellet、牛津大学研发的HermiT。
+- 基于逻辑编程的推理：Datalog语言，Prolog。德国吉森大学研发的DLV ( Datalog with Disjunction )、由波茨坦大学研发的Clingo、由牛津大学研发的RDFox等。
+- 基于图结构的推理：实体与实体之间的路径作为特征，从而对链接路径进行统计推理。
+- 基于规则学习的推理：自动化的规则学习方法，快速有效的从大规模知识图谱中学习出置信度较高的规则，并且应用于推理任务。
+- 基于表示学习的推理：将符号表示映射到向量空间进行数值表示，利用算法在学习知识表示的过程中自动捕捉知识推理所需的特征。
+</code></pre>
+<p>常见知识图谱列表
+<img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-62.png"
+	width="1181"
+	height="964"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-62_hu8404984199887197754.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-62_hu164376530497735736.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="122"
+		data-flex-basis="294px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-63.png"
+	width="1185"
+	height="1051"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-63_hu3616024027755392064.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-63_hu16486277553994156858.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="112"
+		data-flex-basis="270px"
+	
+></p>
+<p>百科知识图谱</p>
+<pre><code>1) Freebase
+Freebase是Google Knowledge Graph的早期版本，早期由Metaweb公司创建，后来被Google收购，成为Google知识图谱的重要组成部分。Freebase中的数据主要是由人工构建，另外一 部分数据则主要来源于维基百科、IMDB、Flickr等 网站或语料库。2015年6月，Freebase整体移入 至WikiData。
+
+
+2) Wikidata
+Wikidata是维基媒体基金会主持的一个自由的协作式多语言辅助知识库，旨在为维基百科、维基共享资源以及其他的维基媒体项目提供支持。目前是一个可以众包协作编辑的多语言百科知识库。它是Wikipedia、Wikivoyage、Wikisource中结构化数据的中央存储器，并支持免费使用。
+
+3) DBpedia
+DBpedia 始于2007年的早期语义网项目，也就是数据库版本的多语言维基百科。是由德国莱比锡大学和曼海姆大学的科研人员创建的多语言综合型知识库。从多种语言的维基百科中抽取结构化信息，并且将其以关联数据的形式发布到互联网上，提供给在线网络应用、社交 网站以及其他在线知识库。DBpedia还能够自动与维基百科保持同步，覆盖多种语言。
+
+4) YAGO
+YAGO是由德国马普所(max planck institute，MPI)的科研人员构建的综合型知识库。YAGO整合了维基百科、WordNet以及GeoNames等数据源，特别是将维基百科中的分类体系与WordNet的分类体系进行了融合，构建了一个复杂的类别层次结构体系。 YAGO拥有10种语言约459万个实体，2400万个知识三元组。YAGO2包含了100个以上关系类型，20万实体类别，300万实体和2.2亿知识三元组等。是IBM沃森大脑的后端知识库之一。
+</code></pre>
+<p>常识知识图谱</p>
+<ol>
+<li>
+<p>Cyc</p>
+<p>Cyc是1984年创建的，作为知识工程时代一项重要进展，最初目标是建立人类最大的常识知识库。
+Cyc知识库主要由术语和断言组成，术语包含概念、关系和实体的定义。而断言用来建立术语间关系，通过形式化谓词逻辑进行描述，包括事实描述和规则描述。</p>
+</li>
+<li>
+<p>ConceptNet</p>
+<p>ConceptNet是一个大规模的多语言常识知识库，起源于一个MIT媒体实验室众包项目Open Mind Common Sense（OMCS），其本质为一个描述人类常识的大型语义网络。</p>
+<p>ConceptNet目前拥有304个语言的版本，超过390万个概念，2800万个断言，知识三元组正确率约为81%，支持数据集的完全下载。</p>
+</li>
+</ol>
+<p>中文类知识图谱</p>
+<pre><code>中文开放知识图谱联盟（OpenKG）推动了中文知识图谱普及与应用。
+
+OpenKG借鉴了Schema.org知识众包模式，搭建了中文知识图谱建模、推理、学习的可解释接口规范cnSchema，构建中文知识图谱核心数据结构，包括数据（实体、本体、陈述）、元数据（版本管理、信息溯源、上下文），支持RDF逻辑层、JSON-LD存储层和计算层三个层次的知识表示。
+
+OpenKG技术平台目前已经包含了Zhishi.me、CN-DBPedia、PKUBase、XLore，以及常识、医疗、金融、城市、出行等15类开放中文知识图谱。
+</code></pre>
+<p>垂直行业知识库：特定的行业领域</p>
+<pre><code>1) IMDB
+IMDB(internet movie database)是一个关于电影演员、电影、电视节目、电视明星以及电影制作的资料库。截止到2012年2月，IMDB共收集了2 132 383部作品资料和4 530 159名人物资料。
+2) MusicBrainz
+MusicBrainz是一个结构化的音乐维基百科，致力于收藏所有的音乐元数据，并向大众用户开放。任何注册用户都可以向网站中添加信息或投稿。
+3) ConceptNet
+ConceptNet是一个语义知识网络，主要由一系列的代表概念的结点构成，这些概念将主要采用自然语言单词或短语的表达形式，通过相互连接建立语义联系。ConceptNet包含了大量计算机可了解的世界的信息，这些信息将有助于计算机更好地实现搜索、问答以及理解人类的意图。
+</code></pre>
+<p>知识图谱应用：</p>
+<pre><code>智慧检索：精准搜索意图理解；搜索对象、粒度多元化；跨媒体搜索；
+
+数据分析：大数据精准分析、精细分析；
+
+智能推荐：场景化推荐；冷启动阶段下的推荐；跨领域推荐；知识型的内容推荐；
+
+自然人机交互：自然语言问答、对话、体感交互、表情交互等；
+
+金融风控：利用实体之间的关系来分析金融活动的风险以提供在风险触发后的补救措施（如联系人等）；
+
+公安刑侦：分析实体和实体之间的关系以获得线索等；
+
+教育医疗：提供可视化的知识表示，用于药物分析、疾病诊断等；
+......
+</code></pre>
+<h3 id="28-框架表示法">2.8 框架表示法
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-64.png"
+	width="910"
+	height="521"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-64_hu8516400016389351921.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-64_hu16223479647971121321.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-65.png"
+	width="877"
+	height="597"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-65_hu15903629792019878249.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-65_hu4039212796875609667.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="352px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-66.png"
+	width="924"
+	height="595"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-66_hu4869099817389499929.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-66_hu8729957011741987747.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-67.png"
+	width="905"
+	height="562"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-67_hu14389032778459287855.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-67_hu15583897405715761259.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="386px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-68.png"
+	width="842"
+	height="497"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-68_hu11088870748192971530.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-68_hu5040272654651605597.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="406px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-69.png"
+	width="899"
+	height="575"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-69_hu8971871322049471166.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-69_hu4014136326484001106.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="375px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-70.png"
+	width="861"
+	height="521"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-70_hu3915923233864662270.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-70_hu9972950934084586436.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="396px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-71.png"
+	width="862"
+	height="462"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-71_hu16409541659377243115.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-71_hu11314523382942993225.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="447px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-72.png"
+	width="919"
+	height="446"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-72_hu4211502917957398479.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-72_hu15845178462340147517.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="494px"
+	
+></p>
+<h3 id="29-剧本表示法">2.9 剧本表示法
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-73.png"
+	width="895"
+	height="365"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-73_hu7294620456976056873.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-73_hu16958261405205097254.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="588px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-74.png"
+	width="894"
+	height="531"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-74_hu4122798988821581209.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-74_hu7627328878369834534.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="404px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-75.png"
+	width="944"
+	height="594"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-75_hu18317693684988445856.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-75_hu9261689296082377631.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="381px"
+	
+></p>
+<h3 id="210-面向对象的表示法">2.10 面向对象的表示法
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-76.png"
+	width="870"
+	height="439"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-76_hu18122498713141196908.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-76_hu6326576081526836218.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-77.png"
+	width="913"
+	height="567"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-77_hu14215620957508846109.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-77_hu3426476988073916620.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="386px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-78.png"
+	width="882"
+	height="322"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-78_hu4093456249532497894.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-78_hu10874785270774423690.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="273"
+		data-flex-basis="657px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-79.png"
+	width="857"
+	height="426"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-79_hu6703712224658803606.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-79_hu12509320932160660100.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="482px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-80.png"
+	width="875"
+	height="437"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-80_hu18306768527420577154.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-80_hu443244748354662832.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>小结
+<img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-81.png"
+	width="872"
+	height="433"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-81_hu1104766916280253752.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-81_hu15422239333922304463.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<p>题目</p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-82.png"
+	width="872"
+	height="685"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-82_hu11860710851580730625.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-82_hu3934244501788860343.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="127"
+		data-flex-basis="305px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-83.png"
+	width="795"
+	height="402"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-83_hu10251888704343403823.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-83_hu2977635096889145326.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="474px"
+	
+></p>
+<h2 id="3-推理及搜索">3 推理及搜索
+</h2><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-84.png"
+	width="845"
+	height="423"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-84_hu14964772372779512925.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-84_hu2434946378463017689.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="479px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-85.png"
+	width="827"
+	height="403"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-85_hu702287261029732906.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-85_hu2482789297258452830.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<h3 id="31-一般搜索原理">3.1 一般搜索原理
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-86.png"
+	width="848"
+	height="404"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-86_hu13368561611555196071.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-86_hu12921583088010030321.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-87.png"
+	width="1067"
+	height="699"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-87_hu10664158831975971097.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-87_hu10300161444942118676.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="366px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-88.png"
+	width="877"
+	height="559"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-88_hu14408175452808422019.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-88_hu6127795653778753890.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="376px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-89.png"
+	width="885"
+	height="577"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-89_hu3218972002187225409.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-89_hu5606206515602118237.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="153"
+		data-flex-basis="368px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-90.png"
+	width="906"
+	height="252"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-90_hu4232946486592038276.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-90_hu435117746416702596.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="359"
+		data-flex-basis="862px"
+	
+></p>
+<h3 id="32-启发式搜索">3.2 启发式搜索
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-91.png"
+	width="853"
+	height="420"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-91_hu14942034396452321632.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-91_hu14800309594406781165.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-92.png"
+	width="858"
+	height="349"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-92_hu2190242293586709031.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-92_hu18168490075250766337.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="590px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-93.png"
+	width="816"
+	height="132"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-93_hu14059276618344311277.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-93_hu3759300372287903567.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="618"
+		data-flex-basis="1483px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-95.png"
+	width="839"
+	height="175"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-95_hu1582638065190781093.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-95_hu17655127849273049412.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="479"
+		data-flex-basis="1150px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-96.png"
+	width="815"
+	height="247"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-96_hu12197152230548987859.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-96_hu14923625040139073910.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="329"
+		data-flex-basis="791px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-97.png"
+	width="835"
+	height="228"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-97_hu5302511000400975089.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-97_hu13118986885748999537.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="366"
+		data-flex-basis="878px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-98.png"
+	width="865"
+	height="178"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-98_hu2460530919567918477.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-98_hu4836087807314065224.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="485"
+		data-flex-basis="1166px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-99.png"
+	width="2139"
+	height="1112"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-99_hu17234185023715605848.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-99_hu17238626127094991893.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<h3 id="33-与或树搜索策略">3.3 与或树搜索策略
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-100.png"
+	width="936"
+	height="260"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-100_hu16013024621386872256.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-100_hu6726395386330567096.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="360"
+		data-flex-basis="864px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-101.png"
+	width="1447"
+	height="784"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-101_hu12840018414854390568.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-101_hu15110046894463823597.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="442px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-102.png"
+	width="1331"
+	height="541"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-102_hu2860552168960756104.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-102_hu4403035846411595960.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="590px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-103.png"
+	width="1328"
+	height="520"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-103_hu14541312124462046260.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-103_hu11937748756241492688.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="255"
+		data-flex-basis="612px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-104.png"
+	width="983"
+	height="152"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-104_hu5150104136619782021.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-104_hu16800429572740055061.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="646"
+		data-flex-basis="1552px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-105.png"
+	width="992"
+	height="245"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-105_hu4764872536550498783.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-105_hu10467489554232118296.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="404"
+		data-flex-basis="971px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-106.png"
+	width="984"
+	height="469"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-106_hu13514574647687440868.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-106_hu2231851744325132831.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-107.png"
+	width="954"
+	height="383"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-107_hu17306293939641368348.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-107_hu4398814123085414135.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="249"
+		data-flex-basis="597px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-108.png"
+	width="957"
+	height="253"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-108_hu1408960595561389920.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-108_hu1522872497469650483.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="378"
+		data-flex-basis="907px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-109.png"
+	width="962"
+	height="323"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-109_hu17313438910662074877.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-109_hu498209546622239894.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="714px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-110.png"
+	width="954"
+	height="205"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-110_hu9384819596697604049.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-110_hu13906123803169164392.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="465"
+		data-flex-basis="1116px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-111.png"
+	width="1268"
+	height="651"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-111_hu3793786892528026346.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-111_hu266687350978801015.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-112.png"
+	width="896"
+	height="280"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-112_hu17750218606039434521.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-112_hu15961995057977673010.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="320"
+		data-flex-basis="768px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-113.png"
+	width="894"
+	height="348"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-113_hu13152728626041034963.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-113_hu13583428135098846562.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="256"
+		data-flex-basis="616px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-114.png"
+	width="911"
+	height="251"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-114_hu12748459677897650976.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-114_hu8947526320040054024.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="362"
+		data-flex-basis="871px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-115.png"
+	width="922"
+	height="276"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-115_hu18288702043592634695.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-115_hu12647336165518217323.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="334"
+		data-flex-basis="801px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-116.png"
+	width="1467"
+	height="691"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-116_hu1721408900531788014.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-116_hu60718311972696249.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="509px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-117.png"
+	width="966"
+	height="399"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-117_hu8496563379645396042.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-117_hu18044867257813008575.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-118.png"
+	width="977"
+	height="197"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-118_hu15499212860259195869.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-118_hu11171000576070898620.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="495"
+		data-flex-basis="1190px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-119.png"
+	width="1498"
+	height="642"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-119_hu2164167768191348670.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-119_hu17653024430846768964.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-120.png"
+	width="918"
+	height="437"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-120_hu9470770980558918221.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-120_hu280098114187053817.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-121.png"
+	width="906"
+	height="480"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-121_hu17136122419643064903.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-121_hu14279240457811234963.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="453px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-122.png"
+	width="926"
+	height="414"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-122_hu17908482153540462297.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-122_hu4256464101048736547.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="536px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-123.png"
+	width="959"
+	height="292"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-123_hu1807522039961982117.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-123_hu4550424007103149180.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="328"
+		data-flex-basis="788px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-124.png"
+	width="942"
+	height="301"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-124_hu12705056626981067670.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-124_hu11194797468142671931.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="312"
+		data-flex-basis="751px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-125.png"
+	width="929"
+	height="226"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-125_hu13622403864361864851.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-125_hu1813649420316049368.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="411"
+		data-flex-basis="986px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-126.png"
+	width="870"
+	height="248"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-126_hu18275802140600318226.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-126_hu7476046681991177941.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="350"
+		data-flex-basis="841px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-127.png"
+	width="934"
+	height="251"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-127_hu2506379783625812689.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-127_hu11409926843263411233.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="372"
+		data-flex-basis="893px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-128.png"
+	width="898"
+	height="266"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-128_hu11119886824449218918.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-128_hu8920672889286219068.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="810px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-129.png"
+	width="1488"
+	height="598"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-129_hu1551106726724997184.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-129_hu7769371060507332655.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="248"
+		data-flex-basis="597px"
+	
+></p>
+<h3 id="34-归结消解演绎推理">3.4 归结/消解演绎推理
+</h3><p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-130.png"
+	width="922"
+	height="318"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-130_hu825462627815359073.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-130_hu9407124828844237333.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="695px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-131.png"
+	width="927"
+	height="148"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-131_hu4982966867568697501.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-131_hu6003105731344218978.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="626"
+		data-flex-basis="1503px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-132.png"
+	width="912"
+	height="102"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-132_hu12354233473612306193.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-132_hu1965591678862566500.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="894"
+		data-flex-basis="2145px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-133.png"
+	width="956"
+	height="129"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-133_hu3908314094328796437.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-133_hu8508108450230947752.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="741"
+		data-flex-basis="1778px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-134.png"
+	width="930"
+	height="315"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-134_hu11958295701905356212.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-134_hu8110932363644055724.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="295"
+		data-flex-basis="708px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-135.png"
+	width="916"
+	height="288"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-135_hu6662775410846796008.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-135_hu16731193390419605568.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="318"
+		data-flex-basis="763px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-136.png"
+	width="901"
+	height="183"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-136_hu14037743139473788617.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-136_hu1759657294110537502.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="492"
+		data-flex-basis="1181px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-137.png"
+	width="925"
+	height="118"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-137_hu11978311363366410603.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-137_hu3535460069658720113.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="783"
+		data-flex-basis="1881px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-138.png"
+	width="947"
+	height="325"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-138_hu5362825546096373671.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-138_hu7268134193275062683.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="291"
+		data-flex-basis="699px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-139.png"
+	width="945"
+	height="291"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-139_hu18157733148833152951.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-139_hu15351454238654535057.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="324"
+		data-flex-basis="779px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-140.png"
+	width="988"
+	height="545"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-140_hu12186886406279021487.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-140_hu11465390519783488875.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-141.png"
+	width="1200"
+	height="695"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-141_hu18170681501807408318.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-141_hu7775118008406267904.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-142.png"
+	width="943"
+	height="361"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-142_hu11228464098087051062.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-142_hu4670578690506856864.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="261"
+		data-flex-basis="626px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-143.png"
+	width="956"
+	height="427"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-143_hu3962172727878048187.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-143_hu15971505952597652280.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="537px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-144.png"
+	width="927"
+	height="203"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-144_hu13844520696583139351.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-144_hu16909923252683799463.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="456"
+		data-flex-basis="1095px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-145.png"
+	width="969"
+	height="472"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-145_hu8057088161993586646.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-145_hu7612812668099519445.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-146.png"
+	width="938"
+	height="197"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-146_hu14708271798763343992.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-146_hu10881119615039399981.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="476"
+		data-flex-basis="1142px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-147.png"
+	width="939"
+	height="185"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-147_hu1685238479566727321.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-147_hu14836937330770003125.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="507"
+		data-flex-basis="1218px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-148.png"
+	width="938"
+	height="249"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-148_hu13632466083586751192.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-148_hu3052827636913998570.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="904px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-149.png"
+	width="956"
+	height="182"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-149_hu7325646701275804077.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-149_hu11337147863898463662.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="525"
+		data-flex-basis="1260px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-150.png"
+	width="924"
+	height="185"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-150_hu14172530185883294291.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-150_hu8347039238229226128.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="499"
+		data-flex-basis="1198px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-151.png"
+	width="898"
+	height="174"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-151_hu4758037986405593070.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-151_hu1652801819156515970.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="516"
+		data-flex-basis="1238px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-152.png"
+	width="925"
+	height="164"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-152_hu16505426937656782216.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-152_hu14181596061753226274.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="564"
+		data-flex-basis="1353px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-153.png"
+	width="916"
+	height="162"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-153_hu297001447904130416.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-153_hu4843382944089364215.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="565"
+		data-flex-basis="1357px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-154.png"
+	width="898"
+	height="148"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-154_hu11140465533012721478.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-154_hu8581371324115708287.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="606"
+		data-flex-basis="1456px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-155.png"
+	width="983"
+	height="328"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-155_hu13944607602823210558.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-155_hu5417480027333150841.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="299"
+		data-flex-basis="719px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-156.png"
+	width="937"
+	height="277"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-156_hu12682111532067048494.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-156_hu12359633801011074733.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="338"
+		data-flex-basis="811px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-157.png"
+	width="991"
+	height="544"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-157_hu10142739127567949485.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-157_hu2904416140645631120.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="437px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-158.png"
+	width="991"
+	height="555"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-158_hu16529317089079704715.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-158_hu3558770303636926178.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-159.png"
+	width="992"
+	height="326"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-159_hu18277376705436245888.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-159_hu9969160845016341139.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="304"
+		data-flex-basis="730px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-160.png"
+	width="1567"
+	height="91"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-160_hu17168084643396715650.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-160_hu13718054586222229171.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1721"
+		data-flex-basis="4132px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-161.png"
+	width="964"
+	height="356"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-161_hu661973068071426980.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-161_hu10308286184956484148.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="270"
+		data-flex-basis="649px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-162.png"
+	width="953"
+	height="266"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-162_hu2978644822536616500.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-162_hu16097993400081433389.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="358"
+		data-flex-basis="859px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-163.png"
+	width="952"
+	height="527"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-163_hu15492647062507022854.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-163_hu13391698553718873175.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-164.png"
+	width="959"
+	height="356"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-164_hu4539678192298631550.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-164_hu12166134962244342577.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="269"
+		data-flex-basis="646px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-165.png"
+	width="954"
+	height="392"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-165_hu495216784450173693.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-165_hu12439582585086324294.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="243"
+		data-flex-basis="584px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-166.png"
+	width="963"
+	height="298"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-166_hu17978972692425472667.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-166_hu6199585735157247215.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="323"
+		data-flex-basis="775px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-167.png"
+	width="1029"
+	height="308"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-167_hu280607306384610030.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-167_hu18333626240053400820.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="334"
+		data-flex-basis="801px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-168.png"
+	width="1029"
+	height="728"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-168_hu3041587491002406529.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-168_hu7346581945383928537.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="339px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-169.png"
+	width="1053"
+	height="660"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-169_hu920649733655113209.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-169_hu11348373315410680956.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="159"
+		data-flex-basis="382px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-170.png"
+	width="978"
+	height="344"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-170_hu17710697534084090469.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-170_hu6002048043944247430.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="284"
+		data-flex-basis="682px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-171.png"
+	width="989"
+	height="419"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-171_hu14356800833870344792.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-171_hu5998666521022587241.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="236"
+		data-flex-basis="566px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-172.png"
+	width="979"
+	height="350"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-172_hu14807691942811675043.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-172_hu2012250960863815139.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="279"
+		data-flex-basis="671px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-173.png"
+	width="985"
+	height="355"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-173_hu6674983790916203146.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-173_hu14266195726348668846.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="665px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-174.png"
+	width="1417"
+	height="616"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-174_hu11234246036968598135.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-174_hu11018367785176706721.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="552px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-175.png"
+	width="1263"
+	height="405"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-175_hu16877547841735805992.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-175_hu5326077603883157297.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="748px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-176.png"
+	width="1312"
+	height="356"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-176_hu2792148599998338133.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-176_hu3550031871201529248.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="368"
+		data-flex-basis="884px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-177.png"
+	width="985"
+	height="287"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-177_hu7741239970883481873.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-177_hu3878742151461730104.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="343"
+		data-flex-basis="823px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-178.png"
+	width="1001"
+	height="368"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-178_hu10530858923915110825.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-178_hu4109342134662182222.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="272"
+		data-flex-basis="652px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-179.png"
+	width="956"
+	height="591"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-179_hu16652645363398572706.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-179_hu11190980210561254289.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-180.png"
+	width="976"
+	height="398"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-180_hu14605696616825691248.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-180_hu14989374328514999574.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="588px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-181.png"
+	width="991"
+	height="515"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-181_hu8944604948830339714.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-181_hu1745235050009702142.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-182.png"
+	width="968"
+	height="487"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-182_hu13232549954306212838.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-182_hu11409021481805213781.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="477px"
+	
+></p>
+<p><img src="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-183.png"
+	width="995"
+	height="634"
+	srcset="/p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-183_hu3957071023877978241.png 480w, /p/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%8E%9F%E7%90%86/image-183_hu3856706467109133314.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="376px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

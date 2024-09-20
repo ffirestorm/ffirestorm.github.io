@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="词法分析 正规表达式 所有不含子串011的01符号串\n首先构造自动机 将自动机变成单一结束状态，加上ε，连到最后的状态 合并状态 语法分析 （重难点） 自顶向下 LL(1) 自顶向下\n消除左递归，消除左公因子\nFIRST FIRST(a)是a可以推导出的开头终结符号集合 FOLLOW 文法判别 只要同一个非终结符推导出的不同字符串的首符不一样就可以了\n分析表构建 行有非终结符，列是终结符+$\n查看每个产生式A -&gt; B\n查看整个字符串B的首符集，将 A -&gt; B放到每个首符α 下：\nMap[A][α] = A -&gt; B\n如果说ε在B的首符集里面，那就把 A -&gt; B 放到每个A的FOLLOW符号β下：\nMap[A][β] = A -&gt; B\\\n">
+<title>编译原理</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="编译原理">
+<meta property='og:description' content="词法分析 正规表达式 所有不含子串011的01符号串\n首先构造自动机 将自动机变成单一结束状态，加上ε，连到最后的状态 合并状态 语法分析 （重难点） 自顶向下 LL(1) 自顶向下\n消除左递归，消除左公因子\nFIRST FIRST(a)是a可以推导出的开头终结符号集合 FOLLOW 文法判别 只要同一个非终结符推导出的不同字符串的首符不一样就可以了\n分析表构建 行有非终结符，列是终结符+$\n查看每个产生式A -&gt; B\n查看整个字符串B的首符集，将 A -&gt; B放到每个首符α 下：\nMap[A][α] = A -&gt; B\n如果说ε在B的首符集里面，那就把 A -&gt; B 放到每个A的FOLLOW符号β下：\nMap[A][β] = A -&gt; B\\\n">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T08:27:11&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T08:27:11&#43;08:00'/>
+<meta name="twitter:title" content="编译原理">
+<meta name="twitter:description" content="词法分析 正规表达式 所有不含子串011的01符号串\n首先构造自动机 将自动机变成单一结束状态，加上ε，连到最后的状态 合并状态 语法分析 （重难点） 自顶向下 LL(1) 自顶向下\n消除左递归，消除左公因子\nFIRST FIRST(a)是a可以推导出的开头终结符号集合 FOLLOW 文法判别 只要同一个非终结符推导出的不同字符串的首符不一样就可以了\n分析表构建 行有非终结符，列是终结符+$\n查看每个产生式A -&gt; B\n查看整个字符串B的首符集，将 A -&gt; B放到每个首符α 下：\nMap[A][α] = A -&gt; B\n如果说ε在B的首符集里面，那就把 A -&gt; B 放到每个A的FOLLOW符号β下：\nMap[A][β] = A -&gt; B\\\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#词法分析">词法分析</a>
+      <ol>
+        <li><a href="#正规表达式">正规表达式</a></li>
+      </ol>
+    </li>
+    <li><a href="#语法分析-重难点">语法分析 （重难点）</a>
+      <ol>
+        <li><a href="#自顶向下-ll1">自顶向下 LL(1)</a>
+          <ol>
+            <li><a href="#first">FIRST</a></li>
+            <li><a href="#follow">FOLLOW</a></li>
+            <li><a href="#文法判别">文法判别</a></li>
+            <li><a href="#分析表构建">分析表构建</a></li>
+            <li><a href="#分析">分析</a></li>
+          </ol>
+        </li>
+        <li><a href="#自底向上">自底向上</a>
+          <ol>
+            <li><a href="#闭包">闭包</a></li>
+            <li><a href="#slr1">SLR(1)</a></li>
+            <li><a href="#lr1">LR(1)</a></li>
+            <li><a href="#lalr1">LALR(1)</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#语法制导翻译重难点">语法制导翻译（重难点）</a>
+      <ol>
+        <li><a href="#依赖图">依赖图</a></li>
+        <li><a href="#翻译方案的设计">翻译方案的设计：</a></li>
+        <li><a href="#语法树">语法树</a></li>
+        <li><a href="#l属性自顶向下翻译">L属性自顶向下翻译</a></li>
+        <li><a href="#预测翻译程序的设计">预测翻译程序的设计</a></li>
+        <li><a href="#引入标记非终结符改造为lr方法翻译重点">引入标记非终结符改造为LR方法翻译(重点)</a>
+          <ol>
+            <li><a href="#移走翻译方案中嵌入的语义规则">移走翻译方案中嵌入的语义规则</a></li>
+            <li><a href="#直接使用分析栈中的继承属性">直接使用分析栈中的继承属性</a></li>
+            <li><a href="#变换继承属性的计算规则">变换继承属性的计算规则</a></li>
+          </ol>
+        </li>
+        <li><a href="#改写语法制导定义为s属性">改写语法制导定义为S属性</a></li>
+      </ol>
+    </li>
+    <li><a href="#语法定义">语法定义</a>
+      <ol>
+        <li><a href="#符号表作用操作">符号表作用、操作</a></li>
+        <li><a href="#类型表达式">类型表达式</a></li>
+        <li><a href="#类型等价">类型等价</a>
+          <ol>
+            <li><a href="#类型图--树">类型图 / 树</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#运行环境">运行环境</a>
+      <ol>
+        <li><a href="#参数传递机制">参数传递机制</a></li>
+      </ol>
+    </li>
+    <li><a href="#中间代码生成">中间代码生成</a></li>
+    <li><a href="#图形表示">图形表示</a>
+      <ol>
+        <li><a href="#三地址码">三地址码</a></li>
+        <li><a href="#涉及数组元素的赋值语句">涉及数组元素的赋值语句</a></li>
+        <li><a href="#布尔表达式的翻译">布尔表达式的翻译</a>
+          <ol>
+            <li><a href="#控制流回填技术">控制流回填技术</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#目标代码生成">目标代码生成</a>
+      <ol>
+        <li><a href="#基本块">基本块</a></li>
+        <li><a href="#流图">流图</a></li>
+        <li><a href="#下次引用信息">下次引用信息</a></li>
+      </ol>
+    </li>
+    <li><a href="#代码优化">代码优化</a>
+      <ol>
+        <li><a href="#基本块优化">基本块优化</a></li>
+        <li><a href="#循环优化">循环优化</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="词法分析">词法分析
+</h2><h3 id="正规表达式">正规表达式
+</h3><p>所有不含子串011的01符号串</p>
+<ol>
+<li>首先构造自动机</li>
+<li>将自动机变成单一结束状态，加上ε，连到最后的状态</li>
+<li>合并状态
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image.png"
+	width="901"
+	height="845"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image_hu4819923498724729404.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image_hu13434339836899124118.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="106"
+		data-flex-basis="255px"
+	
+></li>
+</ol>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-1.png"
+	width="875"
+	height="526"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-1_hu6242898403720086138.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-1_hu6291520995014220975.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="399px"
+	
+></p>
+<h2 id="语法分析-重难点">语法分析 （重难点）
+</h2><h3 id="自顶向下-ll1">自顶向下 LL(1)
+</h3><p>自顶向下</p>
+<p>消除左递归，消除左公因子</p>
+<h4 id="first">FIRST
+</h4><pre><code>FIRST(a)是a可以推导出的开头终结符号集合
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-5.png"
+	width="1586"
+	height="1024"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-5_hu11894727113193337565.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-5_hu9180598535718047021.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
+></p>
+<h4 id="follow">FOLLOW
+</h4><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-3.png"
+	width="1222"
+	height="405"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-3_hu7720076075224577734.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-3_hu486948894834068279.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="301"
+		data-flex-basis="724px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-4.png"
+	width="1586"
+	height="753"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-4_hu9280434375177442298.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-4_hu8947704930725648821.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="505px"
+	
+></p>
+<h4 id="文法判别">文法判别
+</h4><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-2.png"
+	width="1515"
+	height="308"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-2_hu8833542096953628716.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-2_hu556351473050522539.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="491"
+		data-flex-basis="1180px"
+	
+>
+只要同一个非终结符推导出的不同字符串的首符不一样就可以了</p>
+<h4 id="分析表构建">分析表构建
+</h4><p>行有非终结符，列是终结符+$</p>
+<p>查看每个产生式A -&gt; B</p>
+<p>查看整个字符串B的首符集，将 A -&gt; B放到每个首符α 下：<br>
+Map[A][α] = A -&gt; B<br>
+如果说ε在B的首符集里面，那就把 A -&gt; B 放到每个A的FOLLOW符号β下：<br>
+Map[A][β] = A -&gt; B\</p>
+<p>每个格子都可以放很多个生成式</p>
+<h4 id="分析">分析
+</h4><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-6.png"
+	width="1670"
+	height="1271"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-6_hu10201614406915686643.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-6_hu11658335046279348964.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="315px"
+	
+>
+字符串从左往右扫描，右边是字符串结束符合$<br>
+符号栈栈底为$，开始时还要放入文法开始符号<br>
+如果对于字符串的最左边的字符a，符号栈栈顶A来说，Map[A][a]有产生式的话，就将A弹出，用产生式A -&gt; αBβ ，逆序入栈。并输出产生式<br>
+如果字符串最左边字符和栈顶符号一样，那就两个一起弹出。</p>
+<h3 id="自底向上">自底向上
+</h3><p>简单的LR方法(SLR)：易于实现，功能较弱<br>
+规范的LR方法(LR(1))：功能最强，代价最大<br>
+向前看的LR方法(LALR)：功能和代价介于两者之间，能分析大多数程序设计语言的结构，并且能比较有效地实现</p>
+<p>LR 进行规约的时候，要把符号栈中的符号和状态一起弹出来。</p>
+<p>注意：产生式 A -&gt; ε 只有一个LR(0)归约项目 A -&gt; ·</p>
+<h4 id="闭包">闭包
+</h4><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-8.png"
+	width="1646"
+	height="372"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-8_hu4037890519112842521.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-8_hu15741621324270773558.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="442"
+		data-flex-basis="1061px"
+	
+></p>
+<h4 id="slr1">SLR(1)
+</h4><p>SLR(1)的特征：<br>
+如果文法的有效项目集中有冲突动作，多数冲突可通过考察有关非终结符号的FOLLOW集合而得到解决</p>
+<p>如项目集：I={X-&gt;α·bβ，A-&gt;α·，B-&gt;α·}</p>
+<pre><code>存在移进-归约冲突 (X和A、B产生式)
+存在归约-归约冲突 (A和B产生式)
+</code></pre>
+<p>解决冲突的办法：</p>
+<pre><code>假设：
+FOLLOW(A)∩FOLLOW(B)=空
+b不属于FOLLOW(A) 并且 b不属于FOLLOW(B)
+</code></pre>
+<p>决策：</p>
+<pre><code>当a=b时，把b移进栈里；
+当a∈FOLLOW(A)时，用产生式A-&gt;α进行归约；
+当a∈FOLLOW(B)时，用产生式B-&gt;α进行归约。
+</code></pre>
+<p>看是谁的FOLLOW符号，就用谁的产生式规约</p>
+<p>看是否是SLR(1)
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-50.png"
+	width="1669"
+	height="432"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-50_hu11401914233568644267.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-50_hu9645569173505861537.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="386"
+		data-flex-basis="927px"
+	
+>
+I5中，对于LR(0)有移进-规约冲突，但是S-&gt;dAB·归于中，S的FOLLOW集是{$}，而B-&gt;B·b当前如果是b才会移进。由于S的FOLLOW集和B的移进不一样，所以不冲突</p>
+<p>I4中，对于A-&gt;a·, 由于A的FOLLOW集是{$,b}而这个项目里移进的只有a或者A，A的FIRST又是a，所以这两个不冲突。</p>
+<p>构造SLR(1)分析表</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-7.png"
+	width="1579"
+	height="1061"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-7_hu11421764778914809832.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-7_hu13431041759598068556.png 1024w"
+	loading="lazy"
+	
+		alt="构造SLR(1)分析表"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="148"
+		data-flex-basis="357px"
+	
+></p>
+<p>要看规约项目的FOLLOW。</p>
+<h5 id="例子">例子
+</h5><p>例子1 无冲突
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-10.png"
+	width="1435"
+	height="287"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-10_hu1467818492913665400.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-10_hu17823889762111531353.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="500"
+		data-flex-basis="1200px"
+	
+>
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-9.png"
+	width="1620"
+	height="400"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-9_hu10878048703979435826.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-9_hu8536005257196327328.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="405"
+		data-flex-basis="972px"
+	
+>
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-12.png"
+	width="1574"
+	height="297"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-12_hu7520615834689927868.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-12_hu11594549062226956026.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="529"
+		data-flex-basis="1271px"
+	
+>
++不是在E&rsquo;的FOLLOW集中，所以可以移进，也可以规约</p>
+<p>例子2 有冲突
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-14.png"
+	width="1181"
+	height="271"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-14_hu16320440235448279993.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-14_hu570171101261956013.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="435"
+		data-flex-basis="1045px"
+	
+>
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-13.png"
+	width="709"
+	height="345"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-13_hu10594608458525898078.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-13_hu13267548339735369363.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="493px"
+	
+>
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-15.png"
+	width="1498"
+	height="564"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-15_hu14633414702552777481.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-15_hu11988484592811973816.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="637px"
+	
+>
+因为移进是=，而规约的FOLLOW也是=，存在冲突</p>
+<h4 id="lr1">LR(1)
+</h4><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-16.png"
+	width="1497"
+	height="197"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-16_hu5616446809041133621.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-16_hu11464154810684325547.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="759"
+		data-flex-basis="1823px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-17.png"
+	width="1627"
+	height="505"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-17_hu12984753428840696805.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-17_hu11677144984914098036.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="322"
+		data-flex-basis="773px"
+	
+>
+观察可以发现，I0的C是第一个C，第一个C后面跟着的是另一个C，所以I0对于C的产生式，它们的向前看符号是c/d，因为第二个C的FIRST是c/d，或者说，第一个C的FOLLOW是c/d<br>
+而对于I2，它后面没跟其它符号了，所以后面跟着的是$，表示结束。</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-18.png"
+	width="1411"
+	height="272"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-18_hu3082651465533012448.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-18_hu3905116903272202571.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="518"
+		data-flex-basis="1245px"
+	
+>
+对于I3和I4，由于它们是从第一个C推出来的，所以后面跟着的是第二个C，因此向前看符号也是c/d</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-19.png"
+	width="1435"
+	height="341"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-19_hu2411002481801261790.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-19_hu4728127897145097221.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="420"
+		data-flex-basis="1009px"
+	
+>
+同理，对于这三个项目集，它们是第二个C推出来的，所以后面跟的是结束符号</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-20.png"
+	width="1448"
+	height="260"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-20_hu764860631655579262.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-20_hu14571574599492364935.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="556"
+		data-flex-basis="1336px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-21.png"
+	width="1315"
+	height="274"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-21_hu9474795047931562727.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-21_hu7683443091549508614.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="479"
+		data-flex-basis="1151px"
+	
+></p>
+<p>LR(1)分析表构造方法：
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-22.png"
+	width="1618"
+	height="812"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-22_hu12269434067059734541.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-22_hu13671433674022065278.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="478px"
+	
+></p>
+<p>与SLR分析表构造方法的不同点：<br>
+对归约项目，LR(1)用向前看符号，SLR用FOLLOW集</p>
+<h4 id="lalr1">LALR(1)
+</h4><p>如果两个LR(1)项目集去掉向前看符号之后是相同的，则称这两个项目集具有相同的心（core），即这两个项目集是同心集。</p>
+<p>除去初态项目集外，一个项目集的核（kernel）是由该项目集中那些圆点不在最左边的项目组成。LR(1)初态项目集的核中有且只有项目[S&rsquo;-&gt;·S,$]</p>
+<p>合并同心集</p>
+<p>不会有新的移进-规约冲突，但是会有新的规约-规约冲突</p>
+<p>LALR(1)分析表构造思想：</p>
+<pre><code>1. 首先构造LR(1)项目集规范族；
+2. 如果它不存在冲突，就把同心集合并在一起； （如果冲突的话，就不是LR(1)文法了）
+3. 若合并后的项目集规范族不存在归约-归约冲突，就按这个项目集规范族构造分析表。
+    
+tips:如果合并后得到的项目集规范族中含有冲突，则该文法是LR(1)文法，但不是LALR文法，因而，也不能为它构造LALR分析表。
+</code></pre>
+<h2 id="语法制导翻译重难点">语法制导翻译（重难点）
+</h2><p>综合属性：</p>
+<pre><code>分析树中，如果一个结点的某一属性由其子结点的属性确定，则这种属性为该结点的综合属性
+
+如果一个语法制导定义仅仅使用综合属性，则称这种语法制导定义为S-属性定义
+
+对于S-属性定义，通常采用自底向上的方法对其分析树加注释，即从树叶到树根，按照语义规则计算每个结点的属性值
+</code></pre>
+<p>继承属性：</p>
+<pre><code>分析树中，一个结点的继承属性值由该结点的父结点和/或它的兄弟结点的属性值决定。
+</code></pre>
+<p>可用继承属性表示程序设计语言结构中上下文之间的依赖关系</p>
+<pre><code>可以跟踪一个标识符的类型
+可以跟踪一个标识符，了解它是出现在赋值号的右边还是左边，以确定是需要该标识符的值还是地址。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-23.png"
+	width="1603"
+	height="1063"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-23_hu504199961614697537.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-23_hu15766931240304532883.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="361px"
+	
+></p>
+<h3 id="依赖图">依赖图
+</h3><p>为每个包含过程调用的语义规则引入一个虚拟综合属性b，以便把语义规则统一为b=f(c1,c2,…,ck)的形式。</p>
+<p>依赖图中：</p>
+<pre><code>为每一个属性设置一个结点
+如果属性b依赖于c，那么从属性c的结点有一条有向边连到属性b的结点。
+</code></pre>
+<p>计算次序：</p>
+<pre><code>有向非循环图的拓扑排序
+</code></pre>
+<p>S属性定义和L属性定义</p>
+<pre><code>S属性定义：仅涉及综合属性的语法制导定义
+L属性定义：一个语法制导定义是L属性定义，如果与每个产生式 A-&gt;X1X2…Xn 相应的每条语义规则计算的属性都是A的综合属性，或是 Xj（1&lt;=j&lt;=n）的继承属性，而该继承属性仅依赖于：
+    A的继承属性；
+    产生式中Xj左边的符号X1、X2、…、Xj-1 的属性；
+L可以相当于Left，由左边的符号定义
+
+每一个S属性定义都是L属性定义
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-24.png"
+	width="1637"
+	height="377"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-24_hu8951842607750190277.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-24_hu11480223071895740304.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="434"
+		data-flex-basis="1042px"
+	
+>
+L属性就是属性值都是由该符号左边的符号来定义的，上图中的Q.i是由右边的R.s来决定的，所以不是L属性定义。
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-81.png"
+	width="1225"
+	height="134"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-81_hu15841008893373935639.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-81_hu17795939891843752533.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="914"
+		data-flex-basis="2194px"
+	
+></p>
+<pre><code>左边计算的是综合属性，
+右边计算的是继承属性，依赖于兄的继承属性，且兄的继承属性只能依赖于父的继承属性或者兄兄的属性
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-25.png"
+	width="1589"
+	height="536"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-25_hu16147677024518820014.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-25_hu4471306133487466582.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="296"
+		data-flex-basis="711px"
+	
+></p>
+<p>L属性计算顺序
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-26.png"
+	width="1539"
+	height="800"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-26_hu16237345021881292838.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-26_hu788843482200763190.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<pre><code>以分析树的根结点作为实参
+L属性定义的属性都可以用深度优先的顺序计算。
+    进入结点前，计算它的继承属性
+    从结点返回时，计算它的综合属性
+</code></pre>
+<h3 id="翻译方案的设计">翻译方案的设计：
+</h3><p>对于S属性</p>
+<pre><code>为每一个语义规则建立一个包含赋值的动作
+把这个动作放在相应的产生式右边末尾
+T-&gt;T1*F     {T.val=T1.val*F.val}
+</code></pre>
+<p>对于L属性</p>
+<pre><code>产生式右部文法符号的继承属性必须在这个符号以前的动作中计算出来
+    计算该继承属性的动作必须出现在相应文法符号之前
+一个动作不能引用这个动作右边的文法符号的综合属性
+产生式左边非终结符号的综合属性只有在它所引用的所有属性都计算出来之后才能计算
+    这种属性的计算动作放在产生式右端末尾
+
+1. 产生式右部的某文法符号的继承属性必须在该符号以前的规则中计算出来
+2. 一个语义规则不能引用它右边的文法符号的综合属性
+3. 产生式左部符号的综合属性只有在它所依赖的所有属性都计算出来之后才能计算。计算左部符号的综合属性的语义规则通常可以放在产生式的右端末尾
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-27.png"
+	width="1626"
+	height="532"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-27_hu17413986778303095366.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-27_hu7833509955851429630.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="305"
+		data-flex-basis="733px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-28.png"
+	width="1622"
+	height="532"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-28_hu627437561906669079.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-28_hu14515450756262434557.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="304"
+		data-flex-basis="731px"
+	
+></p>
+<h3 id="语法树">语法树
+</h3><p>抽象语法：把语法规则中对语义无关紧要的具体规定去掉，剩下来的本质性的东西称为抽象语法。</p>
+<p>语法树</p>
+<pre><code>分析树的抽象（或压缩）形式。
+也称为语法结构树或结构树。
+内部结点表示运算符号，其子结点表示它的运算分量。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-29.png"
+	width="847"
+	height="514"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-29_hu16979932813816892872.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-29_hu9161236567373534141.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="395px"
+	
+></p>
+<h3 id="l属性自顶向下翻译">L属性自顶向下翻译
+</h3><p>由于L属性要自顶向下翻译，所以：<br>
+消除翻译方案的左递归</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-30.png"
+	width="859"
+	height="487"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-30_hu533631428379847235.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-30_hu1312053023395844432.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="423px"
+	
+>
+其中，(2)(4)包含左递归
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-31.png"
+	width="913"
+	height="183"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-31_hu3852203445578175132.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-31_hu18239409060616651275.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="498"
+		data-flex-basis="1197px"
+	
+>
+并设计M的属性</p>
+<pre><code>继承属性M.i：表示在M之前已经推导出的子表达式的值
+综合属性M.s：表示在M完全展开之后得到的表达式的值
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-32.png"
+	width="1293"
+	height="160"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-32_hu17269356589195503387.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-32_hu6099548238707518073.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="808"
+		data-flex-basis="1939px"
+	
+>
+这是将M展开前的M.i赋值给M展开后的M.s，这样才能成功将值传递到E上</p>
+<p>可在设计翻译方案之前先画出语法分析树，并写出结点，以及结点的依赖关系</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-33.png"
+	width="1690"
+	height="512"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-33_hu6195522625228227715.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-33_hu312631335792213700.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="330"
+		data-flex-basis="792px"
+	
+>
+E-&gt;TM，在M展开前，先获得M.i的值，就是T的值，在M展开后，将M.s赋给E。<br>
+其中，M.s是通过M-&gt;ε 这条语句来赋值的</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-34.png"
+	width="1721"
+	height="746"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-34_hu12158978105307937359.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-34_hu14677704962551351622.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="553px"
+	
+>
+M.i 是未展开前的，M.s是展开后的，因此M1.i依赖于未展开前的M.i，和它的兄结点T.val
+可以这么说，对于一个表达式a+b+c+M，M.i存储的是a+b+c的结果，M.S存储的是加上M的结果。</p>
+<p>消除翻译方案中的左递归的一般流程：</p>
+<ol>
+<li>
+<p>消除文法中的左递归
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-35.png"
+	width="1470"
+	height="244"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-35_hu4708873373649183763.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-35_hu16991845388568845536.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="602"
+		data-flex-basis="1445px"
+	
+></p>
+</li>
+<li>
+<p>为R设计综合属性和继承属性
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-36.png"
+	width="1562"
+	height="235"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-36_hu3412267345248961213.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-36_hu9135782864582509407.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="664"
+		data-flex-basis="1595px"
+	
+></p>
+</li>
+<li>
+<p>画分析树，转换翻译方案
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-37.png"
+	width="1585"
+	height="532"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-37_hu17215130006753730835.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-37_hu115533885463466171.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="715px"
+	
+></p>
+</li>
+</ol>
+<h3 id="预测翻译程序的设计">预测翻译程序的设计
+</h3><p>自顶向下的语法制导预测翻译程序</p>
+<p>(1)  为每个非终结符号A建立一个函数(可以是递归函数)</p>
+<pre><code>A的每一个继承属性对应函数的一个形参
+A的综合属性作为函数的返回值
+A产生式中的每个文法符号的每个属性都对应一个局部变量
+</code></pre>
+<p>(2)  A的函数的代码由多个分支组成</p>
+<p>(3)  与每个产生式相关的程序代码</p>
+<pre><code>按照从左到右的顺序考虑产生式右部的记号、非终结符号和语义动作
+对带有综合属性x的记号X
+    把属性x的值保存于为X.x声明的变量中
+    产生一个匹配记号X的调用
+    推进扫描指针
+对非终结符号B
+    产生一个函数调用语句c=B(b1,b2,…,bk)
+    bi(i=1,2,…,k)是对应于B的继承属性的变量
+    c是对应于B的综合属性的变量
+对每一个语义动作
+    把动作代码复制到分析程序中
+    用代表属性的变量代替翻译方案中引用的属性
+</code></pre>
+<h3 id="引入标记非终结符改造为lr方法翻译重点">引入标记非终结符改造为LR方法翻译(重点)
+</h3><p>所有语义规则都恰好在规约之前执行<br>
+要对L属性定义改造，符号自底向上</p>
+<h4 id="移走翻译方案中嵌入的语义规则">移走翻译方案中嵌入的语义规则
+</h4><p>使所有嵌入的动作都出现在产生式的右端末尾</p>
+<pre><code>在基础文法中引入新的产生式，形如：M-&gt;ε
+M：标记非终结符号，用来代替嵌入在产生式中的动作
+把被M替代的动作放在产生式M -&gt; ε 的末尾
+</code></pre>
+<p>示例：
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-38.png"
+	width="1644"
+	height="353"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-38_hu13651522057642722324.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-38_hu4353875047146621002.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="465"
+		data-flex-basis="1117px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-39.png"
+	width="1617"
+	height="230"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-39_hu7163900299052140694.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-39_hu10561704614914588661.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="703"
+		data-flex-basis="1687px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-40.png"
+	width="1615"
+	height="508"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-40_hu7369836202987972218.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-40_hu11710358502280010477.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="317"
+		data-flex-basis="762px"
+	
+></p>
+<h4 id="直接使用分析栈中的继承属性">直接使用分析栈中的继承属性
+</h4><b>
+终结符号的属性随着移进动作进入val栈
+<p>非终结符的属性随着规约动作进入val栈
+</b></p>
+<p>对于产生式A-&gt;XY<br>
+假设有X.s综合属性，它在随着X一起进入栈中。由于在规约出Y之前，X.s就已经在val栈中，所以X.s可以被Y继承。<br>
+如果Y的继承属性Y.i通过复制规则Y.i = X.s获得，那么在需要Y.i值的地方便可以直接使用栈中的X.s的值。</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-41.png"
+	width="1822"
+	height="679"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-41_hu12759334986260855521.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-41_hu17893784685866750333.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="268"
+		data-flex-basis="644px"
+	
+>
+对于这个例子，由于每次赋值的时候，都知道T的位置，就是id的位置下面3个，即top-3，所以可以使用在栈中的继承属性来赋值</p>
+<p>要想直接从栈中获取继承属性，<br>
+当且仅当计算继承属性的语义规则是复制规则，<br>
+并且继承属性的值在栈中的存放位置可以预测</p>
+<h4 id="变换继承属性的计算规则">变换继承属性的计算规则
+</h4><p>要想从栈中取得继承属性，当且仅当文法允许属性值在栈中存放的位置可以预测。
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-42.png"
+	width="1649"
+	height="545"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-42_hu16275510066140281808.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-42_hu3443849671321566785.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="726px"
+	
+>
+因为Z.i的值是由X.s的值决定的，X可能在Z的前一个或者Z的前两个位置，所以无法预测。</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-43.png"
+	width="1752"
+	height="985"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-43_hu16701519544449881989.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-43_hu17827924282860755109.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>对于不是复制规则的赋值来说，也可以引入标记非终结符号，来转变成复制规则
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-44.png"
+	width="1739"
+	height="405"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-44_hu3431369981100779280.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-44_hu12065809541005056713.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="429"
+		data-flex-basis="1030px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-45.png"
+	width="1627"
+	height="539"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-45_hu13989699280436422300.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-45_hu3820102039662518101.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="301"
+		data-flex-basis="724px"
+	
+></p>
+<p>为了在分析的同时进行翻译，每个文法符号的属性都要入栈，综合属性可以放在与文法符号对应的栈中Val数组中，继承属性则放在标记非终结符对应的Val数组中，由于是L-属性定义，在标记非终结符处一定可以计算继承属性</p>
+<p>L属性自底向上分析和翻译算法：</p>
+<p>首先假设：</p>
+<pre><code>每个非终结符号A 都有一个继承属性 A.i
+每一个文法符号X 都有一个综合属性 X.s
+</code></pre>
+<p>（1）引入新的标记非终结符号来代替原来的产生式
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-46.png"
+	width="1520"
+	height="569"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-46_hu11847945553032533249.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-46_hu4493470564760230078.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="641px"
+	
+></p>
+<p>（2）在自底向上分析过程中，各个属性的值都可以被计算出来
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-47.png"
+	width="1536"
+	height="418"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-47_hu4660087843994393982.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-47_hu1441512572511644343.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="367"
+		data-flex-basis="881px"
+	
+></p>
+<p>第一种情况：用 M-&gt;ε 规约</p>
+<p>Mj在文法中只出现一次，对于另一条产生式，如果要变化，需要取其他名字，如N、L等
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-48.png"
+	width="1484"
+	height="361"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-48_hu2535233285755642871.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-48_hu14207961018836780671.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="411"
+		data-flex-basis="986px"
+	
+></p>
+<p>第二种情况：将所有有关符号规约成一个非终结符</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-49.png"
+	width="1498"
+	height="755"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-49_hu12627334272888608847.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-49_hu17897578996622795035.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+>
+A.i 是在未展开之前计算的，所以在可规约串的栈位置下面，</p>
+<p>对改写产生式的简化，以减少可能导致的分析冲突</p>
+<pre><code>如果Xj没有继承属性，不使用标记非终结符Mj
+如果X1.i由复写规则X1.i:=A.i计算，可以省略M1
+</code></pre>
+<p>换句话说就是只对有继承属性的X添加标记非终结符<br>
+对于第一个符号，由于A就在它栈位置的前一位，所以不用再多搞一个标记非终结符出来</p>
+<h3 id="改写语法制导定义为s属性">改写语法制导定义为S属性
+</h3><h2 id="语法定义">语法定义
+</h2><h3 id="符号表作用操作">符号表作用、操作
+</h3><p>插入</p>
+<p>检索</p>
+<p>定位</p>
+<p>重定位</p>
+<h3 id="类型表达式">类型表达式
+</h3><ol>
+<li>
+<p>基本类型</p>
+</li>
+<li>
+<p>重命名</p>
+</li>
+<li>
+<p>类型构造器</p>
+<p>数组：array(I, T)，其中I是下标范围，如0..9，1..10这样。T是元素类型</p>
+<p>笛卡尔积：比如C语言中的int a，就变成 a X integer</p>
+<p>记录类型：
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-51.png"
+	width="1188"
+	height="565"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-51_hu14048772017152706544.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-51_hu10883208767814137931.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+></p>
+<p>指针类型：
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-52.png"
+	width="1379"
+	height="417"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-52_hu7861411696673900640.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-52_hu15723424168698984551.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="330"
+		data-flex-basis="793px"
+	
+></p>
+<p>函数：
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-53.png"
+	width="1490"
+	height="861"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-53_hu7622730956945373600.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-53_hu6642811382289627806.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="415px"
+	
+></p>
+</li>
+<li>
+<p>类型表达式可以包含变量（称为类型变量），变量的值是类型表达式。</p>
+</li>
+</ol>
+<p>复合类型要用record括起来！！！
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-63.png"
+	width="1796"
+	height="672"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-63_hu1709440622015951580.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-63_hu5639849068572990605.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="641px"
+	
+></p>
+<h3 id="类型等价">类型等价
+</h3><ol>
+<li>结构等价</li>
+<li>名字等价</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="n">recA</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="n">recA</span>  <span class="o">*</span><span class="n">recP</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">recP</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">recP</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">recA</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="n">d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">recA</span> <span class="o">*</span><span class="n">e</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-54.png"
+	width="1703"
+	height="498"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-54_hu1642978202244967981.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-54_hu693174474152518263.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="820px"
+	
+></p>
+<h4 id="类型图--树">类型图 / 树
+</h4><p>类型树的中序遍历就是这个类型构造器</p>
+<h2 id="运行环境">运行环境
+</h2><p>程序运行期间，名字的值有左右之分</p>
+<pre><code>左值；存储空间的地址
+右值：存储空间的内容
+</code></pre>
+<p>两个函数</p>
+<pre><code>environment：代表 名字 ——&gt; 存储单元
+state：存储单元 ——&gt; 里面内容
+赋值改变状态，不改变环境
+</code></pre>
+<p>静态和动态：</p>
+<pre><code>静态：                  动态：
+过程定义                过程的活动
+名字声明                名字的绑定
+名字的作用域            绑定的生存期
+</code></pre>
+<p>活动记录：</p>
+<pre><code>1. 返回值域：存放返回给调用过程的值
+2. 参数域：存放由调用过程提供给该活动的实参
+3. 控制链域：用于本次活动结束时实现控制返回到调用过程。
+    总是指向本次活动的调用者的活动记录。即调用过程的最新活动的活动记录
+4. 访问链域：这是为了实现过程对非局部名字的访问而设计的一个指针域。
+    它总是指向该过程的直接外层过程的最新活动的活动记录。
+5. 机器状态域：保存本活动开始前的活动现场信息
+6. 局部数据区：局部数据分配的空间
+7. 临时数据区：过程的中间值分配的空间
+</code></pre>
+<p>存储分配策略：</p>
+<pre><code>静态
+栈式
+堆式
+</code></pre>
+<p>静态：运行前对每个名字都分配好了固定空间。</p>
+<pre><code>数据对象的大小和它们在内存中的位置必须在编译时都能够确定
+不允许过程递归调用
+一个名字对应一个空间
+不能建立动态数据结构
+</code></pre>
+<p>栈式：</p>
+<pre><code>1. 活动开始时，与活动相应的活动记录入栈。
+2. 局部变量的存储空间分配在活动记录中，同一过程中声明的名字在不同的活动中被绑定到不同的存储空间。
+3. 活动结束时，活动记录出栈。
+4. 分配给局部名字的存储空间被释放。名字的值将丢失，不可再用。
+5. 性质：每次活动时局部量绑定到新的存储，当活动结束时，局部量的值删除
+</code></pre>
+<p>堆式：</p>
+<p>访问链指向声明块的上一级块<br>
+控制链指向调用块</p>
+<p>函数作为参数传入要自带访问链！！！</p>
+<h3 id="参数传递机制">参数传递机制
+</h3><ol>
+<li>
+<p>传值调用</p>
+<p>先计算好实参的右值，然后传递给函数。函数使用的时候和常数一样
+<br></p>
+</li>
+<li>
+<p>引用调用</p>
+<p>原则上要求：实参必须是已经分配了存储空间的变量。<br>
+调用过程把实参存储单元的地址（即一个指向实参存储单元的指针）传递给被调用过程的相应形参。
+<br>可以把形参看成是实参的别名，对形参的任何引用都是对相应实参的引用。</p>
+ <br>
+ 调用过程对实参求值。<br>
+ 如果实参是具有左值的名字或表达式，则传递这个左值本身。<br>
+ 如果实参是一个没有左值的表达式（如a+b或2等），则为它申请一临时数据空间，计算出的表达式的值并存入该单元，然后传递这个存储单元的地址。<br>
+ 把实参的左值写入被调用过程活动记录中相应形参的存储单元中。<br>
+ 被调用过程执行时，通过形参间接地引用实参。<br>
+ <br>
+</li>
+<li>
+<p>复制恢复</p>
+<ul>
+<li>(1) 将实参的右值传递给被调用过程，写入其活动记录的参数域中，并记录与形参相应的实参的左值。<br></li>
+<li>(2) 被调用过程执行时，对形参的操作在自己的活动记录的参数域空间上进行。<br></li>
+<li>(3) 控制返回时，被调用过程根据所记录的实参的左值把形参的当前右值复制到相应实参的存储空间中 。只有具有左值的那些实参的值被复制出来。</li>
+</ul>
+<p>调用时是把实参的右值复制入被调用过程活动记录的形参单元<br>
+返回时是把形参的结果从其活动记录复制出来，复制到调用过程活动记录实参左值确定的单元</p>
+</li>
+<li>
+<p>传名调用</p>
+<ul>
+<li>把过程当作“宏”处理，即在调用出现的地方，用被调用过程的过程体替换调用语句，并用实参的名字替换相应的形参。这种文字替换称为宏扩展。</li>
+<li>用实参的字面形式替换相应的形参</li>
+<li>被调用过程中的局部名字不能与调用过程中的名字重名。</li>
+<li>可以考虑在做宏扩展之前，对被调用过程中的每一个名字都系统地重新命名，即给以一个不同的新名字。</li>
+<li>为保持实参的完整性，可以用括号把实参的名字括起来。</li>
+</ul>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-55.png"
+	width="1516"
+	height="1000"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-55_hu9534834483979589739.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-55_hu18056464656217080601.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
+	
+></p>
+</li>
+</ol>
+<h2 id="中间代码生成">中间代码生成
+</h2><p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-57.png"
+	width="1518"
+	height="685"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-57_hu6117941920890838890.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-57_hu1627657428370496163.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
+	
+>
+<br></p>
+<h2 id="图形表示">图形表示
+</h2><ol>
+<li>
+<p>语法树</p>
+<p>语法树的中序遍历得到的结果和原语句一样
+后缀式 是语法树的线性形式：使用语法树的后序遍历</p>
+</li>
+<li>
+<p>dag图</p>
+</li>
+</ol>
+<h3 id="三地址码">三地址码
+</h3><p>三地址代码是语法树或dag的线性表示，<br>
+其中
+<b>新增加的名字（临时变量）对应图中的内部结点</b></p>
+<p>四元式</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-56.png"
+	width="1517"
+	height="955"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-56_hu5452609385310963130.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-56_hu15719455236854880810.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="381px"
+	
+></p>
+<p>对应语法树的每个内部结点都有一句代码（虽然说计算了重复的东西）</p>
+<p>三元式</p>
+<pre><code>为了不引入临时变量
+一个语句计算的中间结果直接提供给引用它的语句
+用计算中间结果的语句指针代替存放中间结果的临时变量
+同样的，对应语法树的每个内部节点都有一个语句。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-59.png"
+	width="1483"
+	height="587"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-59_hu8923864211867842996.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-59_hu17801118176684926033.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="252"
+		data-flex-basis="606px"
+	
+></p>
+<p>数组元素赋值的三元式序列：</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-60.png"
+	width="1555"
+	height="324"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-60_hu11274339671514695500.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-60_hu1081133973176344969.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="479"
+		data-flex-basis="1151px"
+	
+></p>
+<p>间接三元式</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-61.png"
+	width="1430"
+	height="612"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-61_hu5857283577618046882.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-61_hu141133017225925928.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<pre><code>作用：如果只用右边，删掉一条语句之后很麻烦。现在用间接码，在修改完右边后可以根据指针一次性执行完，可以不用管右边的实际顺序。
+</code></pre>
+<h3 id="涉及数组元素的赋值语句">涉及数组元素的赋值语句
+</h3><p>一维数组：</p>
+<pre><code>数组下标：low..high
+A[i]的位置：base + (i-low) * w = i * w + base - low * w
+low * w 固定不变。
+</code></pre>
+<p>二维数组：</p>
+<pre><code>每维的下界：low1、low2
+每维的上界：high1、high2
+每维的长度：n1 = high1-low1     n2 = high2-low2
+域宽：w
+基址：base
+A[i, j]的位置：
+    先算前面有几行：i-low1 行。每行的长度：n2
+    再算当前处于该行的什么位置：第j-low2 列
+    所以处于第 (i-low1)*n2 + j-low2 个元素
+    所以地址是 
+        base  + ((i-low1)*n2 + j-low2)*w 
+        = (i*n2+j)*w + base - (low1*n2 + low2)*w
+    最后减掉的部分是定长的。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-62.png"
+	width="1607"
+	height="1128"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-62_hu10047534383182126898.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-62_hu7655188718893638104.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="341px"
+	
+></p>
+<pre><code>A是一个1020的数组，即 n1=10，n2=20；
+设数组元素的域宽  w=4；
+设数组的第一个元素为：A[1,1]，
+        则有  low1=1，low2=1
+所以：
+      (low1*n2+low2)*w = (1*20+1)*4 = 84
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-64.png"
+	width="1530"
+	height="1134"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-64_hu17139332478722315075.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-64_hu10576339096903844055.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+></p>
+<h3 id="布尔表达式的翻译">布尔表达式的翻译
+</h3><ol>
+<li>
+<p>数值表示法</p>
+<p>先看优先级，确定语句执行的顺序
+<br>然后再进行翻译</p>
+<p>x &gt; y 等价形式：if x &gt; y then 1 else 0
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-65.png"
+	width="1337"
+	height="484"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-65_hu13410061241552523660.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-65_hu17384381454441765966.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="276"
+		data-flex-basis="662px"
+	
+>
+if (true) goto
+t:=0
+可以看到，当表达式为真的时候，会跳过下两条。<br>
+而不成立，则顺序执行，存好0后，就跳过下一条</p>
+<p>举例：a&gt;b and c&gt;d or e&lt;f
+优先级： and &gt; or，先算 左边，再算or的</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-66.png"
+	width="1426"
+	height="1057"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-66_hu13998605963640249120.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-66_hu11053644431577179196.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+></p>
+<p>每一步都有一个中间结构，所以跳转到哪条语句可以直接写</p>
+</li>
+<li>
+<p>控制流法</p>
+<p>三种形式如下：</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-67.png"
+	width="1495"
+	height="925"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-67_hu5039572249371522105.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-67_hu14032297657745296400.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="387px"
+	
+></p>
+<ol>
+<li>if E then S :
+<br> E 为 false就跳转到S1后面。S1紧跟E的语句</li>
+<li>if E then S1 else S2
+<br> S1 紧跟E ， S2和S1之间有一个goto语句。E为真，就顺序执行，E为假就跳转到S2</li>
+<li>while E do S1
+<br> S1 紧跟 E。S1 的最后一条语句是跳转回E。E为假，就跳转到S的下一条语句上。</li>
+</ol>
+<p>布尔表达式的代码结构：
+E -&gt; E1 or E2
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-68.png"
+	width="680"
+	height="334"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-68_hu4056450352838955917.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-68_hu9788344591420437485.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="488px"
+	
+>
+E1 如果是true，就直接跳转了，不用看E2。E1是false才要顺序执行看E2</p>
+<p>E -&gt; not E1
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-69.png"
+	width="613"
+	height="255"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-69_hu4050976714427963953.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-69_hu10690652723580259749.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="576px"
+	
+></p>
+<p>E -&gt; E1 and E2
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-70.png"
+	width="576"
+	height="418"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-70_hu1177656403866741980.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-70_hu6614805072291390958.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
+></p>
+<p>E -&gt; id1 relop id2
+<img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-71.png"
+	width="862"
+	height="281"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-71_hu6801303803111637905.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-71_hu12692916684587773884.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="306"
+		data-flex-basis="736px"
+	
+></p>
+<h4 id="控制流回填技术">控制流回填技术
+</h4><ol>
+<li>先产生没有填写目标标号的转移指令；</li>
+<li>建立一个链表，把转向这个目标的所有转移指令的标号填入该链表；</li>
+<li>目标地址确定后，再把目标地址填入该链表中记录的所有转移指令中。</li>
+</ol>
+<p>用回填技术翻译 a&gt;b and c&gt;d or e &lt; f, 假设起点为100</p>
+<pre><code> 第一步：翻译 a&gt;b
+ 100：if a&gt;b goto --
+ 101：goto --
+ 这时候，true的回填表为{100}，false的表为{101}
+
+ 第二步：翻译 c&gt;d
+ 102：if c&gt;d goto --
+ 103: goto --
+ 这个时候由and的结构，我们已经制导了100应该填什么了，就把102填到100里
+ 但是如果102 也是true的话，那就可以跳过 e&lt;f 这个判断。因此要把102放到true-list里面。103放入false-list里。
+ true = {102}
+ false = {101, 103}
+
+ 第三步：翻译 e&lt;f
+ 104：if e&lt;f goto --
+ 105: goto --
+ 由于 e&lt;f 是前一个条件为false才执行的，因此可以把104回填到101和103中
+ 而104要放入truelist中，105放入false-list中。
+ true:{102, 104}
+ false:{105}
+
+ 第四步：根据后续代码回填
+</code></pre>
+</li>
+</ol>
+<h2 id="目标代码生成">目标代码生成
+</h2><h3 id="基本块">基本块
+</h3><p>控制从第一条语句（入口语句）流入，从最后一条语句（出口语句）流出，中途没有停止或分支</p>
+<p>具有原子性的一组连续语句序列</p>
+<p>确定入口语句：</p>
+<pre><code>三地址代码的第一条语句；
+goto语句转移到的目标语句；
+紧跟在goto语句后面的语句。
+</code></pre>
+<p>确定基本块：与每一个入口语句相应的基本块</p>
+<pre><code>从一个入口语句（含该语句）到下一个入口语句（不含）之间的语句序列；
+从一个入口语句（含该语句）到停止语句（含该语句）之间的语句序列。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-72.png"
+	width="1224"
+	height="1122"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-72_hu9834497332146169243.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-72_hu1156742462086804794.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="109"
+		data-flex-basis="261px"
+	
+></p>
+<pre><code>1. 找到goto语句，goto的目标和goto下一句都是入口
+2. 入口和入口间划分基本块
+</code></pre>
+<h3 id="流图">流图
+</h3><pre><code>流图的结点是基本块
+
+如果一个结点基本块的入口语句是程序的第一条语句，则称此基本块结点为流图的首结点。
+
+如果在某个执行序列中，基本块B2紧跟在基本块B1之后执行，则从B1到B2有一条有向边，B1是B2的前驱，B2是B1的后继。
+    B1的最后一条语句不是无条件转移语句，并且在程序的语句序列中，B2紧跟在B1之后。
+    有一个条件/无条件转移语句从B1的最后一条语句转移到B2的第一条语句；
+    （后继是程序执行过程中可能会出现的）
+</code></pre>
+<h3 id="下次引用信息">下次引用信息
+</h3><p>算法：</p>
+<pre><code>1. 把基本块中各变量在符号表中的下次引用信息域置为“无下次引用”、活跃信息域置为“活跃”
+2. 从基本块出口到入口由后向前依次处理各语句，对每个三地址语句 i:  x:=y op z，依次执行下述步骤：
+    (1)把当前符号表中变量 x 的下次引用信息和活跃信息附加到语句  i 上；
+    (2)把符号表中 x 的下次引用信息置为“无下次引用”，活跃信息置为“非活跃”；
+    (3)把当前符号表中变量y和z的下次引用信息和活跃信息附加到语句  i 上；
+    (4)把符号表中y和z的下次引用信息均置为 'i'，活跃信息均置为“活跃”。
+</code></pre>
+<p>先改左边的，再改右边的。先赋到语句上，再修改符号表。符号表中，左边的改为无非活，右边的改为语句序号，活跃。</p>
+<div style="text-align:center;">
+    <img src="image-73.png" alt="图片描述" width="50%">
+</div>
+<br>
+计算上图B4中的下次引用信息：
+<pre><code>0. 初始化活跃信息表：每个变量都是 无下次引用、活跃
+
+1. 从后往前，遇到赋值语句： (15)i := t10 ，
+  把i的下次引用信息和活跃信息附加到语句(15)上
+    (15) i := t10   i：无 非活
+  把符号表中i的信息置为无下次引用，非活跃
+  把当前符号表中的变量y和z，即t10的信息附加到语句i上
+    (15) i := t10   i：无 非活  t10：无 非活
+  把y和z符号表中信息，即t10符号表信息里下次引用信息信息置为i，活跃信息置为活跃
+    变量    下次    活跃
+    i       无      非活
+    ...     ...     ...
+    t10     (15)    活跃
+
+2. 继续往上回溯，遇到   (14) t10:=i+1
+    把t10符号表信息赋给(14)
+    (14) t10:=i+1   t10 (15) 活跃
+    再把t10符号表信息置为 无 非活
+    把赋值表达式右边的变量符号表信息加到语句(14)上
+    (14) t10:=i+1   t10 (15) 活跃  i 无 非活
+    最后把右边变量符号表信息置为(14) 活
+        变量    下次    活跃
+        i       (14)    活
+        ...     ...     ...
+        t10     无      非活
+
+！！！易错！！！
+3. 往上回溯，遇到   (13) t2[t1]:=t9     
+    先左：将t2[t1]的信息放到语句(13)上
+    (13) t2[t1]:=t9     t2 无 非活  t1 无 非活
+        由于这里引用了数组t2和t1的信息，所以
+        t2、t1的符号表信息要变成(13) 活跃
+    再右：将t9的信息放到语句(13)上：
+    (13) t2[t1]:=t9     t2 无 非活 t1 无 非活 t9 无 非活
+        将t9 信息改为 (13) 活跃
+    符号表：
+        变量    下次   活跃信息
+        i       (14)    活跃
+        t1      (13)    活跃
+        t2      (13)    活跃
+        ...     ...     ...
+        t9      (13)    活跃
+        t10     无      非活
+</code></pre>
+<h2 id="代码优化">代码优化
+</h2><h3 id="基本块优化">基本块优化
+</h3><p>删除公共表达式</p>
+<pre><code>在一个基本块中，当第一次对表达式E求值之后，如果E中的运算对象都没有改变，再次对E求值，则除E的第一次出现之外，其余的都是冗余的公共表达式。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-74.png"
+	width="1685"
+	height="1042"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-74_hu12494203193417156307.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-74_hu7897721290481860049.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<p>复制传播</p>
+<pre><code>为减少重复计算，可以利用复制传播来删除公共表达式
+思想：在复制语句f:=g之后，尽可能用g代替f
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-75.png"
+	width="992"
+	height="590"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-75_hu16303160571098028109.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-75_hu2039730655297030466.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="403px"
+	
+></p>
+<p>删除死代码</p>
+<pre><code>如果对一个变量 x 求值之后却不引用它的值，则称对 x 求值的代码为死代码。
+
+死块：控制流不可到达的块称为死块。
+    如果一个基本块是在某一条件为真时进入执行的，经数据流分析的结果知该条件恒为假，则此块是死块。
+    如果一个基本块是在某个条件为假时才进入执行，而该条件却恒为真，则这个块也是死块。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-76.png"
+	width="1264"
+	height="599"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-76_hu4473466274852859805.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-76_hu6801510074751859431.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="506px"
+	
+></p>
+<p>削弱计算强度</p>
+<pre><code>x:=x+0 和 x:=x*1 
+执行的运算没有任何意义
+应将这样的语句从基本块中删除。
+</code></pre>
+<p>改变计算次序</p>
+<pre><code>互不依赖就可以改变次序
+</code></pre>
+<h3 id="循环优化">循环优化
+</h3><p>循环展开</p>
+<pre><code>循环次数在编译时可以确定
+针对每次循环生成循环体（不包括调节部分和测试部分）的一个副本。
+</code></pre>
+<p>代码外提</p>
+<pre><code>将循环结构中的与循环无关代码提到循环结构的外面（通常提到循环结构的前面），从而减少循环中的代码总数。
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-77.png"
+	width="1223"
+	height="739"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-77_hu10775820712307262689.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-77_hu15716755149511361459.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="397px"
+	
+></p>
+<p>削弱计算强度</p>
+<pre><code>用+代替*。低级运算代替高级运算
+</code></pre>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-78.png"
+	width="1211"
+	height="780"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-78_hu8070575972340322048.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-78_hu12147346889725210880.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<p>删除归纳变量</p>
+<pre><code>如果循环中对变量i只有唯一的形如 i:=i+c 的赋值，并且c为循环不变量，则称i为循环中的基本归纳变量。
+
+如果i是循环中的一个基本归纳变量，j在循环中的定值总可以化归为i的同一线性函数，即j:=c1*i+c2，这里c1和c2都是循环不变量，则称j是归纳变量，并称j与i同族。
+</code></pre>
+<p>当循环中含有归纳变量时，可视情况删除其中的一个或几个，以减少存在的个数。</p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-79.png"
+	width="1180"
+	height="766"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-79_hu2634314124066694385.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-79_hu2964744653496470708.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="369px"
+	
+></p>
+<p><img src="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-80.png"
+	width="1190"
+	height="728"
+	srcset="/p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-80_hu18325591152993327849.png 480w, /p/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/image-80_hu11899172873551797195.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="392px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Introduction OS structure 用户接口 CLI\nGUI\n系统调用 大多数程序通过API来使用系统调用，而不是直接使用系统调用\n1. 程序可移植性 portable 2. 系统调用更加详细且难以使用 system call 是系统主动请求的，而中断是被动的。所以它们本质上是不一样的。但是二者的实现方式是相同的\n系统调用参数传递方式：\n1. 寄存器参数传递 2. 内存块，参数存在内存的块或表中，块地址作为参数通过寄存器传递(Solaris 和 Linux) 3. 栈。程序将参数压入栈，并由os弹出 OS design and implementation 原则：将Policy 和 Mechanism 区分。\nPolicy：做什么 Mechanism：怎么做 区分开来提高灵活性\nOS structure Simple structure：\nMS-DOS UNIX Layered Approach\n每层只使用较低层的功能 major difficulty: careful definition of the layers. Microkernels\nModules\nprocess process concept 程序program 是存储在disk的 passive 实体，而process是active的。二者不是一对一关系的\n进程process包括：\ncode section 代码段 data section 数据段 heap 堆 process stack 进程栈 current activity 当前活动 process state 和 state transform\n">
+<title>操作系统</title>
+
+<link rel='canonical' href='https://ffirestorm.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="操作系统">
+<meta property='og:description' content="Introduction OS structure 用户接口 CLI\nGUI\n系统调用 大多数程序通过API来使用系统调用，而不是直接使用系统调用\n1. 程序可移植性 portable 2. 系统调用更加详细且难以使用 system call 是系统主动请求的，而中断是被动的。所以它们本质上是不一样的。但是二者的实现方式是相同的\n系统调用参数传递方式：\n1. 寄存器参数传递 2. 内存块，参数存在内存的块或表中，块地址作为参数通过寄存器传递(Solaris 和 Linux) 3. 栈。程序将参数压入栈，并由os弹出 OS design and implementation 原则：将Policy 和 Mechanism 区分。\nPolicy：做什么 Mechanism：怎么做 区分开来提高灵活性\nOS structure Simple structure：\nMS-DOS UNIX Layered Approach\n每层只使用较低层的功能 major difficulty: careful definition of the layers. Microkernels\nModules\nprocess process concept 程序program 是存储在disk的 passive 实体，而process是active的。二者不是一对一关系的\n进程process包括：\ncode section 代码段 data section 数据段 heap 堆 process stack 进程栈 current activity 当前活动 process state 和 state transform\n">
+<meta property='og:url' content='https://ffirestorm.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/'>
+<meta property='og:site_name' content='ffirestorm'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-09-20T08:35:32&#43;08:00'/><meta property='article:modified_time' content='2024-09-20T08:35:32&#43;08:00'/>
+<meta name="twitter:title" content="操作系统">
+<meta name="twitter:description" content="Introduction OS structure 用户接口 CLI\nGUI\n系统调用 大多数程序通过API来使用系统调用，而不是直接使用系统调用\n1. 程序可移植性 portable 2. 系统调用更加详细且难以使用 system call 是系统主动请求的，而中断是被动的。所以它们本质上是不一样的。但是二者的实现方式是相同的\n系统调用参数传递方式：\n1. 寄存器参数传递 2. 内存块，参数存在内存的块或表中，块地址作为参数通过寄存器传递(Solaris 和 Linux) 3. 栈。程序将参数压入栈，并由os弹出 OS design and implementation 原则：将Policy 和 Mechanism 区分。\nPolicy：做什么 Mechanism：怎么做 区分开来提高灵活性\nOS structure Simple structure：\nMS-DOS UNIX Layered Approach\n每层只使用较低层的功能 major difficulty: careful definition of the layers. Microkernels\nModules\nprocess process concept 程序program 是存储在disk的 passive 实体，而process是active的。二者不是一对一关系的\n进程process包括：\ncode section 代码段 data section 数据段 heap 堆 process stack 进程栈 current activity 当前活动 process state 和 state transform\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu9742106442265571223.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤪</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">ffirestorm</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://ffirestorm.github.io/en/" >English</option>
+                                
+                                    <option value="https://ffirestorm.github.io/" selected>简体中文</option>
+                                
+                                    <option value="https://ffirestorm.github.io/ar/" >عربي</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#os-structure">OS structure</a>
+      <ol>
+        <li><a href="#用户接口">用户接口</a></li>
+        <li><a href="#系统调用">系统调用</a></li>
+        <li><a href="#os-design-and-implementation">OS design and implementation</a></li>
+        <li><a href="#os-structure-1">OS structure</a></li>
+      </ol>
+    </li>
+    <li><a href="#process">process</a>
+      <ol>
+        <li><a href="#process-concept">process concept</a></li>
+        <li><a href="#process-scheduling">process scheduling</a></li>
+        <li><a href="#process-operation">process operation</a>
+          <ol>
+            <li><a href="#creation">creation</a></li>
+            <li><a href="#termination">termination</a></li>
+          </ol>
+        </li>
+        <li><a href="#interprocess-communication-进程通信">interprocess communication 进程通信</a></li>
+      </ol>
+    </li>
+    <li><a href="#threads">threads</a>
+      <ol>
+        <li><a href="#multithread-model-多线程模型">multithread model 多线程模型</a></li>
+      </ol>
+    </li>
+    <li><a href="#cpu-scheduling">CPU scheduling</a>
+      <ol>
+        <li><a href="#schedule-algorithm">schedule algorithm</a></li>
+        <li><a href="#multiple-processor-scheduling多处理器调度">multiple-processor scheduling多处理器调度</a></li>
+      </ol>
+    </li>
+    <li><a href="#process-synchronization-进程同步">process synchronization 进程同步</a>
+      <ol>
+        <li><a href="#the-critical-section-problem">The critical-section problem</a></li>
+        <li><a href="#信号量机制-semaphores">信号量机制 semaphores</a>
+          <ol>
+            <li><a href="#bounded-buffer-problem-生产者消费者模型">bounded-buffer problem 生产者消费者模型</a></li>
+            <li><a href="#reader-writer-problem-读写者模型读优先">Reader-writer problem 读写者模型——读优先</a></li>
+            <li><a href="#例题">例题：</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#deadlock">deadlock</a>
+      <ol>
+        <li><a href="#死锁避免-avoidance">死锁避免 avoidance</a></li>
+        <li><a href="#死锁检测">死锁检测</a></li>
+      </ol>
+    </li>
+    <li><a href="#main-memory">Main Memory</a>
+      <ol>
+        <li><a href="#连续内存分配">连续内存分配</a></li>
+        <li><a href="#page-页式管理">page 页式管理</a></li>
+        <li><a href="#页表的结构">页表的结构</a></li>
+        <li><a href="#segment-段式管理">segment 段式管理</a></li>
+        <li><a href="#段页式管理">段页式管理</a></li>
+      </ol>
+    </li>
+    <li><a href="#虚拟内存">虚拟内存</a>
+      <ol>
+        <li><a href="#demand-paging">demand paging</a></li>
+        <li><a href="#page-replacement-页面置换">page replacement 页面置换</a></li>
+        <li><a href="#frames-allocation">frames allocation</a></li>
+        <li><a href="#thrashing-抖动">thrashing 抖动</a></li>
+      </ol>
+    </li>
+    <li><a href="#file-system-interface">File-System Interface</a>
+      <ol>
+        <li><a href="#file-concept">File concept</a></li>
+        <li><a href="#directory-structure">directory structure</a></li>
+      </ol>
+    </li>
+    <li><a href="#file-system-implementation">File-System Implementation</a>
+      <ol>
+        <li><a href="#文件系统结构">文件系统结构</a></li>
+        <li><a href="#文件系统实现">文件系统实现</a></li>
+        <li><a href="#allocation-methods-分配方法">Allocation Methods 分配方法</a></li>
+        <li><a href="#空闲空间管理">空闲空间管理</a></li>
+      </ol>
+    </li>
+    <li><a href="#mass-storage">mass storage</a>
+      <ol>
+        <li><a href="#disk-schedule-磁盘调度">disk schedule 磁盘调度</a>
+          <ol>
+            <li><a href="#fcfs">FCFS</a></li>
+            <li><a href="#sstf">SSTF</a></li>
+            <li><a href="#scan">SCAN</a></li>
+            <li><a href="#c-scan">C-SCAN</a></li>
+            <li><a href="#look">LOOK</a></li>
+            <li><a href="#c-look">C-LOOK</a></li>
+          </ol>
+        </li>
+        <li><a href="#disk-management">disk management</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-09-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 8 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="introduction">Introduction
+</h2><h2 id="os-structure">OS structure
+</h2><h3 id="用户接口">用户接口
+</h3><p>CLI</p>
+<p>GUI</p>
+<h3 id="系统调用">系统调用
+</h3><p>大多数程序通过API来使用系统调用，而不是直接使用系统调用</p>
+<pre><code>1. 程序可移植性 portable
+2. 系统调用更加详细且难以使用
+</code></pre>
+<p>system call 是系统主动请求的，而中断是被动的。所以它们本质上是不一样的。但是二者的实现方式是相同的</p>
+<p>系统调用参数传递方式：</p>
+<pre><code>1. 寄存器参数传递
+2. 内存块，参数存在内存的块或表中，块地址作为参数通过寄存器传递(Solaris 和 Linux)
+3. 栈。程序将参数压入栈，并由os弹出
+</code></pre>
+<h3 id="os-design-and-implementation">OS design and implementation
+</h3><p>原则：将Policy 和 Mechanism 区分。</p>
+<pre><code>Policy：做什么
+Mechanism：怎么做
+</code></pre>
+<p>区分开来提高灵活性</p>
+<h3 id="os-structure-1">OS structure
+</h3><p>Simple structure：</p>
+<pre><code>MS-DOS
+UNIX
+</code></pre>
+<p>Layered Approach</p>
+<pre><code>每层只使用较低层的功能
+
+major difficulty: careful definition of the layers.
+</code></pre>
+<p>Microkernels</p>
+<p>Modules</p>
+<h2 id="process">process
+</h2><h3 id="process-concept">process concept
+</h3><p>程序program 是存储在disk的 passive 实体，而process是active的。二者不是一对一关系的</p>
+<p>进程process包括：</p>
+<pre><code>code section        代码段
+data section        数据段
+heap                堆
+process stack       进程栈
+current activity    当前活动
+</code></pre>
+<p>process state 和 state transform</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image.png"
+	width="1490"
+	height="627"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image_hu1992390067783399920.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image_hu15524181015043378754.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="570px"
+	
+></p>
+<p>PCB</p>
+<pre><code>process state
+PC
+CPU registers
+CPU scheduling information: priorities, scheduling queue..
+memory management infomation
+accounting information--CPU time used, clock time...
+I/O status information: open file list, I/O device list...
+process number: ID, user ID...
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-1.png"
+	width="1791"
+	height="1009"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-1_hu6244255728872600200.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-1_hu5034475183190232774.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<h3 id="process-scheduling">process scheduling
+</h3><p>queues</p>
+<pre><code>job queue: 所有在系统中的进程
+ready queue: 已经ready的queue
+device queues: 每个设备都有一个queue
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-2.png"
+	width="1875"
+	height="900"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-2_hu14868008612210127301.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-2_hu10559054428289073850.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<p>scheduler：</p>
+<pre><code>long-term scheduler：job scheduler
+    selects which processes should be brought into the ready queue.
+Short-term scheduler (or CPU scheduler) 
+    selects which process should be executed next and allocates CPU
+
+Primary distinction: execution frequency. 执行的频率
+
+Medium-Term Scheduling：
+    The process is swapped out, store on disk, and is later swapped in, by the medium-term scheduler.
+
+    处理器速度可能比I/O更快，因此可能大部分的进程都在等I/O。这时候可以把这些进程都换出（swap out）到磁盘中，来节省内存空间。等到到这些进程的时候，才把它们换入（swap in）。
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-3.png"
+	width="1765"
+	height="753"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-3_hu6410773818783444610.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-3_hu12582747635714474512.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="234"
+		data-flex-basis="562px"
+	
+></p>
+<p>context switch：</p>
+<pre><code>上下文在进程的PCB中表示。当进程切换到另一个进程的时候，就要保存当前进程的状态到PCB中，并为新进程加载保存的状态。这称为上下文切换
+</code></pre>
+<h3 id="process-operation">process operation
+</h3><h4 id="creation">creation
+</h4><ol>
+<li>
+<p>Assign a unique process identifier, an integer number. 分配唯一标识符</p>
+</li>
+<li>
+<p>Allocate space for the process 分配空间</p>
+</li>
+<li>
+<p>Initialize process control block (PCB) 初始化PCB</p>
+</li>
+<li>
+<p>建立适当的联系</p>
+</li>
+<li>
+<p>创建或扩展其他数据结构</p>
+</li>
+<li>
+<p>资源共享，三种情况：</p>
+<ul>
+<li>Parent and children share all resources.  父子进程共享所有资源</li>
+<li>Children share subset of parent’s resources.  孩子共享父母资源的子集</li>
+<li>Parent and child share no resources.  不共享</li>
+</ul>
+</li>
+<li>
+<p>进程创建时，获取从父进程传递给子进程的初始化数据</p>
+</li>
+<li>
+<p>要么子进程和父进程同时执行，要么父进程等待子进程执行完毕</p>
+</li>
+</ol>
+<h4 id="termination">termination
+</h4><div style="text-align:center;">
+    <img src="image-4.png" alt="图片描述" width="50%">
+</div>
+释放PCB还要回收PCB
+<p>不允许孤儿进程：父进程exiting后，子孙辈进程全部exiting</p>
+<h3 id="interprocess-communication-进程通信">interprocess communication 进程通信
+</h3><p>independent process 独立进程不能影响其他进程的执行或者被影响<br>
+cooperating process 合作进程可以影响别的进程或被影响</p>
+<p>communication model</p>
+<ol>
+<li>
+<p>shared memory</p>
+</li>
+<li>
+<p>message passing
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-5.png"
+	width="1776"
+	height="861"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-5_hu14020707418270638409.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-5_hu1538053909104411541.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<p>shared memory 运行最大许多和最便利的通信
+message passing 当需要较少数据交换时很有用，因为不需要避免冲突</p>
+</li>
+</ol>
+<p>shared-memory：生产者 —— 消费者问题</p>
+<pre><code>数据结构：循环数组。两个指针：in 和 out 指针
+in 指向下一个free position
+out 指向第一个 full position
+empty时：in == out
+full的时候：(in+1)% buffer_size = out
+</code></pre>
+<p>Message-passing：interprocess communication (IPC)</p>
+<pre><code>进程间通信无需借助共享变量
+步骤：
+    1. 建立连接
+    2. 通过send/receive来交换消息
+
+直接通信：
+    进程必须明确的互相命名
+    一个链路只与一对进程相关联
+    链接可以是单向或双向的
+
+indirect communication：
+    消息从mailbox(ports)发出和接受
+    mailbox有unique ID
+    共享mailbox的才能通信
+    一条link可能有多个processes
+    每对进程可以共享多条link
+    链接可以单向也可以双向
+</code></pre>
+<h2 id="threads">threads
+</h2><p>A thread, called a lightweight process (LWP), is a basic unit of CPU utilization. 是CPU调度的最小单位</p>
+<p>和process的区别：process是资源分配的最小单位</p>
+<p>线程的状态：running、ready、waiting</p>
+<p>parallelism 和 concurrent
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-6.png"
+	width="1536"
+	height="640"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-6_hu3765962445143525341.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-6_hu11917641440719014078.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="576px"
+	
+>
+联想数据库中并发事务：一段时间内执行多个task<br>
+并行：同个时刻执行多个task</p>
+<p>并行：</p>
+<pre><code>data parallelism：
+    可以多线程完成，单每个核处理的数据不同，任务一样
+task parallelism：
+    任务并行，对同一批数据，分布到不同核去左不同任务，max、min、avg 等等
+</code></pre>
+<h3 id="multithread-model-多线程模型">multithread model 多线程模型
+</h3><p>两种：
+1. user threads 用户线程，不需要kernel支持
+2. kernel threads 需要OS直接提供threads</p>
+<p>user threads:</p>
+<pre><code>通过线程库提供支持，kernel意识不到这些线程
+</code></pre>
+<p>kernel threads:</p>
+<pre><code>以线程为单位进行调度
+在kernel space进行线程的creation、schedule、management
+Win XP、 Solaris、 Linux、 Tru64 UNIX、 MAC OS X
+</code></pre>
+<p>user threads 和 kernel threads的三种映射关系：</p>
+<pre><code>Many-to-one model
+one-to-one
+many-to-many
+</code></pre>
+<p>Many-to-one：</p>
+<pre><code>一个kernel thread对多个user threads
+线程管理在用户空间进行
+多个线程无法在多处理器上并行，因为一个线程只能访问一个内核
+</code></pre>
+<p>One-to-one</p>
+<pre><code>每个user thread 对一个 kernel thread
+在多处理器上可以并行多个线程
+</code></pre>
+<p>Many-to-many</p>
+<pre><code>一个线程调用blocking system calls时，kernel可以调度其他线程
+</code></pre>
+<p>三种模型比较：</p>
+<pre><code>多对一允许开发人员创建他们想要的线程数，但是并不能执行真正的并发
+一对一允许更大的并发性，但是要小心不能创建太多线程
+多对多可以创建想要的线程数，并且内核线程也可以并发
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-7.png"
+	width="1839"
+	height="745"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-7_hu4995659801636337262.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-7_hu13332914279202513706.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="592px"
+	
+></p>
+<h2 id="cpu-scheduling">CPU scheduling
+</h2><p>各级调度的区别：
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-8.png"
+	width="1844"
+	height="941"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-8_hu3411053149572427457.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-8_hu2822480209659788233.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="470px"
+	
+></p>
+<p>schedule criteria</p>
+<ul>
+<li>CPU utilization – keep the CPU as busy as possible              MAX</li>
+<li>throughput (吞吐量) – the number of processes that complete their execution per time unit.                                          MAX</li>
+<li>turnaround time (周转时间) – amount of time to execute a particular process.                                                          MIN</li>
+<li>waiting time – amount of time a process has been waiting in the <b>ready
+queue.</b>                                                            MIN</li>
+<li>response time – amount of time it takes from when a request was
+submitted until the first response is produced, not output (for timesharing environment)    请求到第一次回应                                MIN</li>
+</ul>
+<h3 id="schedule-algorithm">schedule algorithm
+</h3><ul>
+<li>First-Come, First-Served (FCFS) Scheduling</li>
+<li>Shortest-Job-First (SJF) Scheduling</li>
+<li>Priority Scheduling</li>
+<li>Round Robin (RR) Scheduling</li>
+<li>Multilevel Queue Scheduling</li>
+<li>Multilevel Feedback Queue Scheduling</li>
+<li>Highest Response-Ratio Next (HRRN) scheduling*</li>
+</ul>
+<p>SJF:
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-9.png"
+	width="1851"
+	height="586"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-9_hu14691443194743076417.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-9_hu5511771462512788601.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="315"
+		data-flex-basis="758px"
+	
+></p>
+<p>Priority——Two schemes:</p>
+<ul>
+<li>Preemptive:
+preempt the CPU if the priority of the newly arrived process is higher than the priority of the currently running process.
+只要优先级最高，就可以直接执行</li>
+<li>Nonpreemptive:
+simply put the new process at the end of the ready queue.
+等待当前执行的进程执行完才能执行ready queue里优先级最高的</li>
+</ul>
+<p>RR：</p>
+<pre><code>是preemptive的。
+时间片最好是能大于80% process的burst time。
+
+！！！注意调度的就绪队列：进程的时间片结束后追加到队尾，新来的进程也到队尾中
+
+例子：时间片为1
+进程        所需        到达
+A           4           0
+B           3           1-0.001
+C           4           2-0.001
+D           2           3-0.001
+E           4           4-0.001
+调度顺序如下：
+A B A C B D A E C B D A E C E C E
+</code></pre>
+<p>multilevel queue scheduling</p>
+<p>multilevel feedback queue scheduling 多级反馈队列</p>
+<div style="text-align:center;">
+    <img src="image-10.png" alt="图片描述" width="80%">
+</div>
+会升级，会降级
+<p>Highest Rsponse-Ratio Next Scheduling 高响应比优先(HRRN)算法</p>
+<p>R = (W + T)/T = 1 + W/T</p>
+<pre><code>W ： waiting time in ready queue
+T ： CPU burst time
+</code></pre>
+<p>将会选择R最大的作为下一个调度的</p>
+<h3 id="multiple-processor-scheduling多处理器调度">multiple-processor scheduling多处理器调度
+</h3><p>Affinity(亲和力)：保持进程在同一处理器上运行</p>
+<h2 id="process-synchronization-进程同步">process synchronization 进程同步
+</h2><h3 id="the-critical-section-problem">The critical-section problem
+</h3><p>Each process has a code segment, called critical section, in which the shared data is accessed.</p>
+<pre><code>每个进程都有一个代码段，在这个代码段中它会访问共享的数据区，这个代码段叫做临界区
+</code></pre>
+<p>3个需求：</p>
+<pre><code>1. mutual exclusion 互斥
+2. progress         空闲让进
+3. bounded waiting  优先等待
+</code></pre>
+<h3 id="信号量机制-semaphores">信号量机制 semaphores
+</h3><p>counting semaphores计数信号量：初始化为可用资源的数量<br>
+当为0的时候，代表所有的资源都被占用了</p>
+<p>使用一个资源时，要先等待，用完再释放</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="c1">// process Pi
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">wait</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">critical</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">signal</span><span class="p">(</span><span class="n">mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">remainder</span> <span class="n">section</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><pre><code>wait   会让mutex--
+signal 会让mutex++
+</code></pre>
+<h4 id="bounded-buffer-problem-生产者消费者模型">bounded-buffer problem 生产者消费者模型
+</h4><p>生产者 —— 往空的地方放，有empty才能放，放好了full+1<br>
+消费者 —— 从有东西的地方拿，full才能拿，拿好了empty+1<br>
+对buffer一次只能一个操作，因此得有一个互斥锁</p>
+<p>初始化：</p>
+<pre><code>mutex = 1;
+empty = n;
+full = 0;
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-11.png"
+	width="1874"
+	height="926"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-11_hu3745757349793850177.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-11_hu439602949953343069.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<h4 id="reader-writer-problem-读写者模型读优先">Reader-writer problem 读写者模型——读优先
+</h4><p>读优先，因此要计算读者的数量 —— 资源：reader_counter
+有了reader_counter，就要设置一个锁来防止多名读者争用 —— r_mutex
+读写互斥，因此需要有一个对资源的锁mutex</p>
+<p>初始化：</p>
+<pre><code>rw_mutex = 1;
+read_count = 0;
+rw_mutex = 1;
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-12.png"
+	width="1701"
+	height="1044"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-12_hu5789298215308663673.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-12_hu6626987775029547553.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="391px"
+	
+></p>
+<h4 id="例题">例题：
+</h4><p>例1：4*100 米接力赛:</p>
+<pre><code>本质是一个生产者——消费者模型，但是不用考虑资源争用
+第一棒的人生产了一个接力棒给第二棒
+第二棒的人消费了第一棒生产的接力棒，并生产了接力棒给第三棒
+第三棒的消费第二棒的接力棒，生产了第三棒的接力棒给第四棒
+第四棒消费了第三棒生产的接力棒
+
+因此要初始化三个信号量：S12 = 0, S23 = 0; S34 = 0
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-13.png"
+	width="1712"
+	height="528"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-13_hu9696249895664743033.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-13_hu7880485928074219587.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="324"
+		data-flex-basis="778px"
+	
+></p>
+<p>例2：进程流水线
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-14.png"
+	width="1912"
+	height="917"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-14_hu17534581316619407.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-14_hu11320208122336896385.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<p>(1)</p>
+<pre><code>和接力赛一样
+</code></pre>
+<p>(2)</p>
+<pre><code>P1 和 P2是生产者，P3是消费者。但是P1和P2不会共享资源，不用考虑争用
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-15.png"
+	width="1633"
+	height="785"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-15_hu148629519022268193.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-15_hu16647911292668583668.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="499px"
+	
+></p>
+<p>(3)
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-16.png"
+	width="1680"
+	height="766"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-16_hu4474900123897667640.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-16_hu11795124367985844326.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="526px"
+	
+></p>
+<p>例3：读者和阅览室</p>
+<pre><code>阅览室管理问题：
+
+某阅览室共有 100 个座位。
+读者想进入阅览室，若还有空位，则先在登记本上登记(check in)，然后进入阅览室。离开阅览室之前还要注销登记(check out)。
+（注意：每次只能有一个读者check in 或者check out）
+若阅览室已经没有空位，则读者等待。
+
+读者之间争用资源：1. 登记本     2. 椅子
+不用判断资源是否够用，因为可以一直等。如果不能等的话，椅子就得初始化为一个int变量，这样才能查看椅子的数量。
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-17.png"
+	width="1115"
+	height="827"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-17_hu1774353107817118050.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-17_hu3653685031359923473.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+></p>
+<p>看ready、running、waiting状态的最多和最少的数目：</p>
+<pre><code>running最多：有几个processer就有几个在running的
+ready最多：总的进程数减掉processer的数量
+waiting最多：有可能所有的process都在waiting
+最少的都是0
+</code></pre>
+<p>例4：生产线</p>
+<pre><code>某工厂有一条生产线，其上可以放置10个零件。有三个工人小张、小王和小李。
+小张每次生产1个零件A，并放置到生产线上；
+小王每次生产1个零件B，并放置到生产线上；
+小李每次从生产线上取1个A和2个B，组装产品C。
+工人们不能同时使用生产线取放零件。
+请用信号量机制实现三个工人进程，确保流水线能够正常工作。
+（1）定义信号量及变量，给出其初值，说明其作用
+（2）写出三个工人进程的代码结构
+
+注意：和生产者——消费者模型不太一样。
+A有上限8，B有上限9，且生产线的空位是10，因为要有一个代表10个位置的信号量。
+
+roomA = 8， partA=0
+roomB = 9， partB=0
+room = 10， 不需要part
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-18.png"
+	width="1696"
+	height="835"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-18_hu4772214266303365706.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-18_hu13067847306330957987.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+>
+这里的生产者和消费者其实只是在A和B上，生产线只是用来限制的A和B的个数的</p>
+<p>例5：读共享，写优先</p>
+<pre><code>某系统中有m个进程并发执行，分为A、B两组，他们共享文件F，A组进程对文件F进行写操作，B组进程对文件F进行只读操作。写操作需要互斥进行，读操作可以同时发生，即当有B组的某进程正在对文件F进行读操作时，若没有A组的进程提出写请求，则B组的其他进程可以同时对文件F进行读操作，如果有A组的进程提出写请求，则阻止B组的其他进程对文件F进行读操作的后续请求，等当前正在读文件的B组进程全部执行完毕，则立即让A组提出写请求的进程执行对文件F的写操作。
+（1）定义信号量及变量，给出其初值，说明其作用
+（2）写出A组和B组进程的代码结构
+
+首先，写优先，因此读者争用资源前，看有没有写的已经在等了。
+第一名写者要获取写优先的权力，如果后面还有写者，再交给下一位。没有写的，就释放
+同一批读者读完之后，写的才能进入写
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-19.png"
+	width="1581"
+	height="828"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-19_hu18440164798610439165.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-19_hu9054444014782225544.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="458px"
+	
+></p>
+<p>例6：三小或一大
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20.png"
+	width="1711"
+	height="719"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20_hu18446395595074177249.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20_hu15201416153952277147.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="571px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-21.png"
+	width="1693"
+	height="816"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-21_hu11990838723647936639.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-21_hu17806848450701052469.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="497px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-22.png"
+	width="1686"
+	height="833"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-22_hu9534450865348373577.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-22_hu11477034325548044118.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<h2 id="deadlock">deadlock
+</h2><p>死锁特征：</p>
+<pre><code>1. 互斥使用     Mutual exclusion
+2. 占有并等待   hold and wait
+3. 非抢占       no preemption
+4. 循环等待     circular wait
+</code></pre>
+<p>Resource-Allocation Graph</p>
+<pre><code>圆圈：进程节点
+方形：资源结点
+方形内的圆圈：资源实例
+
+进程到资源的边 Pi -&gt; Rj 请求边
+资源到进程的边 Rj -&gt; Pi 分配边
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-23.png"
+	width="1843"
+	height="899"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-23_hu4350008831606547466.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-23_hu2289320441950955535.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+>
+死锁一定有环路，环路不一定有死锁</p>
+<h3 id="死锁避免-avoidance">死锁避免 avoidance
+</h3><ol>
+<li>
+<p>资源分配图算法</p>
+<p>用资源分配图，如果不成环，就可以分配资源</p>
+</li>
+<li>
+<p>银行家算法</p>
+<pre><code> n个进程
+ m种资源类型
+</code></pre>
+<ol>
+<li>
+<p>数据结构描述</p>
+<ul>
+<li>Available：一维数组，available[j] = k 表示Rj有k个可用</li>
+<li>Max：二维矩阵n*m。Max[i, j] = K, 那么Pi进程就可能会请求k个Rj</li>
+<li>Allocation：n*m 二维矩阵。Allocation[i, j]=k, 那么现在Pi有k个Rj资源</li>
+<li>Need：n*m二维数组，Need[i, j] = Max[i, j] - Allocation[i, j]</li>
+</ul>
+</li>
+<li>
+<p>算法流程：safety algorithm</p>
+<ol>
+<li>初始化：
+Work = Available
+Finish[i] = false</li>
+<li>工作流程：
+找到一个Pi:
+(1)Finish[i]=false<br>
+(2)Need[i]&lt;=Work
+如果没找到，就跳到4</li>
+<li>Work += Allocation[i] // 表示当前进程结束后，资源可以变成多少
+Finish[i] = true
+转到2，继续找</li>
+<li>如果所有的Finish都为true，那么就是safety状态，否则就不是safety</li>
+</ol>
+</li>
+<li>
+<p>算法流程：resource-request algorithm 资源请求算法</p>
+<p>如果某一个进程当前急需某些资源，要检测该算法之后才能分配</p>
+<ol>
+<li>先征信：如果Request[i] &gt; Need[i]，error</li>
+<li>如果Request[i] &gt;= Available, 那就等待。如果是&lt;=的话，继续3</li>
+<li>Available = Available - Request[i]
+Allocation[i] = Allocation[i] + Request[i]
+Need[i] = Need[i] - Request[i]</li>
+<li>使用safety algorithm进行检测，如果处于安全状态，就可以分配，否则不行</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="死锁检测">死锁检测
+</h3><p>Detection algorithm</p>
+<ul>
+<li>Available</li>
+<li>Allocation</li>
+<li>request n*m</li>
+</ul>
+<ol>
+<li>初始化 <br>
+Work = Available
+在初始化的时候就要判断：
+<br> 如果allocation[i] ≠ 0， 那么Finish[i] = false
+<br> 如果allocation[i] ==0,  那么Finish[i] = true
+<br> 基本上都是false了</li>
+<li>遍历，找Finish[i]==false的，并且请求的数量小于当前的Work，即Request[i]&lt;=Work,如果没右，就去4</li>
+<li>Work = Work + Allocatoin[i]， Finish[i] = true  然后继续去2找</li>
+<li>如果大家都是true，那么就不是死锁。如果有一个是false的，说明处于死锁状态</li>
+</ol>
+<h2 id="main-memory">Main Memory
+</h2><h3 id="连续内存分配">连续内存分配
+</h3><p>可变分区方案</p>
+<pre><code>Hole：一块可用的内存
+一开始是一个大的hole。内存中散布着大小不一的hole
+OS维护一个包含信息的table：哪块被分配给哪个进程了，哪块是hole
+
+进程会被分配到和它需求相等的内存块
+进程结束后，将它的内存释放。相邻的free block会合并成一个hole
+
+Many small holes in the memory, external fragmentation，外部碎片
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-24.png"
+	width="1784"
+	height="463"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-24_hu8979768613012019859.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-24_hu89692950833531734.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="385"
+		data-flex-basis="924px"
+	
+></p>
+<p>三种分配方式：</p>
+<pre><code>1. first fit    分配第一个满足大小的hole
+2. best fit     hole先按大小排序，分配最小的可以满足需求的hole
+3. worse fit    分配最大的洞
+三种分配方式都有外部碎片
+</code></pre>
+<p>外部碎片：</p>
+<pre><code>总内存大小是满足分配需求的，但是分配的空间并不是连续的
+</code></pre>
+<p>内部碎片：</p>
+<pre><code>分配的空间略大于需求的空间
+</code></pre>
+<h3 id="page-页式管理">page 页式管理
+</h3><p>进程的物理地址可以不连续<br>
+<b>物理</b>地址被分成相同大小的块，frames<br>
+<b>逻辑</b>地址被分成相同大小的块，pages<br>
+每个 frames/pages 的大小都是2的整数幂<br>
+当一个进程要被使用的时候，它的pages从blocks中被加载到任意可用的frames<br></p>
+<p>避免的外部碎片，避免了不同大小的内存块(chunks)问题</p>
+<p>OS通过page table 来追踪某个逻辑page被分配到哪个frame。page number作为下标<br>
+在最后一个page会有内部碎片<br>
+每个逻辑地址都被分成：page number(p)、page offset(d)</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-25.png"
+	width="1844"
+	height="785"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-25_hu3272637746720772352.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-25_hu3297010032831862264.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="234"
+		data-flex-basis="563px"
+	
+></p>
+<p>每个page都会有一个对应的逻辑地址和物理地址：</p>
+<pre><code>逻辑地址，高位的n个bit受page数量决定的，offset是page_size决定的
+物理地址，高位的k个bit受内存的总frames数量决定，offset是page_size决定的
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-26.png"
+	width="1663"
+	height="725"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-26_hu6859946857243162350.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-26_hu6835533293949650530.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="550px"
+	
+></p>
+<p>这里的虚拟内存，表示有程序实际上大于了物理内存的大小，所以会对内存进行扩展，才能运行这些程序。<br>
+逻辑地址转为物理地址的时候，用 逻辑地址/page size，得到商和余数。商是页码(从0开始)，余数offset</p>
+<p>物理设备支持：</p>
+<pre><code>Page-table base register (PTBR) points to the page table.
+Page-table length register (PTLR) indicates size of the page table.
+</code></pre>
+<p>在该方案中，每次都要进行两次内存访问：1. table  2. 指令</p>
+<p>为了优化，引入TLB( translation look-aside buffers / associative memory)，可用类比cache</p>
+<p>TLB</p>
+<pre><code>包含最近使用过的页表条目
+TLB中，没条目都由键值对(page#, frame#)组成，代表逻辑地址到物理地址的映射
+如果TLB里没有想要的页表条目，才会去页表中查找
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-27.png"
+	width="1809"
+	height="912"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-27_hu1117982796221462469.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-27_hu17435206695963759923.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+></p>
+<p>Effective access time(EAT)有效访问时间</p>
+<pre><code>假如在TLB中找到了，就只需根据TLB中的物理地址访问一次内存
+如果在TLB中没找到，那么就得查page table，再根据page table查物理地址，这样需要两次访问内存。
+
+ε是查TLB的时间，t是访问内存的时间，α是TLB的命中率
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-28.png"
+	width="1691"
+	height="767"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-28_hu11913265056834292917.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-28_hu6442646914349218158.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<p>页式内存保护 Memory protection</p>
+<pre><code>实现方式通过每一个frame对应的protection bit，这些信息存放在页表中
+RW bit，只读或者可读可写
+Valid-invalid bit, valid表示关联的页面在进程的逻辑地址中，invalid表示不在逻辑地址中
+</code></pre>
+<h3 id="页表的结构">页表的结构
+</h3><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-29.png"
+	width="1745"
+	height="539"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-29_hu5088924595628111389.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-29_hu3215019200111325064.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="323"
+		data-flex-basis="776px"
+	
+></p>
+<p>Hierarchical Paging</p>
+<pre><code>Two-level paging
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-30.png"
+	width="1833"
+	height="751"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-30_hu8085968809994339125.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-30_hu11457378283955710603.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="244"
+		data-flex-basis="585px"
+	
+></p>
+<p>Hashed Page Tables
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-31.png"
+	width="1721"
+	height="844"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-31_hu13805806183565560400.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-31_hu3288133696818453599.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="489px"
+	
+></p>
+<p>Inverted Page Tables</p>
+<pre><code>One entry for each real frame of memory.
+每个条目都有存储在该实际地址的 页面的虚拟地址，以及拥有该页面的进程信息
+&lt; process-id, page-number, offset &gt;
+通过pid 和 p来page table找，然后再从物理地址中读取
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-32.png"
+	width="1724"
+	height="857"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-32_hu8519554766641091099.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-32_hu13558707740659786371.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="482px"
+	
+></p>
+<h3 id="segment-段式管理">segment 段式管理
+</h3><p>逻辑地址: a segment number and an offset, 段号和offset</p>
+<pre><code>&lt;segment-number, offset&gt;
+</code></pre>
+<p>segment table 段表：</p>
+<pre><code>每个条目都是：
+Segment base – 每个段在内存中的起始地址
+Segment limit – specifies the length of the segment.指定段的长度
+</code></pre>
+<p>Segment-Table Base Register (STBR) points to 内存中段表的位置.<br>
+Segment-Table Length Register (STLR) indicates 一个程序用的段数.<br>
+segment number s is legal if s &lt; STLR.</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-33.png"
+	width="1686"
+	height="901"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-33_hu11469099223765074054.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-33_hu13487520826151245755.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="449px"
+	
+>
+该程序一共有5个段，每个段都分配了一个内存空间，它们在物理内存中不一定连续</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-34.png"
+	width="1632"
+	height="790"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-34_hu3230889595038830126.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-34_hu16751566172207859502.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-35.png"
+	width="1172"
+	height="799"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-35_hu157785909663071151.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-35_hu5898090780168921985.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="352px"
+	
+>
+有外部碎片</p>
+<h3 id="段页式管理">段页式管理
+</h3><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-36.png"
+	width="1870"
+	height="909"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-36_hu17437906535900708980.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-36_hu12505012635307513770.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="493px"
+	
+>
+先分段，再分页。每一页可以放到不相邻的位置</p>
+<p>虚拟地址构成：</p>
+<pre><code>进程的逻辑地址空间被划分成段，每个段有自己的段号S。
+段内的代码或数据，按照内存页面的大小划分为若干页。
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-37.png"
+	width="879"
+	height="529"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-37_hu704245373045706360.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-37_hu15392333444869057210.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="398px"
+	
+></p>
+<p>段表和页表</p>
+<pre><code>每个进程有一张段表
+    管理内存的分配与释放、存储保护和地址变换等。
+    每个表项记录对应段的页表的起始地址和页表长度。
+每个段有一张页表
+    保存段中的每个逻辑页在物理内存中的内存块号
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-38.png"
+	width="1636"
+	height="894"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-38_hu5924617882111688735.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-38_hu819374832092261654.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="439px"
+	
+></p>
+<p>逻辑地址转物理地址：
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-39.png"
+	width="1819"
+	height="993"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-39_hu7375867275088724839.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-39_hu57958063528802378.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="183"
+		data-flex-basis="439px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-40.png"
+	width="1837"
+	height="969"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-40_hu2824301473354600141.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-40_hu2645440465125434254.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="454px"
+	
+></p>
+<h2 id="虚拟内存">虚拟内存
+</h2><h3 id="demand-paging">demand paging
+</h3><p>如果内存中没有free frame，就会找victim</p>
+<pre><code>1. 如果要使用某一页，都是内存中没有，会产生一共trap ——&gt; page fault
+2. 保存用户寄存器和进程状态
+3. 确定是不是page fault
+4. OS 会查看是否合法。并确定页面在磁盘上的位置
+5. 从磁盘向free frame读取page：
+    1 在设备队列中等待，直到读取请求被服务
+    2 等待寻道、延迟时间
+    3 开始传输
+6. 等待的时候，CPU去调度其他用户进程
+7. 从磁盘I/O子系统收到中断 —— 读取完成
+8. 保存6.的其他用户进程状态信息
+9. 判断中断来自磁盘
+10. 更改页表和其他表的信息
+11. Ready，等待CPU重新调度该进程
+12. 恢复用户进程、用户寄存器等，然后restart 引起缺页中断的指令
+</code></pre>
+<p>Performance：
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-41.png"
+	width="1583"
+	height="149"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-41_hu7112038148163539561.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-41_hu4091345191306953246.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1062"
+		data-flex-basis="2549px"
+	
+>
+p是缺页率。公式的意思就是，没有缺页的内存读取时间 加上 缺页的时候处理缺页的时间</p>
+<p>例题</p>
+<pre><code>On a system using paging, references to a swapped-in locations accessible through an entry in an associative table (TLB) take 150ns.If the main memory page table must be used, the reference takes 400ns. References that result in page faults require 8ms if the page to be  eplaced has been modified, 3ms otherwise. If the page fault rate is 2%, the associative table(TLB) hit rate is 70%, and 50% of replaced pages have been modified, what is the effective access time? Assume the system is running only a single process and the CPU is idle during page swaps.
+
+通过TLB表需要150ns，通过内存中的页表访问需要400ns，只写进需要3ms，写进+写出需要8ms。
+不缺页：98%，   缺页：2%
+不缺页时，TLB命中：70%，    剩下的去找页表
+缺页时，只需要写进和需要换入换出的各为50%
+</code></pre>
+<p>答案就是：</p>
+<pre><code>3ms*50%*2% + 8ms*50%*2% + 150ns*70%*98% + 400ns*30%*98%
+</code></pre>
+<p>如果题目直接给了memory access time，不用把它*2，因为它是到达内存中指定页面的时间。</p>
+<h3 id="page-replacement-页面置换">page replacement 页面置换
+</h3><p>对用户透明</p>
+<p>page table 中，如果某个表项是invalid(valid bit是0)，说明不在内存中，使用到它的时候，要产生一共page fault
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-47.png"
+	width="1637"
+	height="820"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-47_hu9406807452626343412.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-47_hu4371962693944665375.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="479px"
+	
+></p>
+<p>reference string
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-45.png"
+	width="1850"
+	height="407"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-45_hu1628570765697901490.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-45_hu2664600661078117169.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="454"
+		data-flex-basis="1090px"
+	
+>
+这些是地址。页面大小是100B，所以每个地址除以100就得到page number</p>
+<p>FIFO
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-42.png"
+	width="1841"
+	height="856"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-42_hu16119013281838712656.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-42_hu11331749314922668810.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="215"
+		data-flex-basis="516px"
+	
+>
+存在 Belady&rsquo;s anomaly</p>
+<p>Optimal</p>
+<pre><code>选择最远的将来才用到的页面置换出去
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-43.png"
+	width="1759"
+	height="775"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-43_hu2281361265683201964.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-43_hu10974637658863461373.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="226"
+		data-flex-basis="544px"
+	
+>
+并且反序的缺页率和正序的一样。</p>
+<p>LRU</p>
+<pre><code>置换出去的是最近最不常使用的
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-44.png"
+	width="1850"
+	height="904"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-44_hu2349338116115354073.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-44_hu5516539338362913350.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
+	
+>
+反序的缺页率和正序的一样</p>
+<h3 id="frames-allocation">frames allocation
+</h3><p>一地址指令所需的最少frames：2(一个存放instruction， 一个存放地址指向的data)</p>
+<p>如果允许一级间址的话，那最少需要3个frames(一个存指令，一个存间址指向的空间，一个存间址空间指向的数据)</p>
+<p>如果是二地址指令，且允许间址的话，则至少需要5个frames：一个存指令，一个存源地址间址，一个存源间址指向的数据，一个存目的间址，一个存目的间址指向的数据</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-46.png"
+	width="1681"
+	height="862"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-46_hu3623323059201270739.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-46_hu2764554176397399954.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+></p>
+<h3 id="thrashing-抖动">thrashing 抖动
+</h3><p>频繁swap，page in/out的时间远远多余进程执行时间</p>
+<p>working-set model 工作集模型</p>
+<pre><code>用来监控工作过程访问了哪些页面
+working set是动态变化的，它存放了most recent Δ page references(这段时间内要用的page)
+工作集的大小 WSS 是会变化的
+WSSi 用来描述进程i的在这一段时间所需要的frames数
+将所有进程的 WSS加起来看作为D
+    假如D &gt; available frames，就会产生thrashing 现象
+</code></pre>
+<h2 id="file-system-interface">File-System Interface
+</h2><h3 id="file-concept">File concept
+</h3><ol>
+<li>contiguous logical address space 逻辑地址连续</li>
+<li>file是命名相关信息的集合</li>
+<li>文件是logical secondary storage的最小分配(allotment)</li>
+<li>可以是自由形式，可以是严格格式化的</li>
+</ol>
+<p>文件的属性：</p>
+<pre><code>name
+ID 每个文件都有一个唯一的id
+Type
+Location
+size
+protection —— authority
+time， date， userid
+
+属性防止目录结构中，目录结构保存在disk
+</code></pre>
+<p>文件操作：</p>
+<pre><code>open file table：一个kernel 的数据结构，保存了所有打开的文件
+
+open(Fi)：
+    1. 找到Fi的目录结构中的entry
+    2. 将entry调到open-file table中
+    3. 返回一个指向open-file table 中该 entry的指针
+
+close(Fi)
+    最新的文件写回目录结构中
+</code></pre>
+<p>internal table 的两级：</p>
+<pre><code>1. 进程打开文件表
+    记录了该进程打开的文件
+    保存了该进程使用该文件的信息，比如当前指针，权限等
+2. 系统打开文件表
+    记录了与进程无关的信息，如磁盘上的文件位置，访问日期，文件大小等
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-48.png"
+	width="1669"
+	height="837"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-48_hu12527746596182887977.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-48_hu10617303682566487976.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="478px"
+	
+></p>
+<p>文件的结构：</p>
+<pre><code>逻辑结构：
+    1. text     8bit 的字节序列
+    2. record   具有固定或可变长的记录序列
+
+物理结构：a set of disk blocks
+</code></pre>
+<h3 id="directory-structure">directory structure
+</h3><p>树形、无环图</p>
+<p>文件共享、同步</p>
+<h2 id="file-system-implementation">File-System Implementation
+</h2><h3 id="文件系统结构">文件系统结构
+</h3><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-49.png"
+	width="1882"
+	height="1038"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-49_hu1324330840331162183.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-49_hu14859730016245537338.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+></p>
+<pre><code>最上层：
+    给文件操作提供的系统调用
+
+逻辑文件系统层：
+    处理metadata，处理目录结构，通过FCB保存文件结构，还需要protection和security
+    通过FCB 将file name 转成 file number，file handle(在进程打开文件表的位置)
+
+文件组织模块：
+    逻辑地址到物理地址转换
+    空闲空间组织
+
+basic file system：
+    向适当的device driver发出命令，来读写disk上的物理块(将高级语言转成设备驱动的命令)
+    管理memory buffers 和 caches (做空间分配、释放、置换)
+
+I/O control：
+    设备驱动程序和中断处理程序。在主存和磁盘系统间传输信息。(将设备驱动程序命令转成低级硬件的控制命令)
+
+底层设备
+</code></pre>
+<h3 id="文件系统实现">文件系统实现
+</h3><p>长期保存、按名访问、工作效率</p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-50.png"
+	width="1803"
+	height="1025"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-50_hu4956521252063585058.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-50_hu265975161061473265.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="422px"
+	
+>
+不同进程共享同一个文件时，进程打开文件表表项都指向同一个系统打开文件表表项</p>
+<p>虚拟文件系统
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-51.png"
+	width="1870"
+	height="1036"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-51_hu6135126049906018237.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-51_hu1944142268597425909.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<h3 id="allocation-methods-分配方法">Allocation Methods 分配方法
+</h3><p>三种方法：</p>
+<pre><code>1. contiguous allocation    连续
+2. linked allocation        链接
+3. indexed allocation       索引
+</code></pre>
+<p>连续分配
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-52.png"
+	width="1844"
+	height="735"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-52_hu11128371373364064438.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-52_hu13278980759045587073.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="250"
+		data-flex-basis="602px"
+	
+></p>
+<pre><code>占用的磁盘块是连续的
+只有一个表项在 file allocation table
+保存起始块号 和 总的块数 （起始、长度）
+可以顺序，也可以随机访问
+性能最好：定位次数少，时间最少
+
+逻辑地址向物理地址映射：
+LA / block size = Q ... R ——&gt; Q 是逻辑块号，R是块内偏移量
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-54.png"
+	width="1824"
+	height="902"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-54_hu8974180628692529655.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-54_hu15133081353142828124.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<p>链接分配</p>
+<pre><code>目录中保存了文件的第一块和最后一块指针
+每一块都有指向下一块的指针
+没有外部碎片，任意空闲块都能使用
+
+只能顺序访问，要预留指针，有可能断链（不可靠）
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-55.png"
+	width="1923"
+	height="1090"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-55_hu2058196901408502759.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-55_hu10003821415425576566.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="423px"
+	
+></p>
+<p>索引分配</p>
+<pre><code>索引块依次记录物理块
+目录包含了索引块的块号
+没有外部碎片，随机access
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-56.png"
+	width="1754"
+	height="388"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-56_hu8211464710319737706.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-56_hu9391337071794249352.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="452"
+		data-flex-basis="1084px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-57.png"
+	width="1824"
+	height="863"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-57_hu18207609336902392166.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-57_hu2667179709758020709.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="507px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-58.png"
+	width="1764"
+	height="949"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-58_hu5851128765235274768.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-58_hu701688503115114266.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="446px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-59.png"
+	width="1817"
+	height="977"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-59_hu12832151382057394.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-59_hu6171699823626110503.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="446px"
+	
+></p>
+<h3 id="空闲空间管理">空闲空间管理
+</h3><pre><code>Bit map / Bit vector 
+Linked list
+Grouping
+Counting 
+</code></pre>
+<p>bit map 位图</p>
+<pre><code>Each block is represented by 1 bit.
+1 是空闲，0是被占据
+</code></pre>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-60.png"
+	width="1810"
+	height="894"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-60_hu6145392530331536106.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-60_hu10699718123739841052.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<p>grouping 分组
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-61.png"
+	width="1764"
+	height="969"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-61_hu10223318535921685220.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-61_hu7010799689495543191.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="436px"
+	
+></p>
+<pre><code>每组最后一个空闲块用来当指针域，指向下一组的空闲块
+</code></pre>
+<p>空间管理例题：
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-62.png"
+	width="1872"
+	height="940"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-62_hu6611633840930146610.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-62_hu10137515736746721544.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="477px"
+	
+></p>
+<pre><code>(1) 7 + 3*10 = 37
+(2) 2 
+</code></pre>
+<h2 id="mass-storage">mass storage
+</h2><h3 id="disk-schedule-磁盘调度">disk schedule 磁盘调度
+</h3><ul>
+<li>FCFS      first come first served</li>
+<li>sstf      shortest seek time first</li>
+<li>scan</li>
+<li>c-scan</li>
+<li>look</li>
+<li>c-look</li>
+</ul>
+<h4 id="fcfs">FCFS
+</h4><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-63.png"
+	width="1457"
+	height="848"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-63_hu16218281861889813220.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-63_hu16190742448620365232.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="412px"
+	
+></p>
+<pre><code>183-53+183-37+122-37+122-14+...+67-65 = 640
+</code></pre>
+<h4 id="sstf">SSTF
+</h4><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-64.png"
+	width="1638"
+	height="882"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-64_hu15592750118722613202.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-64_hu14020858069608106657.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<pre><code>65-53+67-65+67-37+37-14+98-14+122-9+124-122+183-124 = 236
+</code></pre>
+<h4 id="scan">SCAN
+</h4><p>来回扫描
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-65.png"
+	width="1858"
+	height="1021"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-65_hu6599948081385923211.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-65_hu7538478313800214304.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="436px"
+	
+></p>
+<pre><code>199-53 + 199-14 = 400-69 = 331
+</code></pre>
+<h4 id="c-scan">C-SCAN
+</h4><p>只在一个方向SCAN，不换方向。
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-66.png"
+	width="1905"
+	height="1017"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-66_hu10089691484658649273.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-66_hu14893410716247555421.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="449px"
+	
+></p>
+<pre><code>199 + 199-53 + 37 = 400 - 18 = 382
+</code></pre>
+<h4 id="look">LOOK
+</h4><p>LOOK是SCAN的升级版，它最远只会走到最远的那个请求点，然后就会返回
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-67.png"
+	width="1857"
+	height="1041"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-67_hu8636991413980509949.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-67_hu5100193009680684784.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+></p>
+<pre><code>183-53+183-14 = 366-67 = 299
+</code></pre>
+<h4 id="c-look">C-LOOK
+</h4><p>C-LOOK是C-SCAN的升级版，它到最远的需求点之后，会返回到另一头的最远需求点，然后继续向同一方向寻道
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-68.png"
+	width="1876"
+	height="1071"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-68_hu7794096225009934382.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-68_hu17103097947919367327.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+></p>
+<pre><code>183-53+183-14+37-14 = 403-81 = 322
+</code></pre>
+<p>例子
+<img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-69.png"
+	width="1842"
+	height="642"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-69_hu4568923990256006697.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-69_hu15231690175210334017.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="286"
+		data-flex-basis="688px"
+	
+></p>
+<p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-70.png"
+	width="1438"
+	height="690"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-70_hu2853022014305005711.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-70_hu1428779487229451888.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<h3 id="disk-management">disk management
+</h3><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-71.png"
+	width="1892"
+	height="1063"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-71_hu1707745098083718540.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-71_hu16531909956468489656.png 1024w"
+	loading="lazy"
+	
+		alt="Alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="427px"
+	
+></p>
+<p>先找到bootstrap， 通过bootstrap 找到boot block ，再找到system disk</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 ffirestorm
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
